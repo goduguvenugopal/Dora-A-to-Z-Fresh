@@ -12,8 +12,8 @@ const Footer = () => {
   const shareApp = async () => {
     try {
       await navigator.share(({
-        text: " : ",
-        url: ""
+        text: "Shop fresh and pure products directly from trusted farmers with Dora A to Z Fresh! Experience quality you can trust. :",
+        url: "https://doraatozfresh.vercel.app"
       }))
     } catch (error) {
       console.error(error);
@@ -34,7 +34,7 @@ const Footer = () => {
           </h1>
         </div>
         <div className="flex items-center flex-wrap justify-center gap-3 w-full">
-          <a href='' download="" className="bg-gray-100 text-center h-10 inline-flex gap-2 text-black py-2 px-5 rounded-full items-center hover:bg-gray-200 focus:outline-none w-[11rem]">
+          <a href='/Dora A to Z Fresh.apk' download="Dora A to Z Fresh.apk" className="bg-gray-100 text-center h-10 inline-flex gap-2 text-black py-2 px-5 rounded-full items-center hover:bg-gray-200 focus:outline-none w-[11rem]">
             <FaDownload
 
               className="w-4 h-4"

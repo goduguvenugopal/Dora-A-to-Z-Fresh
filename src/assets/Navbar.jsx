@@ -85,7 +85,8 @@ const Navbar = () => {
           <Link onClick={() => setOffcanvas(false)} to="/carousel" className='text-[1.2rem]'>Add Offer Images</Link>
           <Link onClick={() => setOffcanvas(false)} to="/addcategory" className='text-[1.2rem]'>Add New Category</Link>
           <Link onClick={() => setOffcanvas(false)} to="/admin" className='text-[1.2rem]'>Admin</Link>
-          <a href='Dora A-Z Fresh Seller.apk' download="Dora A-Z Fresh Seller.apk" className='text-[1.2rem] absolute left-5 bottom-5 h-10 bg-blue-600 flex justify-center items-center gap-2 rounded-full w-fit hover:bg-blue-800 px-5'><FaDownload />  Download App</a> */}
+          */}
+           <a href='/Dora A to Z Fresh.apk' download="Dora A to Z Fresh.apk" className='text-[1.2rem] absolute left-5 bottom-5 h-10 bg-blue-600 flex justify-center items-center gap-2 rounded-full w-fit hover:bg-blue-800 px-5'><FaDownload />  Download App</a>
 
           <MdClose size={25} className='absolute right-5 cursor-pointer' onClick={() => setOffcanvas(false)} />
         </div>

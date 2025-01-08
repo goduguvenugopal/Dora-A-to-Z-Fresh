@@ -3,7 +3,7 @@ import Carousel from "../assets/Carousel"
 import Footer from './Footer'
 import { dataContext } from '../App'
 import { Link } from 'react-router-dom'
-
+import { FaDownload, FaShareSquare } from 'react-icons/fa'
 
 
 
@@ -11,6 +11,18 @@ const Home = () => {
     const { categories } = useContext(dataContext)
 
 
+    // share app function 
+    const shareApp = async () => {
+        try {
+            await navigator.share(({
+                text: "Shop fresh and pure products directly from trusted farmers with Dora A to Z Fresh! Experience quality you can trust. :",
+                url: "https://doraatozfresh.vercel.app"
+            }))
+        } catch (error) {
+            console.error(error);
+
+        }
+    }
     return (
         <>
             <Carousel />
@@ -57,6 +69,38 @@ const Home = () => {
                 </div>
 
             </div>
+
+{/* download share app section  */}
+            <section className="container mb-7 px-5 py-10 mx-auto flex items-center md:flex-row flex-col bg-gray-700">
+                <div className="flex flex-col md:pr-10 md:mb-0 mb-6 pr-0 w-full md:w-auto md:text-left text-center">
+                    <h2 className="text-xs text-indigo-500 tracking-widest font-medium title-font mb-1">
+                        Dora A to Z Fresh
+                    </h2>
+                    <h1 className=" text-md font-medium title-font text-white">
+                        Download our app for a better experience! Get faster access, exclusive features, and more.
+
+                    </h1>
+                </div>
+                <div className="flex items-center flex-wrap justify-center gap-3 w-full">
+                    <a href='/Dora A to Z Fresh.apk' download="Dora A to Z Fresh.apk" className="bg-gray-100 text-center h-10 inline-flex gap-2 text-black py-2 px-5 rounded-full items-center hover:bg-gray-200 focus:outline-none w-[11rem]">
+                        <FaDownload
+
+                            className="w-4 h-4"
+
+                        />
+                        <span className="title-font font-medium">Download App</span>
+
+                    </a>
+                    <button onClick={shareApp} className='bg-blue-600 text-white flex items-center justify-center gap-2 font-semibold h-10 rounded-full w-[11rem]'>
+
+                        <FaShareSquare className=' text-white' />Share App
+                    </button>
+
+                </div>
+            </section>
+
+
+{/* milk description section  */}
             <div className='mb-9 p-3 bg-orange-100  rounded mt-5 flex justify-around flex-wrap gap-3'>
                 <img src="/buffalomilk.jpg" alt="buffalomilk"
                     className='rounded w-full lg:w-[40%]' />
