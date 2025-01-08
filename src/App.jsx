@@ -47,7 +47,6 @@ function App() {
         const res = await axios.get(`${api}/category/get-category-products`)
         if (res) {
           setCategories(res.data.retrievedProducts)
-          setSpinner(false)
 
         }
       } catch (error) {
@@ -56,6 +55,25 @@ function App() {
       }
     }
     fetchAllCategories()
+
+    // fetching carousel 
+    const getCarousel = async () => {
+      try {
+        const res = await axios.get(`${api}/carousel/get-carousel`);
+        if (res) {
+          setCarousel(res.data.retrievedCarousel[0]);
+          setSpinner(false)
+
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getCarousel();
+
+
+
   }, [])
 
   if (spinner) {
@@ -74,7 +92,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/products_by/:category" element={<AllProducts/>}/>
+        <Route path="/products_by/:category" element={<AllProducts />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/search" element={<Search />} />

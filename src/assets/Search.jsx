@@ -54,9 +54,9 @@ const Search = () => {
                 />
               </Link>
 
-              <div className="mt-2 ">
+              <div className="mt-2 text-center">
 
-                <h3 className="text-[0.9rem]  text-gray-700">
+                <h3 className=" text-[0.9rem] lg:text-[1rem]  text-black">
 
                   {item?.itemName?.substring(0, 25)}..
                 </h3>

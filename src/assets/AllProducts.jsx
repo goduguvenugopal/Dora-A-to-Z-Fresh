@@ -12,8 +12,6 @@ const AllProducts = () => {
   const [categoryItems, setCategoryItems] = useState([])
 
 
-  console.log(products);
-
   useEffect(() => {
     const results = products.filter((item) => item.itemCategory?.toLowerCase().includes(category.toLowerCase()))
     setCategoryItems(results)
@@ -41,9 +39,9 @@ const AllProducts = () => {
 
               <div className="mt-2 text-center">
 
-                <h3 className="text-[0.9rem]  text-gray-700">
+                <h3 className="text-[0.9rem] lg:text-[1rem]  text-black">
 
-                  {item?.itemName?.substring(0, 35)}..
+                  {item?.itemName?.substring(0, 28)}..
                 </h3>
                 <span className='text-lg font-semibold'>₹{item?.itemCost}</span>
 

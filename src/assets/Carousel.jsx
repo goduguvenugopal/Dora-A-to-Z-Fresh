@@ -4,28 +4,9 @@ import { dataContext } from "../App";
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { api, setCarousel } = useContext(dataContext);
-  const [offerTitle, setOfferTitle] = useState("");
-  const [images, setImages] = useState([]);
-
-
-
-  useEffect(() => {
-    const getCarousel = async () => {
-      try {
-        const res = await axios.get(`${api}/carousel/get-carousel`);
-        if (res) {
-          setCarousel(res.data.retrievedCarousel[0]);
-          setImages(res.data.retrievedCarousel[0].carouselImage);
-          setOfferTitle(res.data.retrievedCarousel[0].offerTitle)
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getCarousel();
-  }, []);
+  const {carousel} = useContext(dataContext);
+  const [offerTitle, setOfferTitle] = useState(carousel.offerTitle);
+  const [images, setImages] = useState(carousel.carouselImage);
 
   const totalItems = images?.length;
 

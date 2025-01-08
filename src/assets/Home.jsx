@@ -29,7 +29,7 @@ const Home = () => {
             <div className='p-3 mt-5'>
                 <h5 className='text-center text-2xl font-semibold'>Product Categories</h5>
                 <hr className='my-2 border border-orange-500' />
-                <div className="mt-5 py-6 grid  grid-cols-2 gap-y-5 gap-x-5 md:gap-y-6 lg:gap-y-6  md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+                <div className="mt-4 py-6 grid  grid-cols-2 gap-y-5 gap-x-5 md:gap-y-6 lg:gap-y-6  md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
 
                     {categories?.length > 0 ? <>
                         {categories?.map((item) => (
@@ -108,7 +108,7 @@ const Home = () => {
 
                     <h5 className=' text-2xl font-semibold'>Dora A to Z Fresh Milk</h5>
                     <hr className='my-2 border border-orange-500' />
-                    <h5 className='my-1 font-semibold text-lg'>Pure, Farm-Fresh Milk Delivered to Your Doorstep</h5>
+                    <h5 className='my-1 text-orange-600 font-semibold text-lg'>Pure, Farm-Fresh Milk Delivered to Your Doorstep</h5>
                     <p className='text-lg font-sans'>
                         Welcome to Dora A to Z Fresh, where we deliver pure, farm-fresh milk straight to your doorstep. Sourced directly from trusted farmers, our milk is 100% natural, raw, and unprocessed, ensuring the highest quality and nutrition. Free from additives and preservatives, our milk retains its natural taste and goodness. With ethical farming practices and convenient home delivery, Dora A to Z Fresh brings the wholesome purity of nature right to your home.
                     </p>
