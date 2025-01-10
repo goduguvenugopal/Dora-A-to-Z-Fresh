@@ -4,6 +4,7 @@ import Footer from './Footer'
 import { dataContext } from '../App'
 import { Link } from 'react-router-dom'
 import { FaDownload, FaShareSquare } from 'react-icons/fa'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 
 
@@ -36,7 +37,8 @@ const Home = () => {
 
                             <Link to={item.available === "no" ? "/" : `/products_by/${item.productCategoryName}`} key={item._id} className="group border-2 rounded border-red-300 w-full h-full  md:w-52   lg:w-72   p-3    transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 ">
                                 <div className=' relative'>
-                                    <img
+                                    <LazyLoadImage
+                                        effect='blur'
                                         src={item?.productImage}
                                         alt={item?.productCategoryName}
                                         className="h-fit w-full rounded "
@@ -70,7 +72,7 @@ const Home = () => {
 
             </div>
 
-{/* download share app section  */}
+            {/* download share app section  */}
             <section className="container mb-7 px-5 py-10 mx-auto flex items-center md:flex-row flex-col bg-gray-700">
                 <div className="flex flex-col md:pr-10 md:mb-0 mb-6 pr-0 w-full md:w-auto md:text-left text-center">
                     <h2 className="text-xs text-indigo-500 tracking-widest font-medium title-font mb-1">
@@ -100,7 +102,7 @@ const Home = () => {
             </section>
 
 
-{/* milk description section  */}
+            {/* milk description section  */}
             <div className='mb-9 p-3 bg-orange-100  rounded mt-5 flex justify-around flex-wrap gap-3'>
                 <img src="/buffalomilk.jpg" alt="buffalomilk"
                     className='rounded w-full lg:w-[40%]' />

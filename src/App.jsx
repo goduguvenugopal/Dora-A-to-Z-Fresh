@@ -12,6 +12,9 @@ import axios from "axios";
 import Profile from "./assets/Profile";
 import { Loading } from "./assets/Loading"
 import AllProducts from "./assets/AllProducts"
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
+
 
 export const dataContext = createContext();
 

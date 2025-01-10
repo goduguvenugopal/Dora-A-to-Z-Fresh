@@ -55,12 +55,17 @@ const Navbar = () => {
 
   return (
     <>
-      <div className={`bg-red-500 w-[100vw] h-[5.2rem] flex justify-around fixed top-0 left-0 items-center transition-transform duration-300 ${showNavbar ? 'translate-y-0' : '-translate-y-full'} z-10`}>
-        <FaBars size={25} title='open menu' className="text-white cursor-pointer" onClick={(e) => { setOffcanvas(true), e.stopPropagation() }} />
+      <div className={`bg-red-500 w-[100vw] h-[5.2rem] flex justify-between lg:justify-around px-[0.9rem] fixed top-0 left-0 items-center transition-transform duration-300 ${showNavbar ? 'translate-y-0' : '-translate-y-full'} z-10`}>
+        <div className='flex items-center justify-center relative'>
+          <FaBars size={25} title='open menu' className="text-white cursor-pointer" onClick={(e) => { setOffcanvas(true), e.stopPropagation() }} />
+          <Link onClick={() => setOffcanvas(false)} to="/search" className='text-[1.2rem] absolute top-[0.19rem] left-[3.5rem] lg:left-32'>
+            <FaSearch size={25} className="text-white cursor-pointer" />
+          </Link>
+        </div>
         <div className="w-[7.5rem] md:w-[7.9rem]">
           <img className="md:w-full rounded-full" src="/dora-logo.jpeg" alt="dora-logo" />
         </div>
-        <Link to="/cart" className="flex flex-wrap items-center gap-2 relative">
+        <Link to="/cart">
           <FaCartShopping
             size={25}
             title="Cart"
@@ -75,7 +80,6 @@ const Navbar = () => {
       <div onClick={(e) => e.stopPropagation()} className={`offcanvas-menu fixed z-50 top-0 left-0  h-screen w-screen lg:w-[30%] p-2 transform transition-transform duration-300 ${offcanvas ? "translate-x-0" : "-translate-x-full"}`}>
         <div className='bg-gray-700 relative flex flex-col gap-4 text-white p-5  h-full w-full rounded-lg'>
           <Link onClick={() => setOffcanvas(false)} to="/" className='text-[1.2rem] flex items-center gap-2'><FaHome /> Home</Link>
-          <Link onClick={() => setOffcanvas(false)} to="/search" className='text-[1.2rem] flex items-center gap-2'><FaSearch /> Search</Link>
           <Link onClick={() => setOffcanvas(false)} to="/contact" className='text-[1.2rem] flex items-center gap-2'><MdPhone /> Contact Us</Link>
           <Link onClick={() => setOffcanvas(false)} to="/profile" className='text-[1.2rem] flex items-center gap-2'><MdPerson /> Profile</Link>
 
@@ -86,7 +90,7 @@ const Navbar = () => {
           <Link onClick={() => setOffcanvas(false)} to="/addcategory" className='text-[1.2rem]'>Add New Category</Link>
           <Link onClick={() => setOffcanvas(false)} to="/admin" className='text-[1.2rem]'>Admin</Link>
           */}
-           <a href='/Dora A to Z Fresh.apk' download="Dora A to Z Fresh.apk" className='text-[1.2rem] absolute left-5 bottom-5 h-10 bg-blue-600 flex justify-center items-center gap-2 rounded-full w-fit hover:bg-blue-800 px-5'><FaDownload />  Download App</a>
+          <a href='/Dora A to Z Fresh.apk' download="Dora A to Z Fresh.apk" className='text-[1.2rem] absolute left-5 bottom-5 h-10 bg-blue-600 flex justify-center items-center gap-2 rounded-full w-fit hover:bg-blue-800 px-5'><FaDownload />  Download App</a>
 
           <MdClose size={25} className='absolute right-5 cursor-pointer' onClick={() => setOffcanvas(false)} />
         </div>

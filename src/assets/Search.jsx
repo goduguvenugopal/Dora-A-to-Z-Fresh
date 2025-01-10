@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import { FaSearch } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { dataContext } from '../App'
+import { LazyLoadImage } from 'react-lazy-load-image-component'
 
 const Search = () => {
   const { products } = useContext(dataContext)
@@ -47,9 +48,10 @@ const Search = () => {
 
             <div key={item._id} className="group border-2 rounded border-red-300 w-full h-full  md:w-52   lg:w-72   p-3 relative  hover:opacity-85">
               <Link to={`/product_over_view/${item._id}`} className=''>
-                <img
+                <LazyLoadImage
                   src={item.itemImage[0]}
                   alt={item.itemName}
+                  effect='blur'
                   className="h-fit w-full rounded"
                 />
               </Link>

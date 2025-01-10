@@ -64,10 +64,10 @@ const Footer = () => {
             <nav className="list-none mb-10 flex  items-center lg:items-start flex-col w-full">
               <div>
                 <li className='flex '>
-                  <a className="text-white-600 hover:text-white-800 flex items-center gap-2" href=' '><FaYoutube className='bg-white text-red-600   w-8 h-8 p-1 rounded-full ' /> YouTube</a>
+                  <a className="text-white-600 hover:text-white-800 flex items-center gap-2" href='https://www.youtube.com/@DoraA-ZFresh'><FaYoutube className='bg-white text-red-600   w-8 h-8 p-1 rounded-full ' /> YouTube</a>
                 </li>
                 <li className='flex mt-3'>
-                  <a className="text-white-600 hover:text-white-800 flex items-center gap-2" href=' '><FaInstagram className='bg-white text-red-600 w-8 h-8 p-1 rounded-full ' /> Instagram</a>
+                  <a className="text-white-600 hover:text-white-800 flex items-center gap-2" href='https://www.instagram.com/bunny_rao_bprs/profilecard/?igsh=MWg4amw1bDloYnd4eQ=='><FaInstagram className='bg-white text-red-600 w-8 h-8 p-1 rounded-full ' /> Instagram</a>
                 </li>
                 <li className='flex mt-3'>
                   <a className="text-white-600 hover:text-white-800 flex items-center gap-2" href=' '><FaFacebook className='bg-white text-blue-600   w-8 h-8 p-1 rounded-full ' /> Facebook</a>
@@ -123,9 +123,11 @@ const Footer = () => {
       </div>
       <div className="bg-white">
         <div className=" py-4 px-5 ">
+          <a href="mailto:venuiti97@gmail.com">
           <p className=" text-black text-center ">
             © 2025 Built with ❤️ by Venugopal. All rights reserved.
           </p>
+          </a>
 
         </div>
       </div>
