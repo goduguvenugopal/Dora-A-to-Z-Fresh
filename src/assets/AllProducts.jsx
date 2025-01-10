@@ -74,15 +74,15 @@ const AllProducts = () => {
           {categoryItems.length ? <>
             {categoryItems.map((item) => (
 
-              <div key={item._id} className="group border-2 rounded border-red-300 w-full h-full  md:w-52   lg:w-72   p-3 relative  hover:opacity-85">
-                <Link to={`/product_over_view/${item._id}`} className=''>
+              <Link to={`/product_over_view/${item._id}`} key={item._id} className="group border-2 rounded border-red-300 w-full h-full  md:w-52   lg:w-72   p-3 relative  hover:opacity-85">
+                <div>
                   <LazyLoadImage
                     src={item.itemImage[0]}
                     alt={item.itemName}
                     effect='blur'
                     className="h-fit w-full rounded"
                   />
-                </Link>
+                </div>
 
                 <div className="mt-2 text-center">
 
@@ -93,7 +93,7 @@ const AllProducts = () => {
                   <span className='text-lg font-semibold'>₹{item?.itemCost}</span>
 
                 </div>
-              </div>
+              </Link>
             ))}
           </> :
             <div className="text-lg font-medium flex justify-center items-center h-[70vh] w-[95vw]">

@@ -12,6 +12,7 @@ import axios from "axios";
 import Profile from "./assets/Profile";
 import { Loading } from "./assets/Loading"
 import AllProducts from "./assets/AllProducts"
+import ProductOverView from "./assets/ProductOverView"
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 
@@ -95,13 +96,13 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/products_by/:category" element={<AllProducts />} />
+        <Route path="/products_by_category/:category" element={<AllProducts />} />
+        <Route path="/product_over_view/:itemId" element={<ProductOverView/>}/>
         <Route path="/cart" element={<Cart />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/search" element={<Search />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<PageNotFound />} />
-
       </Routes>
     </dataContext.Provider>
   );

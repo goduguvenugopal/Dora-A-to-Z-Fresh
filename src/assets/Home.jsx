@@ -35,7 +35,7 @@ const Home = () => {
                     {categories?.length > 0 ? <>
                         {categories?.map((item) => (
 
-                            <Link to={item.available === "no" ? "/" : `/products_by/${item.productCategoryName}`} key={item._id} className="group border-2 rounded border-red-300 w-full h-full  md:w-52   lg:w-72   p-3    transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 ">
+                            <Link to={item.available === "no" ? "/" : `/products_by_category/${item.productCategoryName}`} key={item._id} className="group border-2 rounded border-red-300 w-full h-full  md:w-52   lg:w-72   p-3    transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 ">
                                 <div className=' relative'>
                                     <LazyLoadImage
                                         effect='blur'

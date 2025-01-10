@@ -62,9 +62,9 @@ const Navbar = () => {
             <FaSearch size={25} className="text-white cursor-pointer" />
           </Link>
         </div>
-        <div className="w-[7.5rem] md:w-[7.9rem]">
+        <Link to="/" className="w-[7.5rem] md:w-[7.9rem]">
           <img className="md:w-full rounded-full" src="/dora-logo.jpeg" alt="dora-logo" />
-        </div>
+        </Link>
         <Link to="/cart">
           <FaCartShopping
             size={25}

@@ -31,7 +31,7 @@ const Search = () => {
 
   return (
     <div className='mt-20 px-5 pb-10'>
-      <div className='flex justify-center pt-5 mb-7'>
+      <div className='flex justify-center pt-9 mb-7'>
         <div className='relative w-full sm:w-auto'>
 
           <input ref={searchRef} value={text} onChange={changeHandling} placeholder="Search for products" type="text" name="text" id="text" className=' w-full h-[3rem] lg:w-96 rounded-full border-2  py-1.5 pl-12 pr-20 text-gray-900 outline-none border-orange-600 placeholder:text-gray-800   sm:text-md sm:leading-6 placeholder="0.00' />
@@ -46,15 +46,15 @@ const Search = () => {
         {searchProducts.length ? <>
           {searchProducts.map((item) => (
 
-            <div key={item._id} className="group border-2 rounded border-red-300 w-full h-full  md:w-52   lg:w-72   p-3 relative  hover:opacity-85">
-              <Link to={`/product_over_view/${item._id}`} className=''>
+            <Link to={`/product_over_view/${item._id}`}   key={item._id} className="group border-2 rounded border-red-300 w-full h-full  md:w-52   lg:w-72   p-3 relative  hover:opacity-85">
+              <div>
                 <LazyLoadImage
                   src={item.itemImage[0]}
                   alt={item.itemName}
                   effect='blur'
                   className="h-fit w-full rounded"
                 />
-              </Link>
+              </div>
 
               <div className="mt-2 text-center">
 
@@ -64,10 +64,10 @@ const Search = () => {
                 </h3>
 
               </div>
-            </div>
+            </Link>
           ))}
         </> :
-          <div className="text-lg font-medium text-center w-screen">
+          <div className="text-lg flex items-center justify-center font-medium h-[45vh]  w-screen">
             No results found
           </div>
         }
