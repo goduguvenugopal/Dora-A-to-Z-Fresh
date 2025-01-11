@@ -3,15 +3,16 @@ import { Link, useParams } from 'react-router-dom'
 import { dataContext } from '../App'
 import Footer from './Footer'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
+import { scrollToTop } from './RouteHandler'
 
 
 
 
 const AllProducts = () => {
+  scrollToTop()
   const { category } = useParams()
   const { products } = useContext(dataContext)
   const [categoryItems, setCategoryItems] = useState([])
-
 
   useEffect(() => {
     const results = products.filter((item) => item.itemCategory?.toLowerCase().includes(category.toLowerCase()))

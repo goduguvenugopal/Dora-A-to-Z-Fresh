@@ -6,7 +6,7 @@ import PageNotFound from "./assets/PageNotFound";
 import Home from "./assets/Home";
 import Cart from "./assets/Cart";
 import ContactUs from "./assets/ContactUs";
-import RouteHandler from "./assets/RouteHandler";
+import {RouteHandler} from "./assets/RouteHandler";
 import Search from "./assets/Search";
 import axios from "axios";
 import Profile from "./assets/Profile";
@@ -20,6 +20,8 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 export const dataContext = createContext();
 
 function App() {
+  RouteHandler()
+  
   const api = import.meta.env.VITE_API;
   const [carousel, setCarousel] = useState({});
   const [products, setProducts] = useState([])
@@ -91,7 +93,7 @@ function App() {
       products, setProducts,
       categories, setCategories
     }}>
-      <RouteHandler />
+      
       <Navbar />
 
       <Routes>

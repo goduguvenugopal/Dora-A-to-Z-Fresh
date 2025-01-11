@@ -7,31 +7,19 @@ import { Loading } from './Loading'
 import { FaMinus, FaPlus } from 'react-icons/fa'
 
 const ProductOverView = () => {
-  const { api } = useContext(dataContext)
+  const { api, products } = useContext(dataContext)
   const { itemId } = useParams()
   const [product, setProduct] = useState({})
   const [itemImg, setItemImg] = useState("")
   const [itemWeight, setItemWeight] = useState("")
   const [itemCost, setItemCost] = useState("")
-  const [itemQty, setItemQty] = useState("")
+  const [itemQty, setItemQty] = useState(null)
 
-  // retrieving single product by id 
+  // finding single product by id 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const res = await axios.get(`${api}/product/get-single-product/${itemId}`)
-        if (res) {
-          console.log(res.data.retrievedSingleProduct);
-          setProduct(res.data.retrievedSingleProduct)
-        }
-      } catch (error) {
-        console.error(error);
-
-      }
-    }
-    fetchProduct()
-
-  }, [itemId])
+    const results = products.find((item) => item._id === itemId)
+    setProduct(results)
+  }, [products, itemId])
 
   // item weight,cost and qty initial value function 
   useEffect(() => {
@@ -39,6 +27,10 @@ const ProductOverView = () => {
       setItemWeight(product.itemWeight[0]);
       setItemCost(product.itemCost)
       setItemQty(1)
+    }else{
+      setItemCost(product.itemCost)
+      setItemQty(1)
+
     }
   }, [product]);
 
@@ -115,7 +107,7 @@ const ProductOverView = () => {
               </div>
 
               <div className="flex gap-1 mb-3 items-start">
-                <span className='text-2xl text-gray-700 font-medium'>₹{parseFloat(itemCost || 0).toFixed(2)}
+                <span className='text-2xl text-gray-700 font-medium'>Rs.{parseFloat(itemCost || 0).toFixed(2)}
                 </span>
               </div>
 
@@ -147,11 +139,9 @@ const ProductOverView = () => {
 
               {/* add to cart button  */}
               <div className="flex gap-3 justify-start my-5 w-full">
-
-                <button className="w-full bg-gradient-to-r from-indigo-700 to-orange-500 font-semibold text-white border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
+                <button className="w-full bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
                   Add to cart
                 </button>
-
               </div>
 
 

@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { Component, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const RouteHandler = () => {
+export const RouteHandler = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Scroll to the top when the route changes
-    window.scrollTo(0, 0);
 
     // Set document title based on the current route
     switch (location.pathname) {
@@ -20,12 +18,22 @@ const RouteHandler = () => {
         document.title = 'Contact Us for Any Delivery Queries';
         break;
       default:
-        document.title = 'Our Website';
+        document.title = 'Welcome to Dora A to Z Fresh';
         break;
     }
   }, [location]);
 
-  return null; // This component doesn't render anything
+  return null;
 };
 
-export default RouteHandler;
+
+
+// scroll to top custom Component 
+export const scrollToTop = () => {
+  const location = useLocation()
+  // Scroll to the top when the route changes
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [location])
+  return null
+}

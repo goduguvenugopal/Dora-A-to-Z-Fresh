@@ -3,13 +3,14 @@ import { FaSearch } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { dataContext } from '../App'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
+import { scrollToTop } from './RouteHandler'
 
 const Search = () => {
+  scrollToTop()
   const { products } = useContext(dataContext)
   const [searchProducts, setsearchProducts] = useState(products)
   const [text, setText] = useState("")
   const searchRef = useRef()
-
   const changeHandling = (e) => {
     setText(e.target.value)
 

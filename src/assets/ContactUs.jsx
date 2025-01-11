@@ -6,9 +6,11 @@ import { MdMail } from "react-icons/md";
 import { FaLocationDot, FaMapLocationDot } from "react-icons/fa6";
 import Footer from "./Footer";
 import { dataContext } from "../App";
+import { scrollToTop } from "./RouteHandler";
 
 
 const ContactUs = () => {
+  scrollToTop()
   const {api} = useContext(dataContext)
   const [activeIndex, setActiveIndex] = useState(null);
   const [message, setMessage] = useState("");
