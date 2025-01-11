@@ -74,23 +74,23 @@ const AllProducts = () => {
           {categoryItems.length ? <>
             {categoryItems.map((item) => (
 
-              <Link to={`/product_over_view/${item._id}`} key={item._id} className="group border-2 rounded border-red-300 w-full h-full  md:w-52   lg:w-72   p-3 relative  hover:opacity-85">
+              <Link to={`/product_over_view/${item._id}`} key={item._id} className="group  w-full h-full  md:w-52   lg:w-72  relative  hover:opacity-85">
                 <div>
                   <LazyLoadImage
                     src={item.itemImage[0]}
                     alt={item.itemName}
                     effect='blur'
-                    className="h-fit w-full rounded"
+                    className="h-fit w-full rounded-lg"
                   />
                 </div>
 
                 <div className="mt-2 text-center">
 
-                  <h3 className="text-[0.9rem] lg:text-[1rem]  text-black">
+                  <h3 className="text-[0.9rem] lg:text-[1rem] font-bold text-black">
 
                     {item?.itemName?.substring(0, 28)}..
                   </h3>
-                  <span className='text-lg font-semibold'>₹{item?.itemCost}</span>
+                  <span className='text-md text-gray-900'>₹{item?.itemCost}</span>
 
                 </div>
               </Link>

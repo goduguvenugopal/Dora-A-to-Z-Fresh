@@ -4,13 +4,16 @@ import { useParams } from 'react-router-dom'
 import { dataContext } from "../App"
 import { PiShareNetwork } from 'react-icons/pi'
 import { Loading } from './Loading'
+import { FaMinus, FaPlus } from 'react-icons/fa'
 
 const ProductOverView = () => {
   const { api } = useContext(dataContext)
   const { itemId } = useParams()
   const [product, setProduct] = useState({})
   const [itemImg, setItemImg] = useState("")
-
+  const [itemWeight, setItemWeight] = useState("")
+  const [itemCost, setItemCost] = useState("")
+  const [itemQty, setItemQty] = useState("")
 
   // retrieving single product by id 
   useEffect(() => {
@@ -18,7 +21,7 @@ const ProductOverView = () => {
       try {
         const res = await axios.get(`${api}/product/get-single-product/${itemId}`)
         if (res) {
-          console.log(res.data);
+          console.log(res.data.retrievedSingleProduct);
           setProduct(res.data.retrievedSingleProduct)
         }
       } catch (error) {
@@ -30,21 +33,45 @@ const ProductOverView = () => {
 
   }, [itemId])
 
+  // item weight,cost and qty initial value function 
+  useEffect(() => {
+    if (product && product.itemWeight && product.itemWeight.length > 0) {
+      setItemWeight(product.itemWeight[0]);
+      setItemCost(product.itemCost)
+      setItemQty(1)
+    }
+  }, [product]);
 
+
+  // item weight and cost radio input handle function 
+  const weightSelectFunc = (weightParam) => {
+    if (weightParam === "250") {
+      setItemWeight(weightParam)
+      setItemCost(product.itemCost)
+    } else if (weightParam === "500") {
+      setItemWeight(weightParam)
+      setItemCost(product.itemHalfKgCost)
+    } else if (weightParam === "1000") {
+      setItemWeight(weightParam)
+      setItemCost(product.itemKgCost)
+    }
+  }
+
+  // item image initial value function 
   useEffect(() => {
     if (product?.itemImage?.length > 0) {
       setItemImg(product?.itemImage[0])
     }
-
   }, [product])
 
 
   // share function 
   const shareFunc = async () => {
+
     try {
       await navigator.share({
         title: `Check out ${product.itemName} on Dora A to Z Fresh!`,
-        text: `Hello! Welcome to Dora A to Z Fresh! 🌸 Take a look at this product: "${data.itemName}"\n\nDescription: ${product.itemDescription}\nPrice: ₹${product.itemCost}\n\nDiscover more by clicking the link below:`,
+        text: `Hello! Welcome to Dora A to Z Fresh! 🌸 Take a look at this product: "${product.itemName}"\n\nDescription: ${product.itemDescription}\nPrice: ₹${product.itemCost}\n\nDiscover more by clicking the link below:`,
         url: `https://doraatozfresh.vercel.app/product_over_view/${itemId}`
       });
     } catch (error) {
@@ -52,65 +79,81 @@ const ProductOverView = () => {
     }
   };
 
-   // Check if the product is still being retrieved or is empty
-   if (!product || Object.keys(product).length === 0) {
-    return <Loading />; 
+  // Check if the product is still being retrieved or is empty
+  if (!product || Object.keys(product).length === 0) {
+    return <Loading />;
   }
-  
+
 
   return (
     <div>
-      <section className="text-gray-600 p-3">
+      <section className="text-gray-600 p-3 select-none">
         <div className=" py-24 pb-8">
-          <div className="flex flex-row gap-5 gap-x-[3rem] flex-wrap">
-              <div className='relative border flex flex-col gap-3 w-full lg:h-[25rem] sm:w-[48%]'>
-                <img
-                  alt="ecommerce"
-                  className=" w-full rounded "
-                  src={itemImg}
-                />
-                <PiShareNetwork title='Share' onClick={shareFunc} className='absolute top-2 bg-black p-1 h-8 w-10 cursor-pointer  text-white rounded-full  right-2  ' />
-              
-              <div className=' flex gap-3'>
-                {product?.itemImage?.map((item ,index)=>(
-                  <img key={index} src={item} alt={product.itemName} onClick={()=> setItemImg(item)} className='w-32 h-24 rounded cursor-pointer hover:border-2 hover:border-blue-600' />
+          <div className="flex flex-row gap-2 gap-x-[3rem] flex-wrap">
+            {/* image section  */}
+            <div className='relative   flex flex-col gap-3 w-full lg:h-[25rem] sm:w-[48%]'>
+              <img
+                alt="ecommerce"
+                className=" w-full h-auto rounded-lg "
+                src={itemImg}
+              />
+              <PiShareNetwork title='Share' onClick={shareFunc} className='absolute top-2 bg-black p-1 h-8 w-10 cursor-pointer  text-white rounded-full  right-2  ' />
+
+              <div className=' flex gap-3 flex-wrap'>
+                {product?.itemImage?.map((item, index) => (
+                  <img key={index} src={item} alt={product.itemName} onClick={() => setItemImg(item)} className='w-[5rem] h-[4rem] lg:w-32 lg:h-24 rounded-lg cursor-pointer hover:border-2 hover:border-blue-600' />
 
                 ))}
               </div>
-              </div>
+            </div>
 
-            <div className="w-full sm:w-[40%] border">
-              <h2 className="text-sm title-font text-gray-500 tracking-widest">
-
-              </h2>
+            <hr className='border w-full sm:hidden border-gray-200 mt-3' />
+            {/* item name and cost section  */}
+            <div className="w-full sm:w-[40%] ">
               <div className="flex gap-1 mb-3 justify-start  items-start ">
-                <span className='text-2xl font-semibold'>{product.itemName}</span>
+                <span className='text-3xl text-black capitalize font-semibold'>{product.itemName}</span>
               </div>
 
+              <div className="flex gap-1 mb-3 items-start">
+                <span className='text-2xl text-gray-700 font-medium'>₹{parseFloat(itemCost || 0).toFixed(2)}
+                </span>
+              </div>
 
-              {/* <div className="flex gap-1 mb-3 items-start">
-                  <span className='font-semibold text-nowrap'>Book Author : </span>
-                  <span className='text-lg'>{data.bookAuthor}</span>
-                </div>
-             
-              <div className="flex gap-1 mb-4 items-center">
-                <span className='font-semibold text-nowrap'>{data.itemType === "other" ? "Price" : "Book Price"} : </span>
-                <span className='text-lg font-semibold text-black'>  ₹{data.bookPrice}</span>
-              </div> */}
-
-
-              {/* <div className='hidden md:block'>
-
-                  <div className="flex gap-3 justify-start my-5">
-
-                    {cart.some((item) => item._id === data._id) ? <Link to="/cart" className=" bg-indigo-800 w-[12rem] text-center font-semibold text-white border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
-                      GO TO CART
-                    </Link> : <button onClick={() => addCartFunc(data._id)} className="bg-gradient-to-r w-[12rem] from-indigo-700 to-orange-500 font-semibold text-white border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
-                      ADD TO CART
-                    </button>}
-
+              <hr className='border  border-gray-200 my-3' />
+              {/* item weight quantity selection section  */}
+              <div className="flex gap-1 mb-3 items-center">
+                <span className='font-semibold text-nowrap'>Quantity : </span>
+                <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemCategory === "milk" ? "ml" : "g"}</span>
+              </div>
+              <div className='flex gap-2 flex-wrap mb-3'>
+                {product.itemWeight.map((item, index) => (
+                  <div onClick={() => weightSelectFunc(item)} key={index} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
+                    {item}{product.itemCategory === "milk" ? "ml" : "g"}
                   </div>
-                </div> */}
+                ))}
+              </div>
+
+              {/* item quantity increment and decrement section  */}
+              <div className="flex gap-1 mb-3 items-center">
+                <span className='font-semibold text-nowrap'>Quantity : </span>
+                <span className='text-lg font-semibold text-black'> {itemQty}</span>
+              </div>
+              <div className='flex gap-2 flex-wrap mb-3'>
+                <div className='border-2 border-gray-500 py-2 hover:border-gray-800 px-4 rounded-full cursor-pointer font-semibold flex items-center gap-5'>
+                  <FaMinus className='cursor-pointer' onClick={() => setItemQty(itemQty - 1)} /><span>{itemQty}</span><FaPlus className='cursor-pointer' onClick={() => setItemQty(itemQty + 1)} />
+                </div>
+
+              </div>
+
+              {/* add to cart button  */}
+              <div className="flex gap-3 justify-start my-5 w-full">
+
+                <button className="w-full bg-gradient-to-r from-indigo-700 to-orange-500 font-semibold text-white border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
+                  Add to cart
+                </button>
+
+              </div>
+
 
               {/* <div className="md:hidden fixed bottom-2 left-2 right-2">
 

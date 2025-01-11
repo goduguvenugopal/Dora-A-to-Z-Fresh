@@ -35,13 +35,13 @@ const Home = () => {
                     {categories?.length > 0 ? <>
                         {categories?.map((item) => (
 
-                            <Link to={item.available === "no" ? "/" : `/products_by_category/${item.productCategoryName}`} key={item._id} className="group border-2 rounded border-red-300 w-full h-full  md:w-52   lg:w-72   p-3    transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 ">
+                            <Link to={item.available === "no" ? "/" : `/products_by_category/${item.productCategoryName}`} key={item._id} className="group w-full h-full  md:w-52   lg:w-72   transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-105 ">
                                 <div className=' relative'>
                                     <LazyLoadImage
                                         effect='blur'
                                         src={item?.productImage}
                                         alt={item?.productCategoryName}
-                                        className="h-fit w-full rounded "
+                                        className="h-fit w-full rounded-lg "
                                     />
                                     {item.available === "no" && (
                                         <div className='absolute flex items-center justify-center  top-0 left-0 w-full h-full bg-black bg-opacity-0  text-white '>
@@ -55,7 +55,7 @@ const Home = () => {
 
                                 <div className="mt-2 text-center">
 
-                                    <h3 className="text-lg capitalize  text-gray-800">
+                                    <h3 className="text-lg capitalize font-medium text-gray-800">
 
                                         {item?.productCategoryName}
                                     </h3>
@@ -75,7 +75,7 @@ const Home = () => {
             {/* download share app section  */}
             <section className="container mb-7 px-5 py-10 mx-auto flex items-center md:flex-row flex-col bg-gray-700">
                 <div className="flex flex-col md:pr-10 md:mb-0 mb-6 pr-0 w-full md:w-auto md:text-left text-center">
-                    <h2 className="text-xs text-indigo-500 tracking-widest font-medium title-font mb-1">
+                    <h2 className="text-xs text-orange-300 tracking-widest font-medium title-font mb-1">
                         Dora A to Z Fresh
                     </h2>
                     <h1 className=" text-md font-medium title-font text-white">
