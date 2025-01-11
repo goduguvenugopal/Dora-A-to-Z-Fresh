@@ -91,7 +91,7 @@ const AllProducts = () => {
 
                     {item?.itemName?.substring(0, 28)}..
                   </h3>
-                  <span className='text-md text-gray-900'>₹{item?.itemCost}</span>
+                  <span className='text-md text-gray-900'>Rs. {parseFloat(item?.itemCost || 0).toFixed(2)}</span>
 
                 </div>
               </Link>
