@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { dataContext } from "../App"
 import { PiShareNetwork } from 'react-icons/pi'
 import { Loading } from './Loading'
-import { FaMinus, FaPlus } from 'react-icons/fa'
+import { FaMinus, FaPlus, FaTruck } from 'react-icons/fa'
 import { Slide, toast, ToastContainer } from 'react-toastify'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import Footer from './Footer'
@@ -23,10 +23,12 @@ const ProductOverView = () => {
   const [areas, setAreas] = useState([])
   const [noServiceText, setNoServiceText] = useState("")
   const [areaName, setAreaName] = useState("")
+  const [orderType, setOrderType] = useState("buyonce")
+  const [days, setDays] = useState(7)
 
   // related products filter function 
   useEffect(() => {
-    const results = products.filter((item) => item.itemSubCategory === product.itemSubCategory)
+    const results = products?.filter((item) => item?.itemSubCategory === product?.itemSubCategory)
     if (results.length > 1) {
       setRelatedProducts(results)
     }
@@ -96,17 +98,31 @@ const ProductOverView = () => {
     setAreas(results)
     if (results.length > !0) {
       setAreaName("")
-      setNoServiceText("Unfortunately, door delivery service is currently not available at your location. We apologize for the inconvenience.")
+      setNoServiceText("Door delivery service is currently not available at your location. We apologize for the inconvenience.")
       setAreas([])
     }
   }
 
 
   const areaSelectFunc = (param) => {
-    setNoServiceText("Great news! Door delivery service is available at your location. You can proceed to add the product to your cart")
+    setNoServiceText("Door delivery service is available at your location.")
     setAreaName(param)
     setAreas([])
   }
+
+
+
+  // order type select drop down handle func 
+  const orderTypeFunc = (event) => {
+    const inputText = event.target.value
+    if (inputText === "subscription") {
+      setOrderType(inputText)
+    } else {
+      setOrderType("buyonce")
+    }
+
+  }
+
 
 
   // Check if the product is still being retrieved or is empty
@@ -117,7 +133,7 @@ const ProductOverView = () => {
 
   return (
     <>
-      <ToastContainer position='top-center' draggable transition={Slide} theme='colored' />
+      <ToastContainer position='top-center' draggable transition={Slide} theme='dark' />
 
       <section className="text-gray-600 p-3 select-none mt-3 mb-7 pt-24">
 
@@ -142,18 +158,24 @@ const ProductOverView = () => {
           <hr className='border w-full sm:hidden border-gray-200 mt-3' />
           {/* item name and cost section  */}
           <div className="w-full sm:w-[40%] ">
-            <div className="flex gap-1 mb-3 justify-start  items-start ">
-              <span className='text-3xl text-black capitalize font-semibold'>{product.itemName}</span>
-            </div>
-
             <div className="flex flex-col gap-3 mb-3 ">
               <div className='flex gap-3 mb-1 items-center'>
 
-                <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(itemCost || 0).toFixed(2)}
-                </span>{
-                  itemWeight === "250" || product.itemCategory === "food" || product.itemCategory === "non-veg" ?
-                    <span className='text-md line-through text-red-700 font-medium'>Rs. {parseFloat(product.offerCost || 0).toFixed(2)}
-                    </span> : null
+
+                {orderType === "subscription" ? <>
+                  <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(days * itemCost || 0).toFixed(2)}
+                  </span>
+                </>
+                  :
+                  <>
+                    <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(itemCost || 0).toFixed(2)}
+                    </span>
+                    {
+                      itemWeight === "250" || product.itemCategory === "food" || product.itemCategory === "non-veg" ?
+                        <span className='text-md line-through text-red-700 font-medium'>Rs. {parseFloat(product.offerCost || 0).toFixed(2)}
+                        </span> : null
+                    }
+                  </>
                 }
 
               </div>
@@ -216,7 +238,7 @@ const ProductOverView = () => {
                       <span className='font-semibold text-nowrap'>Quantity : </span>
                       <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemCategory === "milk" ? "ml" : "g"}</span>
                     </div>
-                    <div className='flex gap-2 flex-wrap mb-3'>
+                    <div className='flex gap-2 flex-wrap mb-5'>
                       {product.itemWeight.map((item, index) => (
                         <div onClick={() => weightSelectFunc(item)} key={index} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
                           {item}{product.itemCategory === "milk" ? "ml" : "g"}
@@ -232,23 +254,68 @@ const ProductOverView = () => {
                   <span className='font-semibold text-nowrap'>Quantity : </span>
                   <span className='text-lg font-semibold text-black'> {itemQty}</span>
                 </div>
-                <div className='flex gap-2 flex-wrap mb-3'>
+                <div className='flex gap-2 flex-wrap mb-5'>
                   <div className='border-2 border-gray-500 py-2 hover:border-gray-800 px-4 rounded-full  font-semibold flex items-center gap-5'>
                     <FaMinus className={` text-lg hover:text-blue-600 ${itemQty === 1 ? "pointer-events-none " : "cursor-pointer"}`} onClick={() => setItemQty(itemQty - 1)} /><span>{itemQty}</span><FaPlus className='cursor-pointer  text-lg hover:text-blue-600' onClick={() => {
                       if (itemQty < parseInt(product.itemStock)) {
                         setItemQty(itemQty + 1)
                       } else {
-                        toast.warning(`Maximum quantity limit ${itemQty}`)
+                        toast.warning(`Contact us for larger quantity orders.`)
                       }
 
                     }} />
                   </div>
                 </div>
 
+                {/* order type and suscription section */}
+
+                {product.itemSubCategory === "Milk" || product.itemSubCategory === "Curd" ?
+                  <>
+                    <div className="flex gap-1 mb-3 items-center">
+                      <span className='font-semibold text-nowrap'>Order Type : </span>
+                      <select onChange={orderTypeFunc} className=' border-2 rounded  border-gray-500 '>
+                        <option value="" disabled>Select Order Type</option>
+                        <option value="buyonce">Buy Once</option>
+                        <option value="subscription">Subscription</option>
+                      </select>
+                    </div>
+                    {orderType === "buyonce" && <h5 className='font-semibold my-4 flex items-center gap-2'><FaTruck className='text-blue-500'/> Delivery charges apply at checkout</h5>}
+
+                    {orderType === "subscription" && <>
+                      <div className="flex gap-1 mb-3 items-center">
+                        <span className='font-semibold text-nowrap'>Days : </span>
+                        <span className='text-lg font-semibold text-black'>{days} days</span>
+                      </div>
+                      <div className='flex gap-2 flex-wrap mb-5'>
+                        <div onClick={() => setDays(7)} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
+                          7 days
+                        </div>
+                        <div onClick={() => setDays(10)} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
+                          10 days
+                        </div>
+                        <div onClick={() => setDays(20)} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
+                          20 days
+                        </div>
+                        <div onClick={() => setDays(30)} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
+                          30 days
+                        </div>
+                      </div>
+                    <h5 className='font-semibold mb-2 flex items-center gap-2 text-green-600'><FaTruck className='text-blue-500'/> free delivery on all subscription orders.</h5>
+                    <h5 className=' mb-3 flex items-center gap-2 '>Subscription orders are delivered daily at <span className='font-bold'>6 PM</span> and  <span className='font-bold'>6 AM</span></h5>
+
+                    </>}
+
+
+                  </> :
+                  <h5 className='font-semibold my-4 flex items-center gap-2'><FaTruck className='text-blue-500'/> Delivery charges apply at checkout</h5>
+                   
+                }
+
+
                 {/* checking delivery service to address  */}
 
                 <div>
-                  <h6 className='font-bold'>Note : <span className='font-normal font-serif'>Before adding this product to your cart, please check if door delivery is available in your area.</span></h6>
+                  <h6 className='font-bold'>Note : <span className='font-normal'>Check door delivery service for your location.</span></h6>
                   <div className='mt-4 relative'>
                     <input onChange={areaInputHandleFunc} type="text" className='rounded w-full border-2 border-blue-500 py-1 pl-3 ' placeholder='Enter your location check delivery availability.' />
                     {areas.length > 0 ? <div className="border-2 absolute top-10 left-0 bg-white z-10 mt-[0.01rem] flex flex-col outline-none border-blue-500 rounded-lg p-2 px-1 w-full">
@@ -289,7 +356,7 @@ const ProductOverView = () => {
 
         {/* related products section  */}
         {relatedProducts.length > 1 &&
-          <div className='mt-3 lg:px-9'>
+          <div className='mt-10 lg:px-9'>
             <h5 className='text-2xl font-medium text-black'>Related Products</h5>
             <hr className='border border-gray-200 mb-5 mt-3 lg:mt-3' />
 
