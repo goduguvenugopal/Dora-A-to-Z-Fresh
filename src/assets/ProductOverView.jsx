@@ -8,7 +8,7 @@ import { Slide, toast, ToastContainer } from 'react-toastify'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import Footer from './Footer'
 import { scrollToTop } from './RouteHandler'
-
+import { locations } from "./hardCodeData"
 
 const ProductOverView = () => {
   scrollToTop()
@@ -20,8 +20,10 @@ const ProductOverView = () => {
   const [itemCost, setItemCost] = useState("")
   const [itemQty, setItemQty] = useState(null)
   const [relatedProducts, setRelatedProducts] = useState([])
+  const [areas, setAreas] = useState([])
+  const [noServiceText, setNoServiceText] = useState("")
+  const [areaName, setAreaName] = useState("")
 
-  console.log(product);
   // related products filter function 
   useEffect(() => {
     const results = products.filter((item) => item.itemSubCategory === product.itemSubCategory)
@@ -86,6 +88,27 @@ const ProductOverView = () => {
     }
   };
 
+
+  // searcing for area input handle function 
+  const areaInputHandleFunc = (e) => {
+    const areaName = e.target.value
+    const results = locations.filter((item) => item.toLowerCase().includes(areaName.toLowerCase()))
+    setAreas(results)
+    if (results.length > !0) {
+      setAreaName("")
+      setNoServiceText("Unfortunately, door delivery service is currently not available at your location. We apologize for the inconvenience.")
+      setAreas([])
+    }
+  }
+
+
+  const areaSelectFunc = (param) => {
+    setNoServiceText("Great news! Door delivery service is available at your location. You can proceed to add the product to your cart")
+    setAreaName(param)
+    setAreas([])
+  }
+
+
   // Check if the product is still being retrieved or is empty
   if (!product || Object.keys(product).length === 0) {
     return <Loading />;
@@ -146,52 +169,119 @@ const ProductOverView = () => {
             </div>
 
             <hr className='border border-gray-200 mb-2 mt-5' />
-            {/* item weight quantity selection section  */}
-            {product.itemWeight.length > 0 ?
+
+            {/* rendering elements based on stock availability  */}
+            {product.itemStock === "0" ?
               <>
-                <div className="flex gap-1 mb-3 items-center">
+                <div className="flex gap-1 mb-3 items-center pointer-events-none">
                   <span className='font-semibold text-nowrap'>Quantity : </span>
                   <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemCategory === "milk" ? "ml" : "g"}</span>
                 </div>
-                <div className='flex gap-2 flex-wrap mb-3'>
+                <div className='flex gap-2 flex-wrap mb-3 pointer-events-none'>
                   {product.itemWeight.map((item, index) => (
                     <div onClick={() => weightSelectFunc(item)} key={index} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
                       {item}{product.itemCategory === "milk" ? "ml" : "g"}
                     </div>
                   ))}
                 </div>
-              </> : ""
+                <div className="flex gap-1 mb-3 items-center pointer-events-none">
+                  <span className='font-semibold text-nowrap'>Quantity : </span>
+                  <span className='text-lg font-semibold text-black'> {itemQty}</span>
+                </div>
+                <div className='flex gap-2 flex-wrap mb-3 pointer-events-none'>
+                  <div className='border-2 border-gray-500 py-2 hover:border-gray-800 px-4 rounded-full  font-semibold flex items-center gap-5'>
+                    <FaMinus className={` text-lg hover:text-blue-600 ${itemQty === 1 ? "pointer-events-none " : "cursor-pointer"}`} onClick={() => setItemQty(itemQty - 1)} /><span>{itemQty}</span><FaPlus className='cursor-pointer  text-lg hover:text-blue-600' onClick={() => {
+                      if (itemQty < parseInt(product.itemStock)) {
+                        setItemQty(itemQty + 1)
+                      } else {
+                        toast.warning(`Maximum quantity limit ${itemQty}`)
+                      }
+
+                    }} />
+                  </div>
+                </div>
+                <div className="flex gap-3 justify-start my-5 w-full">
+                  <button className="w-full bg-gray-400 font-semibold text-white border-0 py-3 px-6 focus:outline-none pointer-events-none rounded-full">
+                    Out Of Stock
+                  </button>
+                </div>
+              </>
+
+              :
+              <>
+                {/* item weight quantity selection section  */}
+                {product.itemWeight.length > 0 ?
+                  <>
+                    <div className="flex gap-1 mb-3 items-center">
+                      <span className='font-semibold text-nowrap'>Quantity : </span>
+                      <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemCategory === "milk" ? "ml" : "g"}</span>
+                    </div>
+                    <div className='flex gap-2 flex-wrap mb-3'>
+                      {product.itemWeight.map((item, index) => (
+                        <div onClick={() => weightSelectFunc(item)} key={index} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
+                          {item}{product.itemCategory === "milk" ? "ml" : "g"}
+                        </div>
+                      ))}
+                    </div>
+                  </> : ""
+                }
+
+
+                {/* item quantity increment and decrement section  */}
+                <div className="flex gap-1 mb-3 items-center">
+                  <span className='font-semibold text-nowrap'>Quantity : </span>
+                  <span className='text-lg font-semibold text-black'> {itemQty}</span>
+                </div>
+                <div className='flex gap-2 flex-wrap mb-3'>
+                  <div className='border-2 border-gray-500 py-2 hover:border-gray-800 px-4 rounded-full  font-semibold flex items-center gap-5'>
+                    <FaMinus className={` text-lg hover:text-blue-600 ${itemQty === 1 ? "pointer-events-none " : "cursor-pointer"}`} onClick={() => setItemQty(itemQty - 1)} /><span>{itemQty}</span><FaPlus className='cursor-pointer  text-lg hover:text-blue-600' onClick={() => {
+                      if (itemQty < parseInt(product.itemStock)) {
+                        setItemQty(itemQty + 1)
+                      } else {
+                        toast.warning(`Maximum quantity limit ${itemQty}`)
+                      }
+
+                    }} />
+                  </div>
+                </div>
+
+                {/* checking delivery service to address  */}
+
+                <div>
+                  <h6 className='font-bold'>Note : <span className='font-normal font-serif'>Before adding this product to your cart, please check if door delivery is available in your area.</span></h6>
+                  <div className='mt-4 relative'>
+                    <input onChange={areaInputHandleFunc} type="text" className='rounded w-full border-2 border-blue-500 py-1 pl-3 ' placeholder='Enter your location check delivery availability.' />
+                    {areas.length > 0 ? <div className="border-2 absolute top-10 left-0 bg-white z-10 mt-[0.01rem] flex flex-col outline-none border-blue-500 rounded-lg p-2 px-1 w-full">
+                      {
+                        areas.map((item, index) => (
+                          <span onClick={() => areaSelectFunc(item)} className='hover:bg-blue-600 hover:text-white cursor-pointer rounded p-1 px-2' key={index} value={item}>{item}</span>
+                        ))
+                      }
+                    </div>
+                      : <div className='mt-3'>
+                        <p className={`${areaName ? "text-green-600" : "text-red-700"}`}>{noServiceText}</p>
+                      </div>
+                    }
+
+                  </div>
+                </div>
+
+                {/* add to cart button  */}
+                <div className="flex gap-3 justify-start my-5 w-full">
+                  <button className="w-full bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
+                    Add to cart
+                  </button>
+                </div>
+
+              </>
             }
 
-
-            {/* item quantity increment and decrement section  */}
-            <div className="flex gap-1 mb-3 items-center">
-              <span className='font-semibold text-nowrap'>Quantity : </span>
-              <span className='text-lg font-semibold text-black'> {itemQty}</span>
-            </div>
-            <div className='flex gap-2 flex-wrap mb-3'>
-              <div className='border-2 border-gray-500 py-2 hover:border-gray-800 px-4 rounded-full  font-semibold flex items-center gap-5'>
-                <FaMinus className={` text-lg hover:text-blue-600 ${itemQty === 1 ? "pointer-events-none " : "cursor-pointer"}`} onClick={() => setItemQty(itemQty - 1)} /><span>{itemQty}</span><FaPlus className='cursor-pointer  text-lg hover:text-blue-600' onClick={() => {
-                  if (itemQty < parseInt(product.itemStock)) {
-                    setItemQty(itemQty + 1)
-                  } else {
-                    toast.warning(`Maximum quantity limit ${itemQty}`)
-                  }
-
-                }} />
-              </div>
-            </div>
-            {/* add to cart button  */}
-            <div className="flex gap-3 justify-start my-5 w-full">
-              <button className="w-full bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
-                Add to cart
-              </button>
-            </div>
           </div>
+
           {/* Description section  */}
         </div>
-        <hr className='border border-gray-200 mb-2 lg:mt-5' />
         <div className='lg:px-9'>
+          <hr className='border   border-gray-200 mb-2 lg:mt-5' />
           <h5 className='font-bold text-lg mb-2'>Description</h5>
           <p className='font-serif'>{product.itemDescription}</p>
         </div>
@@ -200,9 +290,10 @@ const ProductOverView = () => {
         {/* related products section  */}
         {relatedProducts.length > 1 &&
           <div className='mt-3 lg:px-9'>
-            <h5 className='text-2xl font-bold'>Related Products</h5>
+            <h5 className='text-2xl font-medium text-black'>Related Products</h5>
+            <hr className='border border-gray-200 mb-5 mt-3 lg:mt-3' />
 
-            <div className='mt-4 flex gap-3 overflow-x-auto'>
+            <div className='mt-4 grid grid-cols-2 gap-y-6 gap-x-5 md:gap-y-7 lg:gap-y-6  md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8'>
               {relatedProducts.map((item) => (
                 <Link to={`/product_over_view/${item._id}`} key={item._id} className="group  w-full h-full  md:w-52   lg:w-72  relative  hover:opacity-85">
                   <div>
@@ -218,7 +309,7 @@ const ProductOverView = () => {
 
                     <h3 className="text-[0.9rem] lg:text-[1rem] font-bold text-black">
 
-                      {item?.itemName?.substring(0, 28)}..
+                      {item?.itemName?.substring(0, 18)}..
                     </h3>
                     <span className='text-md text-gray-900'>Rs. {parseFloat(item?.itemCost || 0).toFixed(2)}</span>
 
