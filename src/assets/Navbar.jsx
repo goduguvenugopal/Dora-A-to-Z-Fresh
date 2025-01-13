@@ -1,13 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { BsFillBoxSeamFill } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
 import { FaBars, FaDownload, FaHome, FaSearch } from 'react-icons/fa';
 import { FaCartShopping } from 'react-icons/fa6';
-import { MdClose, MdPerson, MdPhone } from 'react-icons/md';
+import { MdClose, MdLogin, MdLogout, MdPhone } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { dataContext } from '../App';
 
 
 
 const Navbar = () => {
+  const { token, setToken } = useContext(dataContext)
   const [offcanvas, setOffcanvas] = useState(false)
   const [showNavbar, setShowNavbar] = useState(true);
   const [prevScrollPos, setPrevScrollPos] = useState(window.scrollY);
@@ -79,17 +82,20 @@ const Navbar = () => {
 
       <div onClick={(e) => e.stopPropagation()} className={`offcanvas-menu fixed z-50 top-0 left-0  h-screen w-screen lg:w-[30%] p-2 transform transition-transform duration-300 ${offcanvas ? "translate-x-0" : "-translate-x-full"}`}>
         <div className='bg-gray-700 relative flex flex-col gap-4 text-white p-5  h-full w-full rounded-lg'>
-          <Link onClick={() => setOffcanvas(false)} to="/" className='text-[1.2rem] flex items-center gap-2'><FaHome /> Home</Link>
-          <Link onClick={() => setOffcanvas(false)} to="/contact" className='text-[1.2rem] flex items-center gap-2'><MdPhone /> Contact Us</Link>
-          <Link onClick={() => setOffcanvas(false)} to="/profile" className='text-[1.2rem] flex items-center gap-2'><MdPerson /> Profile</Link>
+          <Link onClick={() => setOffcanvas(false)} to="/" className='text-[1.2rem] flex items-center  border-b border-gray-700 hover:border-white gap-3  w-fit'><FaHome /> Home</Link>
+          <Link onClick={() => setOffcanvas(false)} to="/orders" className='text-[1.2rem] flex items-center  w-fit gap-[0.9rem] border-b  border-gray-700 hover:border-white'> <BsFillBoxSeamFill size={17} /> Orders </Link>
+          <Link onClick={() => setOffcanvas(false)} to="/profile" className='text-[1.2rem] flex items-center  w-fit gap-[0.7rem] border-b  border-gray-700 hover:border-white'><CgProfile size={22} /> Profile</Link>
+          <Link onClick={() => setOffcanvas(false)} to="/contact" className='text-[1.2rem] flex items-center  w-fit gap-[0.7rem] border-b  border-gray-700 hover:border-white'><MdPhone size={22} /> Contact Us</Link>
+          {token ?
+            <div onClick={() => {
+              localStorage.removeItem("token")
+              setToken("")
+              setOffcanvas(false)
+            }} to="/login" className='text-[1.2rem] cursor-pointer flex items-center  w-fit   gap-[0.7rem] border-b  border-gray-700 hover:border-white'><MdLogout size={23} /> Log out</div>
+            :
+            <Link onClick={() => setOffcanvas(false)} to="/login" className='text-[1.2rem] flex items-center  w-fit   gap-[0.7rem] border-b  border-gray-700 hover:border-white'><MdLogin size={23} /> Login</Link>
+          }
 
-
-          {/*  <Link onClick={() => setOffcanvas(false)} to="/products" className='text-[1.2rem]'>Update Products</Link>
-          <Link onClick={() => setOffcanvas(false)} to="/uploadproducts" className='text-[1.2rem]'>Add Products</Link>
-          <Link onClick={() => setOffcanvas(false)} to="/carousel" className='text-[1.2rem]'>Add Offer Images</Link>
-          <Link onClick={() => setOffcanvas(false)} to="/addcategory" className='text-[1.2rem]'>Add New Category</Link>
-          <Link onClick={() => setOffcanvas(false)} to="/admin" className='text-[1.2rem]'>Admin</Link>
-          */}
           <a href='/Dora A to Z Fresh.apk' download="Dora A to Z Fresh.apk" className='text-[1.2rem] absolute left-5 bottom-5 h-10 bg-blue-600 flex justify-center items-center gap-2 rounded-full w-fit hover:bg-blue-800 px-5'><FaDownload />  Download App</a>
 
           <MdClose size={25} className='absolute right-5 cursor-pointer' onClick={() => setOffcanvas(false)} />

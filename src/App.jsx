@@ -6,7 +6,7 @@ import PageNotFound from "./assets/PageNotFound";
 import Home from "./assets/Home";
 import Cart from "./assets/Cart";
 import ContactUs from "./assets/ContactUs";
-import {RouteHandler} from "./assets/RouteHandler";
+import { RouteHandler } from "./assets/RouteHandler";
 import Search from "./assets/Search";
 import axios from "axios";
 import Profile from "./assets/Profile";
@@ -14,6 +14,8 @@ import { Loading } from "./assets/Loading"
 import AllProducts from "./assets/AllProducts"
 import ProductOverView from "./assets/ProductOverView"
 import 'react-lazy-load-image-component/src/effects/blur.css';
+import Orders from "./assets/Orders";
+import Login from "./assets/Login";
 
 
 
@@ -21,13 +23,21 @@ export const dataContext = createContext();
 
 function App() {
   RouteHandler()
-  
+  const [token, setToken] = useState("")
   const api = import.meta.env.VITE_API;
   const [carousel, setCarousel] = useState({});
   const [products, setProducts] = useState([])
   const [spinner, setSpinner] = useState(false)
   const [categories, setCategories] = useState([])
+  const [user, setuser] = useState({})
 
+
+  useEffect(() => {
+    const token = localStorage.getItem("token")
+    if (token) {
+      setToken(JSON.parse(token))
+    }
+  }, [])
 
   // fetching all products 
   useEffect(() => {
@@ -87,23 +97,27 @@ function App() {
   }
 
   return (
+    // useContext provider wrapped to child components for state management 
     <dataContext.Provider value={{
       api,
       carousel, setCarousel,
       products, setProducts,
-      categories, setCategories
+      categories, setCategories,
+      token, setToken,
+      user, setuser
     }}>
-      
-      <Navbar />
 
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products_by_category/:category" element={<AllProducts />} />
-        <Route path="/product_over_view/:itemId" element={<ProductOverView/>}/>
+        <Route path="/product_over_view/:itemId" element={<ProductOverView />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/search" element={<Search />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/login" element={<Login />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </dataContext.Provider>

@@ -3,12 +3,13 @@ import { Link, useParams } from 'react-router-dom'
 import { dataContext } from "../App"
 import { PiShareNetwork } from 'react-icons/pi'
 import { Loading } from './Loading'
-import { FaMinus, FaPlus, FaTruck } from 'react-icons/fa'
+import { FaMinus, FaPhone, FaPlus, FaTruck } from 'react-icons/fa'
 import { Slide, toast, ToastContainer } from 'react-toastify'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import Footer from './Footer'
 import { scrollToTop } from './RouteHandler'
 import { locations } from "./hardCodeData"
+import axios from 'axios'
 
 const ProductOverView = () => {
   scrollToTop()
@@ -25,6 +26,28 @@ const ProductOverView = () => {
   const [areaName, setAreaName] = useState("")
   const [orderType, setOrderType] = useState("buyonce")
   const [days, setDays] = useState(7)
+  const initialData = {
+    itemCategory: product?.itemCategory,
+    itemCost: product?.itemCost,
+    itemImage: product?.itemImage,
+    itemName: product?.itemName,
+    itemHalfKgCost: product?.itemHalfKgCost,
+    itemKgCost: product?.itemKgCost,
+    itemQty: itemQty,
+    itemSubCategory: product?.itemSubCategory,
+    itemWeight: itemWeight,
+    _id: product?._id,
+    orderType: orderType,
+    days: days
+  };
+
+  const [cart, setCart] = useState({
+    userId: product._id,
+    products: [initialData]
+  })
+
+
+
 
   // related products filter function 
   useEffect(() => {
@@ -52,7 +75,6 @@ const ProductOverView = () => {
 
     }
   }, [product]);
-
 
   // item weight and cost radio input handle function 
   const weightSelectFunc = (weightParam) => {
@@ -90,7 +112,6 @@ const ProductOverView = () => {
     }
   };
 
-
   // searcing for area input handle function 
   const areaInputHandleFunc = (e) => {
     const areaName = e.target.value
@@ -103,14 +124,11 @@ const ProductOverView = () => {
     }
   }
 
-
   const areaSelectFunc = (param) => {
     setNoServiceText("Door delivery service is available at your location.")
     setAreaName(param)
     setAreas([])
   }
-
-
 
   // order type select drop down handle func 
   const orderTypeFunc = (event) => {
@@ -121,6 +139,31 @@ const ProductOverView = () => {
       setOrderType("buyonce")
     }
 
+  }
+
+  // updating cart object values when changes occured in dependencies 
+  useEffect(() => {
+    setCart((prevCaart) => ({
+      ...prevCaart,
+      products: [initialData]
+    }))
+  }, [product, itemId, products, itemCost, itemWeight, days, orderType])
+
+
+  // add to cart function 
+  const addToCartFunc = async () => {
+    try {
+      const res = await axios.post(`${api}/cart/add-to-cart`, cart, {
+        headers: {
+          token: null
+        }
+      })
+      if (res) {
+        toast.success("Item Addded to Cart")
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
 
@@ -266,6 +309,9 @@ const ProductOverView = () => {
                     }} />
                   </div>
                 </div>
+                {itemQty === parseInt(product.itemStock) && <div className='mb-5 text-blue-600 flex items-center flex-wrap gap-2'>
+                  <span className='text-gray-500'>Contact us for larger quantity orders</span> <a href="tel:+919603669236" className='underline flex items-center gap-2 '><FaPhone /> 9603669236</a>
+                </div>}
 
                 {/* order type and suscription section */}
 
@@ -273,13 +319,13 @@ const ProductOverView = () => {
                   <>
                     <div className="flex gap-1 mb-3 items-center">
                       <span className='font-semibold text-nowrap'>Order Type : </span>
-                      <select onChange={orderTypeFunc} className=' border-2 rounded  border-gray-500 '>
+                      <select onChange={orderTypeFunc} className='py-1 border-2 rounded  border-orange-600 focus:border-blue-500'>
                         <option value="" disabled>Select Order Type</option>
                         <option value="buyonce">Buy Once</option>
                         <option value="subscription">Subscription</option>
                       </select>
                     </div>
-                    {orderType === "buyonce" && <h5 className='font-semibold my-4 flex items-center gap-2'><FaTruck className='text-blue-500'/> Delivery charges apply at checkout</h5>}
+                    {orderType === "buyonce" && <h5 className='font-semibold my-4 flex items-center gap-2'><FaTruck className='text-blue-500' /> Delivery charges apply at checkout</h5>}
 
                     {orderType === "subscription" && <>
                       <div className="flex gap-1 mb-3 items-center">
@@ -300,15 +346,15 @@ const ProductOverView = () => {
                           30 days
                         </div>
                       </div>
-                    <h5 className='font-semibold mb-2 flex items-center gap-2 text-green-600'><FaTruck className='text-blue-500'/> free delivery on all subscription orders.</h5>
-                    <h5 className=' mb-3 flex items-center gap-2 '>Subscription orders are delivered daily at <span className='font-bold'>6 PM</span> and  <span className='font-bold'>6 AM</span></h5>
+                      <h5 className='font-semibold mb-2 flex items-center gap-2 text-green-600'><FaTruck className='text-blue-500' /> free delivery on all subscription orders.</h5>
+                      <p className='text-gray-500 mb-3 '>Subscription orders are delivered daily at 6 PM and 6 AM </p>
 
                     </>}
 
 
                   </> :
-                  <h5 className='font-semibold my-4 flex items-center gap-2'><FaTruck className='text-blue-500'/> Delivery charges apply at checkout</h5>
-                   
+                  <h5 className='font-semibold my-4 flex items-center gap-2'><FaTruck className='text-blue-500' /> Delivery charges apply at checkout</h5>
+
                 }
 
 
@@ -317,8 +363,8 @@ const ProductOverView = () => {
                 <div>
                   <h6 className='font-bold'>Note : <span className='font-normal'>Check door delivery service for your location.</span></h6>
                   <div className='mt-4 relative'>
-                    <input onChange={areaInputHandleFunc} type="text" className='rounded w-full border-2 border-blue-500 py-1 pl-3 ' placeholder='Enter your location check delivery availability.' />
-                    {areas.length > 0 ? <div className="border-2 absolute top-10 left-0 bg-white z-10 mt-[0.01rem] flex flex-col outline-none border-blue-500 rounded-lg p-2 px-1 w-full">
+                    <input onChange={areaInputHandleFunc} type="text" className='rounded w-full border-2 border-blue-500 py-[0.4rem] outline-none focus:border-orange-600 pl-3 ' placeholder='Enter your location check delivery availability.' />
+                    {areas.length > 0 ? <div className="border-2 absolute top-10 left-0 bg-white z-10 mt-[0.2rem] flex flex-col outline-none border-blue-500 rounded-lg p-2 px-1 w-full">
                       {
                         areas.map((item, index) => (
                           <span onClick={() => areaSelectFunc(item)} className='hover:bg-blue-600 hover:text-white cursor-pointer rounded p-1 px-2' key={index} value={item}>{item}</span>

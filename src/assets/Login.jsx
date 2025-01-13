@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { dataContext } from '../App'
 import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
+import { Slide, toast, ToastContainer } from 'react-toastify'
 import { Loading } from './Loading'
+import { useNavigate } from 'react-router-dom'
 
 
 const Login = () => {
     const [loginToggle, setLoginToggle] = useState(false)
-    const { setToken, api, user, loading } = useContext(dataContext)
+    const { setToken, api, token, loading } = useContext(dataContext)
     const [fullName, setFullName] = useState("")
     const [email, setEmail] = useState("")
     const [otp, setOtp] = useState("")
@@ -15,6 +16,8 @@ const Login = () => {
     const [submitBtn, setSubmitBtn] = useState(false)
     const [otpError, setOtpError] = useState(false)
     const inputFocus = useRef(null)
+    const navigate = useNavigate()
+
 
     // send otp function 
     const sendOtpFunction = async (event) => {
@@ -63,10 +66,10 @@ const Login = () => {
     }, [loginToggle])
 
     useEffect(() => {
-        if (user.role === "user") {
-            toast.success("Logged in successfully. Waiting for admin approval.")
+        if (token) {
+            navigate("/profile")
         }
-    }, [user])
+    }, [token])
 
     if (loading) {
         return (<Loading />)
@@ -74,8 +77,8 @@ const Login = () => {
 
     return (
         <>
-            <ToastContainer position='top-center' theme='dark' />
-            <div className='flex justify-center items-center w-screen h-screen'>
+            <ToastContainer position='top-center' transition={Slide} theme='dark' />
+            <div className='flex justify-center items-center  p-3 select-none mt-3 mb-7 pt-24'>
 
                 {
                     loginToggle ? <>
@@ -137,7 +140,7 @@ const Login = () => {
                                 <h5 onClick={() => { setLoginToggle(false), setOtpError(false), setOtp("") }} className='text-sm font-semibold mt-4 text-blue-700 cursor-pointer'>Log in with a different email</h5>
                                 <p className="mt-2  text-sm/6 text-gray-500">
                                     <span className='mr-1'>
-                                        If you didn’t receive the login code, please check your email or
+                                        If you didn’t receive the login code to email, check your spam folder or
                                     </span>
                                     <a
                                         href="mailto:dora.a.to.z.fresh@gmail.com"
@@ -227,7 +230,7 @@ const Login = () => {
                                     </form>
                                     <p className="mt-5 text-center text-sm/6 text-gray-500">
                                         <span className='mr-1'>
-                                            If you didn’t receive the login code, please check your email or
+                                            If you didn’t receive the login code to email, check your spam folder or
                                         </span>
                                         <a
                                             href="mailto:dora.a.to.z.fresh@gmail.com"
