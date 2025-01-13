@@ -29,7 +29,7 @@ function App() {
   const [products, setProducts] = useState([])
   const [spinner, setSpinner] = useState(false)
   const [categories, setCategories] = useState([])
-  const [user, setuser] = useState({})
+  const [user, setUser] = useState({})
 
 
   useEffect(() => {
@@ -104,7 +104,7 @@ function App() {
       products, setProducts,
       categories, setCategories,
       token, setToken,
-      user, setuser
+      user, setUser
     }}>
 
       <Navbar />

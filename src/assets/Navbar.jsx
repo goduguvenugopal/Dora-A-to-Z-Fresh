@@ -68,14 +68,26 @@ const Navbar = () => {
         <Link to="/" className="w-[7.5rem] md:w-[7.9rem]">
           <img className="md:w-full rounded-full" src="/dora-logo.jpeg" alt="dora-logo" />
         </Link>
+        {token ?
         <Link to="/cart">
           <FaCartShopping
             size={25}
             title="Cart"
             className="text-white cursor-pointer"
-          />
+            />
 
         </Link>
+          : 
+          <Link to="/login">
+          <FaCartShopping
+            size={25}
+            title="Cart"
+            className="text-white cursor-pointer"
+            />
+
+        </Link>
+          
+          }
       </div>
 
       {/* offcanvas  */}
@@ -83,8 +95,18 @@ const Navbar = () => {
       <div onClick={(e) => e.stopPropagation()} className={`offcanvas-menu fixed z-50 top-0 left-0  h-screen w-screen lg:w-[30%] p-2 transform transition-transform duration-300 ${offcanvas ? "translate-x-0" : "-translate-x-full"}`}>
         <div className='bg-gray-700 relative flex flex-col gap-4 text-white p-5  h-full w-full rounded-lg'>
           <Link onClick={() => setOffcanvas(false)} to="/" className='text-[1.2rem] flex items-center  border-b border-gray-700 hover:border-white gap-3  w-fit'><FaHome /> Home</Link>
+         {token ? <>
+         
           <Link onClick={() => setOffcanvas(false)} to="/orders" className='text-[1.2rem] flex items-center  w-fit gap-[0.9rem] border-b  border-gray-700 hover:border-white'> <BsFillBoxSeamFill size={17} /> Orders </Link>
           <Link onClick={() => setOffcanvas(false)} to="/profile" className='text-[1.2rem] flex items-center  w-fit gap-[0.7rem] border-b  border-gray-700 hover:border-white'><CgProfile size={22} /> Profile</Link>
+         </>
+         :
+<>
+         
+         <Link onClick={() => setOffcanvas(false)} to="/login" className='text-[1.2rem] flex items-center  w-fit gap-[0.9rem] border-b  border-gray-700 hover:border-white'> <BsFillBoxSeamFill size={17} /> Orders </Link>
+         <Link onClick={() => setOffcanvas(false)} to="/login" className='text-[1.2rem] flex items-center  w-fit gap-[0.7rem] border-b  border-gray-700 hover:border-white'><CgProfile size={22} /> Profile</Link>
+        </>
+        }
           <Link onClick={() => setOffcanvas(false)} to="/contact" className='text-[1.2rem] flex items-center  w-fit gap-[0.7rem] border-b  border-gray-700 hover:border-white'><MdPhone size={22} /> Contact Us</Link>
           {token ?
             <div onClick={() => {

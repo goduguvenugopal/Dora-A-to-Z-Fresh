@@ -1,8 +1,52 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { dataContext } from "../App";
+import { Loading } from "./Loading";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const Profile = () => {
-  const { api, token } = useContext(dataContext)
+  const { api, token, setUser, user } = useContext(dataContext)
+  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
+
+
+  useEffect(() => {
+    // fetching user details 
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`${api}/user/get-single-user`, {
+          headers: {
+            token: token
+          }
+        })
+        if (response) {
+          setUser(response.data.singleUser)
+          setLoading(false)
+        }
+      } catch (error) {
+        setLoading(true)
+      }
+    }
+
+    if (token) {
+      fetchUser()
+    }
+
+  }, [token])
+
+
+  // if token not navigate to home 
+  useEffect(() => {
+    if (!token) {
+      navigate("/")
+    }
+  }, [token])
+
+  // loading when fetching user detailes 
+  if (loading) {
+    return (<Loading />)
+  }
 
   return (
     <>
@@ -13,10 +57,10 @@ const Profile = () => {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between">
             <div className="mb-4 sm:mb-0">
               <h1 className="text-lg sm:text-xl font-semibold mb-3 text-gray-800">
-                Venu Gopal
+                {user.fullName}
               </h1>
               <p className="text-sm text-gray-500">Email</p>
-              <p className="text-sm text-gray-800 truncate">venuiti97@gmail.com</p>
+              <p className="text-sm text-gray-800 truncate">{user.email}</p>
             </div>
 
           </div>

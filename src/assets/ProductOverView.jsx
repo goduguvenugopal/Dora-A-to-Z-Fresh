@@ -13,7 +13,7 @@ import axios from 'axios'
 
 const ProductOverView = () => {
   scrollToTop()
-  const { products } = useContext(dataContext)
+  const { products, token } = useContext(dataContext)
   const { itemId } = useParams()
   const [product, setProduct] = useState({})
   const [itemImg, setItemImg] = useState("")
@@ -42,11 +42,8 @@ const ProductOverView = () => {
   };
 
   const [cart, setCart] = useState({
-    userId: product._id,
-    products: [initialData]
+    products: []
   })
-
-
 
 
   // related products filter function 
@@ -54,6 +51,7 @@ const ProductOverView = () => {
     const results = products?.filter((item) => item?.itemSubCategory === product?.itemSubCategory)
     if (results.length > 1) {
       setRelatedProducts(results)
+       
     }
   }, [product, itemId])
 
@@ -61,6 +59,7 @@ const ProductOverView = () => {
   useEffect(() => {
     const results = products.find((item) => item._id === itemId)
     setProduct(results)
+   
   }, [products, itemId])
 
   // item weight,cost and qty initial value function 
@@ -202,8 +201,8 @@ const ProductOverView = () => {
           {/* item name and cost section  */}
           <div className="w-full sm:w-[40%] ">
             <div className="flex flex-col gap-3 mb-3 ">
+              <span className='text-2xl lg:text-3xl capitalize font-medium '>{product.itemName}</span>
               <div className='flex gap-3 mb-1 items-center'>
-
 
                 {orderType === "subscription" ? <>
                   <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(days * itemCost || 0).toFixed(2)}
@@ -381,9 +380,17 @@ const ProductOverView = () => {
 
                 {/* add to cart button  */}
                 <div className="flex gap-3 justify-start my-5 w-full">
-                  <button className="w-full bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
-                    Add to cart
-                  </button>
+                  {token ?
+
+                    <button onClick={addToCartFunc} className="w-full bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
+                      Add to cart
+                    </button>
+                    :
+                    <Link to="/login" className="w-full text-center bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
+                      Add to cart
+                    </Link>
+
+                  }
                 </div>
 
               </>
