@@ -30,12 +30,19 @@ function App() {
   const [spinner, setSpinner] = useState(false)
   const [categories, setCategories] = useState([])
   const [user, setUser] = useState({})
-
+  const [defaultAddress, setDefaultAddress] = useState([])
 
   useEffect(() => {
+    // retrieving token from localStorage
     const token = localStorage.getItem("token")
     if (token) {
       setToken(JSON.parse(token))
+    }
+
+    // retrieving address from localStorage
+    const address = localStorage.getItem("address")
+    if (address) {
+      setDefaultAddress(JSON.parse(address))
     }
   }, [])
 
@@ -104,7 +111,8 @@ function App() {
       products, setProducts,
       categories, setCategories,
       token, setToken,
-      user, setUser
+      user, setUser,
+      defaultAddress, setDefaultAddress
     }}>
 
       <Navbar />

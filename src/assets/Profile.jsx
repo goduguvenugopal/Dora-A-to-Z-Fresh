@@ -1,32 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
 import { dataContext } from "../App";
-import { Loading } from "./Loading";
+import { Loading, SmallLoading } from "./Loading";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { MdClose } from "react-icons/md";
 import { Slide, toast, ToastContainer } from "react-toastify";
+import { locations } from "./hardCodeData";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
 
 const Profile = () => {
-  const { api, token, setUser, user } = useContext(dataContext)
+  const { api, token, setUser, user, defaultAddress, setDefaultAddress } = useContext(dataContext)
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
   const [address, setAddress] = useState([])
+  const [delSpin, setDelSpin] = useState("")
   const [addressToggle, setAddressToggle] = useState(false)
   const initialData = {
     name: "",
     phone: "",
-    email: user.email,
+    email: user?.email,
     district: "",
     village: "",
     street: "",
-    state: "",
+    state: "Andhra Pradesh",
     postalCode: ""
   };
   const [addressForm, setAddressForm] = useState(initialData)
   const [addressSpin, setAddressSpin] = useState(false)
-
-
 
 
   useEffect(() => {
@@ -51,9 +52,27 @@ const Profile = () => {
       fetchUser()
     }
 
+
+    // fetch addresses 
+    const fetchAddress = async () => {
+      try {
+        const res = await axios.get(`${api}/address/get-user-address`, {
+          headers: {
+            token: token
+          }
+        })
+        if (res) {
+          setAddress(res.data.retrievedAddress.reverse())
+        }
+
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchAddress()
   }, [token])
 
- 
+
 
   // if token not navigate to home 
   useEffect(() => {
@@ -64,35 +83,96 @@ const Profile = () => {
 
 
 
-// form handle function 
-const formHandleFunc = (e) =>{
-  const {name , value} = e.target
-  setAddressForm((prevData)=>({
-    ...prevData , [name] : value
-  }))
-}
+  // form handle function 
+  const formHandleFunc = (e) => {
+    const { name, value } = e.target
+    setAddressForm((prevData) => ({
+      ...prevData, [name]: value
+    }))
+  }
 
 
   // address submit function 
   const addressSubmit = async (e) => {
     e.preventDefault()
+    if (!addressForm.district || !addressForm.village) {
+      toast.error("Please select village and district")
+    } else {
+      try {
+        setAddressSpin(true)
+        const res = await axios.post(`${api}/address/save-shipping-address`, addressForm, {
+          headers: {
+            token: token
+          }
+        })
+        if (res) {
 
-    try {
-      setAddressSpin(true)
-      const res = await axios.post(`${api}/address/save-shipping-address`, addressForm, {
-        headers: {
-          token: token
+          try {
+            const res = await axios.get(`${api}/address/get-user-address`, {
+              headers: {
+                token: token
+              }
+            })
+            if (res) {
+              const retrievedAddress = res.data.retrievedAddress.reverse()
+              setAddress(retrievedAddress)
+              toast.success("Address added successfully")
+              setDefaultAddress([retrievedAddress[0]])
+              setAddressForm(initialData)
+              setAddressForm((prevData) => ({
+                ...prevData, email: user.email
+              }))
+              setAddressSpin(false)
+              setAddressToggle(false)
+            }
+
+          } catch (error) {
+            console.error(error);
+
+          }
+
+
         }
-      })
-      if (res) {
-        toast.success("Address added successfully")
+      } catch (error) {
+        console.error(error);
         setAddressSpin(false)
+        toast.error("Failed to add address. Please try again.");
+      }
+    }
+  }
+
+
+
+  // set as default address function 
+  const setDefaultAddressFunc = (itemId) => {
+    const findAddress = address.find((item) => item._id === itemId)
+    const selectedAddress = [findAddress]
+    localStorage.setItem("address", JSON.stringify(selectedAddress))
+    setDefaultAddress([findAddress])
+    toast.success("Default address has changed successfully")
+  }
+
+
+  // delete address function 
+  const deleteAddress = async (delId) => {
+    const isOkay = confirm("Address will be deleted permanently, are you sure ?")
+    if (isOkay) {
+      try {
+        setDelSpin(delId)
+        const res = await axios.delete(`${api}/address/delete-address/${delId}`)
+        if (res) {
+          toast.success("Address deleted successfully")
+          const remain = address.filter((item) => item._id !== delId)
+          setAddress(remain)
+          setDelSpin("")
+
+        }
+      } catch (error) {
+        console.error(error);
+        setDelSpin("")
+        toast.error("Failed to delete address. Please try again.");
 
       }
-    } catch (error) {
-      console.error(error);
-      setAddressSpin(false)
-      toast.error("Failed to add address. Please try again.");
     }
   }
 
@@ -128,22 +208,29 @@ const formHandleFunc = (e) =>{
               </button>
             </div>
             {/* No Address Placeholder */}
-            <div className="mt-4 bg-gray-100 text-center text-gray-600 p-4 rounded-lg">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6 mx-auto"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 11c.621 0 1.206.24 1.648.648l.824.824a2.25 2.25 0 010 3.182l-.824.824a2.25 2.25 0 01-3.182 0l-.824-.824a2.25 2.25 0 010-3.182l.824-.824A2.25 2.25 0 0112 11zm0 0V5.25m0 0L9.75 8.25M12 5.25L14.25 8.25"
-                />
-              </svg>
-              <p className="mt-2 text-sm">No addresses added</p>
+            <div className="mt-4 bg-gray-100  text-gray-600  rounded-lg">
+              {address.length > 0 ?
+                <div>
+                  {address.map((item) => (
+                    <div className='flex flex-col border bg-white relative  items-start gap-1 mb-3 shadow-md rounded shadow-gray-300 p-2 ' key={item._id}>
+                      <h5 className='font-medium capitalize'>{item.name}   </h5>
+                      <h6 className='font-medium capitalize'>{item.phone} </h6>
+                      <h6 className=' text-gray-500'>{item.email} </h6>
+                      <h6 className=' capitalize'>{item.village}, {item.district}</h6>
+                      <h6 className='capitalize'>{item.street} </h6>
+                      <h6 className='font-medium capitalize'>{item.state}, {item.postalCode} </h6>
+                      <div onClick={() => setDefaultAddressFunc(item._id)} className={`   cursor-pointer absolute border-2  rounded-full h-4 w-4 right-3 p-2 ${defaultAddress[0]?._id === item._id ? "bg-blue-500 border-white" : "border-gray-400"}`}></div>
+                      {delSpin === item._id ? <div className='hover:text-red-600 cursor-pointer absolute right-3 top-11 text-gray-600'><SmallLoading /></div> : <RiDeleteBin6Line onClick={() => deleteAddress(item._id)} size={20} className='hover:text-red-600 cursor-pointer absolute right-3 top-11 text-gray-600' />}
+                    </div>
+                  ))
+                  }
+                </div>
+                :
+                <div className="p-3 h-20 flex  justify-center items-center">
+                  <p className="text-sm">No addresses added</p>
+                </div>
+
+              }
             </div>
           </div>
         </div>
@@ -152,8 +239,8 @@ const formHandleFunc = (e) =>{
 
       {/* add address section modal  */}
       {addressToggle && (
-        <div className="bg-gray-700 mt-3  pt-24 bg-opacity-50 fixed top-0 left-0 w-screen h-screen p-4 flex justify-center pb-8 lg:pb-10">
-          <div className="py-5 scrollbar-hide-card bg-white rounded-lg h-full w-full sm:w-[60%] md:w-[50%] lg:w-[40%]   overflow-auto ">
+        <div onClick={() => setAddressToggle(false)} className="bg-gray-700 mt-3  pt-24 bg-opacity-50 fixed top-0 left-0 w-screen h-screen p-4 flex justify-center pb-8 lg:pb-10">
+          <div onClick={(e) => e.stopPropagation()} className="py-5 scrollbar-hide-card bg-white rounded-lg h-full w-full sm:w-[60%] md:w-[50%] lg:w-[40%]   overflow-auto ">
             <div className="isolate relative bg-white px-6 rounded-lg">
               <div
                 className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
@@ -204,83 +291,15 @@ const formHandleFunc = (e) =>{
                         name="email"
                         id="email"
                         required
-                        placeholder="Enter Email"
                         value={addressForm.email}
                         onChange={formHandleFunc}
-                        autoComplete="email"
+
                         className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
                       />
                     </div>
+                    <h5 className="mt-2 mb-0 text-sm text-gray-500">Email will be used for order updates and delivery communication.</h5>
                   </div>
-                  <div className="sm:col-span-3">
-                  <label
-                    htmlFor="itemCategory"
-                    className="block text-sm/6 font-medium text-gray-900"
-                  >
-                    District <span className='text-red-500'>*</span>
-                  </label>
-                  <div className="mt-2 grid grid-cols-1">
-                    <select
-                      id="itemCategory"
-                      name="itemCategory"
-                      autoComplete="itemCategory"
-                      required
-                      onChange={formHandleFunc}
-                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1  outline-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    >
-                      <option value="wanaprthy">Select the district</option>
-                      <option value="wanaparthy">Wanaparthy</option>
-                      
-                    </select>
-                    <svg
-                      className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
-                      viewBox="0 0 16 16"
-                      fill="currentColor"
-                      aria-hidden="true"
-                      data-slot="icon"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div className="sm:col-span-3">
-                  <label
-                    htmlFor="itemCategory"
-                    className="block text-sm/6 font-medium text-gray-900"
-                  >
-                    Village <span className='text-red-500'>*</span>
-                  </label>
-                  <div className="mt-2 grid grid-cols-1">
-                    <select
-                      id="itemCategory"
-                      name="itemCategory"
-                      autoComplete="itemCategory"
-                      required
-                      onChange={formHandleFunc}
-                      className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1  outline-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                    >
-                      <option disabled value="">Select the Village</option>
-                      <option value="wanaparthy">Wanaparthy</option>
-                    </select>
-                    <svg
-                      className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
-                      viewBox="0 0 16 16"
-                      fill="currentColor"
-                      aria-hidden="true"
-                      data-slot="icon"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                </div>
+
                   <div className="sm:col-span-2">
                     <label
                       htmlFor="phone"
@@ -294,8 +313,7 @@ const formHandleFunc = (e) =>{
                         <input
                           type="text"
                           name="phone"
-                        required
-
+                          required
                           id="phone"
                           value={addressForm.phone}
                           onChange={formHandleFunc}
@@ -305,6 +323,83 @@ const formHandleFunc = (e) =>{
                       </div>
                     </div>
                   </div>
+
+                  <div className="sm:col-span-3">
+                    <label
+                      htmlFor="district"
+                      className="block text-sm/6 font-medium text-gray-900"
+                    >
+                      District <span className='text-red-500'>*</span>
+                    </label>
+                    <div className="mt-2 grid grid-cols-1">
+                      <select
+                        id="district"
+                        name="district"
+                        required
+                        onChange={formHandleFunc}
+                        className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1  outline-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      >
+                        <option value="wanaprthy">Select the district</option>
+                        <option value="wanaparthy">Wanaparthy</option>
+
+                      </select>
+                      <svg
+                        className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        aria-hidden="true"
+                        data-slot="icon"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+
+                  <div className="sm:col-span-3">
+                    <label
+                      htmlFor="village"
+                      className="block text-sm/6 font-medium text-gray-900"
+                    >
+                      Village <span className='text-red-500'>*</span>
+                    </label>
+                    <div className="mt-2 grid grid-cols-1">
+                      <select
+                        id="village"
+                        name="village"
+                        required
+                        onChange={formHandleFunc}
+                        className="col-start-1 row-start-1 w-full appearance-none rounded-md bg-white py-1.5 pl-3 pr-8 text-base text-gray-900 outline outline-1 -outline-offset-1  outline-gray-500 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                      >
+                        <option disabled value="">Select the Village</option>
+                        {locations.map((item, index) => (
+                          <option key={index} value={item}>{item}</option>
+                        ))}
+
+                      </select>
+                      <svg
+                        className="pointer-events-none col-start-1 row-start-1 mr-2 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                        viewBox="0 0 16 16"
+                        fill="currentColor"
+                        aria-hidden="true"
+                        data-slot="icon"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M4.22 6.22a.75.75 0 0 1 1.06 0L8 8.94l2.72-2.72a.75.75 0 1 1 1.06 1.06l-3.25 3.25a.75.75 0 0 1-1.06 0L4.22 7.28a.75.75 0 0 1 0-1.06Z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+
+                    <div className="mt-3 text-red-500"><strong className="text-black">Note</strong> : Door delivery is available only to the above villages.</div>
+
+                  </div>
+
+
                   <div className="sm:col-span-2">
                     <label
                       htmlFor="street"
@@ -318,21 +413,54 @@ const formHandleFunc = (e) =>{
                         value={addressForm.street}
                         onChange={formHandleFunc}
                         id="street"
-                        rows={4}
+                        rows={2}
+                        placeholder="Enter street or colony address"
                         className="block w-full rounded-md bg-white px-3.5 py-2 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600"
-                        defaultValue={""}
+                        required
                       />
                     </div>
                   </div>
 
+                  <div className="sm:col-span-2">
+                    <label
+                      htmlFor="postalCode"
+                      className="block text-sm/6 font-semibold text-gray-900"
+                    >
+                      Postal Code
+                    </label>
+                    <div className="mt-2.5">
+                      <div className="flex rounded-md bg-white outline outline-1 -outline-offset-1 outline-gray-300 has-[input:focus-within]:outline has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-indigo-600">
+
+                        <input
+                          type="text"
+                          name="postalCode"
+                          required
+                          id="postalCode"
+                          value={addressForm.postalCode}
+                          onChange={formHandleFunc}
+                          className="block min-w-0 grow py-1.5 pl-3 pr-3 text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:outline-0 sm:text-sm/6"
+                          placeholder="Enter postal code"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+
                 </div>
-                <div className="mt-10">
-                  <button
-                    type="submit"
-                    className="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                <div className="mt-5">
+
+
+                  {addressSpin ? <button
+
+                    className="w-full flex items-center justify-center gap-2 rounded-md bg-gray-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                   >
-                    Let's talk
-                  </button>
+                    <SmallLoading />  Adding Address..
+                  </button> : <button
+                    type="submit"
+                    className="w-full  rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  >
+                    Add Address
+                  </button>}
                 </div>
               </form>
             </div>
