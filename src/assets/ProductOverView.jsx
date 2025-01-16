@@ -13,7 +13,7 @@ import axios from 'axios'
 
 const ProductOverView = () => {
   scrollToTop()
-  const { products, token, api } = useContext(dataContext)
+  const { products, token, api, cartItems, setCartItems } = useContext(dataContext)
   const { itemId } = useParams()
   const [product, setProduct] = useState({})
   const [itemImg, setItemImg] = useState("")
@@ -43,6 +43,8 @@ const ProductOverView = () => {
   };
 
   const [cart, setCart] = useState({
+    productId: "",
+    totalAmount: "",
     products: []
   })
 
@@ -145,6 +147,8 @@ const ProductOverView = () => {
   useEffect(() => {
     setCart((prevCaart) => ({
       ...prevCaart,
+      productId: product?._id,
+      totalAmount: orderType === "subscription" ? parseFloat(days * itemCost || 0).toFixed(2) : parseFloat(itemCost || 0).toFixed(2),
       products: [initialData]
     }))
   }, [product, itemId, products, itemCost, itemWeight, days, orderType])
@@ -154,7 +158,7 @@ const ProductOverView = () => {
   // add to cart function 
   const addToCartFunc = async () => {
     if (itemQty < parseInt(product.minOrderQty) && orderType === "buyonce" && itemWeight === "250") {
-      toast.warning(`Minimum order qty is ${product.minOrderQty}`)
+      toast.warning(`Minimum order qty is ${product.minOrderQty}`, { className: "custom-toast" })
     } else {
       try {
         setCartSpin(true)
@@ -164,11 +168,7 @@ const ProductOverView = () => {
           }
         })
         if (res) {
-          toast.success("Item added to Cart", {
-            className: "custom-toast",
-          })
-          setCartSpin(false)
-
+          fetchCartItems()
         }
       } catch (error) {
         console.error(error);
@@ -177,6 +177,27 @@ const ProductOverView = () => {
           className: "custom-toast",
         })
       }
+    }
+  }
+
+  // fetching cart products
+  const fetchCartItems = async () => {
+    try {
+      const res = await axios.get(`${api}/cart/get-user-cart-products`, {
+        headers: {
+          token: token
+        }
+      })
+      if (res) {
+        setCartItems(res.data.retrievdProducts.reverse())
+        toast.success("Item added to Cart", {
+          className: "custom-toast",
+        })
+        setCartSpin(false)
+
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -405,9 +426,18 @@ const ProductOverView = () => {
                     <>{cartSpin ?
                       <FlipkartSpin />
                       :
-                      <button onClick={addToCartFunc} className="w-full bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
-                        Add to cart
-                      </button>
+                      <>
+                        {cartItems?.some((item) => item.productId === product?._id) ?
+                          <Link to="/cart" className="w-full text-center bg-orange-900 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-orange-700 rounded-full">
+                            Go to cart
+                          </Link>
+                          :
+                          <button onClick={addToCartFunc} className="w-full bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
+                            Add to cart
+                          </button>
+                        }
+
+                      </>
                     }
                     </>
                     :

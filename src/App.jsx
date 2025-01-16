@@ -31,7 +31,7 @@ function App() {
   const [categories, setCategories] = useState([])
   const [user, setUser] = useState({})
   const [defaultAddress, setDefaultAddress] = useState([])
-  const [cart, setCart] = useState([])
+  const [cartItems, setCartItems] = useState([])
 
 
 
@@ -105,7 +105,7 @@ function App() {
         })
         if (res) {
           console.log(res.data.retrievdProducts.reverse());
-          setCart(res.data.retrievdProducts.reverse())
+          setCartItems(res.data.retrievdProducts.reverse())
           setSpinner(false)
         }
       } catch (error) {
@@ -136,7 +136,7 @@ if(token){
       token, setToken,
       user, setUser,
       defaultAddress, setDefaultAddress,
-      cart , setCart
+      cartItems , setCartItems
     }}>
 
       <Navbar />
