@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { dataContext } from "../App";
-import { Loading, SmallLoading } from "./Loading";
+import { Loading, SmallLoading, FlipkartSpin } from "./Loading";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { MdClose } from "react-icons/md";
@@ -96,7 +96,9 @@ const Profile = () => {
   const addressSubmit = async (e) => {
     e.preventDefault()
     if (!addressForm.district || !addressForm.village) {
-      toast.error("Please select village and district")
+      toast.error("Please select village and district", {
+        className: "custom-toast",
+      })
     } else {
       try {
         setAddressSpin(true)
@@ -116,7 +118,9 @@ const Profile = () => {
             if (res) {
               const retrievedAddress = res.data.retrievedAddress.reverse()
               setAddress(retrievedAddress)
-              toast.success("Address added successfully")
+              toast.success("Address added successfully", {
+                className: "custom-toast",
+              })
               setDefaultAddress([retrievedAddress[0]])
               setAddressForm(initialData)
               setAddressForm((prevData) => ({
@@ -136,7 +140,9 @@ const Profile = () => {
       } catch (error) {
         console.error(error);
         setAddressSpin(false)
-        toast.error("Failed to add address. Please try again.");
+        toast.error("Failed to add address. Please try again.", {
+          className: "custom-toast",
+        });
       }
     }
   }
@@ -149,7 +155,9 @@ const Profile = () => {
     const selectedAddress = [findAddress]
     localStorage.setItem("address", JSON.stringify(selectedAddress))
     setDefaultAddress([findAddress])
-    toast.success("Default address has changed successfully")
+    toast.success("Default address has changed successfully", {
+      className: "custom-toast",
+    })
   }
 
 
@@ -161,7 +169,9 @@ const Profile = () => {
         setDelSpin(delId)
         const res = await axios.delete(`${api}/address/delete-address/${delId}`)
         if (res) {
-          toast.success("Address deleted successfully")
+          toast.success("Address deleted successfully", {
+            className: "custom-toast",
+          })
           const remain = address.filter((item) => item._id !== delId)
           setAddress(remain)
           setDelSpin("")
@@ -170,7 +180,9 @@ const Profile = () => {
       } catch (error) {
         console.error(error);
         setDelSpin("")
-        toast.error("Failed to delete address. Please try again.");
+        toast.error("Failed to delete address. Please try again.", {
+          className: "custom-toast",
+        });
 
       }
     }
@@ -183,8 +195,8 @@ const Profile = () => {
 
   return (
     <>
-      <ToastContainer position="top-center" theme="dark" transition={Slide} />
       <div className="bg-gray-100  p-3 lg:px-16 select-none mt-3 mb-7 pt-24">
+        <ToastContainer position="top-center" theme="dark" transition={Slide} />
         {/* Profile Container */}
         <div className="w-full bg-white shadow-md rounded-lg p-4 sm:p-6">
           {/* Profile Header */}
@@ -212,15 +224,18 @@ const Profile = () => {
               {address.length > 0 ?
                 <div>
                   {address.map((item) => (
-                    <div className='flex flex-col border bg-white relative  items-start gap-1 mb-3 shadow-md rounded shadow-gray-300 p-2 ' key={item._id}>
-                      <h5 className='font-medium capitalize'>{item.name}   </h5>
+                    <div className='flex flex-col text-black border bg-white relative  items-start gap-1 mb-3 shadow-md rounded shadow-gray-300 p-2 ' key={item._id}>
+                      <h5 className='font-medium capitalize ' >{item.name}   </h5>
                       <h6 className='font-medium capitalize'>{item.phone} </h6>
                       <h6 className=' text-gray-500'>{item.email} </h6>
-                      <h6 className=' capitalize'>{item.village}, {item.district}</h6>
-                      <h6 className='capitalize'>{item.street} </h6>
+                      <h6 className='capitalize font-semibold'>{item.village}, {item.district}</h6>
+                      <h6 className='capitalize text-gray-500'>{item.street} </h6>
                       <h6 className='font-medium capitalize'>{item.state}, {item.postalCode} </h6>
                       <div onClick={() => setDefaultAddressFunc(item._id)} className={`   cursor-pointer absolute border-2  rounded-full h-4 w-4 right-3 p-2 ${defaultAddress[0]?._id === item._id ? "bg-blue-500 border-white" : "border-gray-400"}`}></div>
-                      {delSpin === item._id ? <div className='hover:text-red-600 cursor-pointer absolute right-3 top-11 text-gray-600'><SmallLoading /></div> : <RiDeleteBin6Line onClick={() => deleteAddress(item._id)} size={20} className='hover:text-red-600 cursor-pointer absolute right-3 top-11 text-gray-600' />}
+                      {delSpin === item._id ?
+                        <FlipkartSpin />
+                        :
+                        <RiDeleteBin6Line onClick={() => deleteAddress(item._id)} size={20} className='hover:text-red-600 cursor-pointer absolute right-3 top-11 text-gray-600' />}
                     </div>
                   ))
                   }
@@ -241,7 +256,7 @@ const Profile = () => {
       {addressToggle && (
         <div onClick={() => setAddressToggle(false)} className="bg-gray-700 mt-3  pt-24 bg-opacity-50 fixed top-0 left-0 w-screen h-screen p-4 flex justify-center pb-8 lg:pb-10">
           <div onClick={(e) => e.stopPropagation()} className="py-5 scrollbar-hide-card bg-white rounded-lg h-full w-full sm:w-[60%] md:w-[50%] lg:w-[40%]   overflow-auto ">
-            <div className="isolate relative bg-white px-6 rounded-lg">
+            <div className="isolate relative bg-white px-3 rounded-lg">
               <div
                 className="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem]"
                 aria-hidden="true"

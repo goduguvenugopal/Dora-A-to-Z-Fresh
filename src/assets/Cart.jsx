@@ -6,10 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 
 
 const Cart = () => {
-  const [totalAmount, setTotalAmount] = useState("")
-  const [weightCharges, setWeightCharges] = useState("")
-  const [itemsAmount, setItemsAmount] = useState("")
-  const [gst, setGst] = useState("")
+  
 
  
   return (

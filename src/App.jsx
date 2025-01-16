@@ -31,6 +31,9 @@ function App() {
   const [categories, setCategories] = useState([])
   const [user, setUser] = useState({})
   const [defaultAddress, setDefaultAddress] = useState([])
+  const [cart, setCart] = useState([])
+
+
 
   useEffect(() => {
     // retrieving token from localStorage
@@ -38,7 +41,6 @@ function App() {
     if (token) {
       setToken(JSON.parse(token))
     }
-
     // retrieving address from localStorage
     const address = localStorage.getItem("address")
     if (address) {
@@ -85,8 +87,6 @@ function App() {
         const res = await axios.get(`${api}/carousel/get-carousel`);
         if (res) {
           setCarousel(res.data.retrievedCarousel[0]);
-          setSpinner(false)
-
         }
       } catch (error) {
         console.error(error);
@@ -95,9 +95,32 @@ function App() {
 
     getCarousel();
 
+    // fetching cart products
+    const fetchCartItems = async () => {
+      try {
+        const res = await axios.get(`${api}/cart/get-user-cart-products`, {
+          headers: {
+            token: token
+          }
+        })
+        if (res) {
+          console.log(res.data.retrievdProducts.reverse());
+          setCart(res.data.retrievdProducts.reverse())
+          setSpinner(false)
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+if(token){
+  fetchCartItems()
+}
 
 
-  }, [])
+
+  }, [token])
+
 
   if (spinner) {
     return (<Loading />)
@@ -112,7 +135,8 @@ function App() {
       categories, setCategories,
       token, setToken,
       user, setUser,
-      defaultAddress, setDefaultAddress
+      defaultAddress, setDefaultAddress,
+      cart , setCart
     }}>
 
       <Navbar />

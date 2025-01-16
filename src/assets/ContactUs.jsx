@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
+import { Slide, toast, ToastContainer } from "react-toastify";
 import axios from "axios";
-import { FaPhoneAlt, FaAddressCard, FaWhatsapp } from "react-icons/fa";
+import { FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
 import { MdMail } from "react-icons/md";
-import { FaLocationDot, FaMapLocationDot } from "react-icons/fa6";
+import { FaLocationDot, } from "react-icons/fa6";
 import Footer from "./Footer";
 import { dataContext } from "../App";
 import { scrollToTop } from "./RouteHandler";
@@ -11,7 +11,7 @@ import { scrollToTop } from "./RouteHandler";
 
 const ContactUs = () => {
   scrollToTop()
-  const {api} = useContext(dataContext)
+  const { api } = useContext(dataContext)
   const [activeIndex, setActiveIndex] = useState(null);
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
@@ -31,32 +31,39 @@ const ContactUs = () => {
   };
   // sending mail function
   const submitFunc = async () => {
-    if(!name || !email || !message){
-      toast.error("Please Enter the Name, Email and Message")
-    }else{
-    setSubmitSpin(true);
-    try {
-      const res = await axios.post(`${api}/updates-email/send-updates`, formData);
-      if (res) {
-        toast.success(
-          "Thank you for reaching out. Our customer service team will be in touch with you shortly."
-        );
+    if (!name || !email || !message) {
+      toast.error("Please Enter the Name, Email and Message", {
+        className: "custom-toast",
+      })
+    } else {
+      setSubmitSpin(true);
+      try {
+        const res = await axios.post(`${api}/updates-email/send-updates`, formData);
+        if (res) {
+          toast.success(
+            "Thank you for reaching out. Our customer service team will be in touch with you shortly."
+            , {
+              className: "custom-toast",
+            });
+          setSubmitSpin(false);
+          setName("");
+          setEmail("");
+          setMessage("");
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Please try again", {
+          className: "custom-toast",
+        });
         setSubmitSpin(false);
-        setName("");
-        setEmail("");
-        setMessage("");
       }
-    } catch (error) {
-      console.log(error);
-      toast.error("Please try again");
-      setSubmitSpin(false);
-    }}
+    }
   };
 
- 
+
   return (
     <>
-      <ToastContainer position="top-center" theme="dark" />
+      <ToastContainer position="top-center" draggable transition={Slide} theme="dark" />
 
       <section className="text-gray-600 body-font relative flex justify-center pb-10 px-5 pt-24">
         <div className="container flex flex-wrap justify-between ">
@@ -305,7 +312,7 @@ const ContactUs = () => {
         </div>
       </div>
 
-      <Footer/>
+      <Footer />
     </>
   );
 };

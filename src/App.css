@@ -7,3 +7,9 @@ body::-webkit-scrollbar{
 .scrollbar-hide-card::-webkit-scrollbar{
   display: none;
 }
+
+
+
+.custom-toast {
+  @apply bg-gray-800 text-white text-sm p-4 rounded-lg w-fit m-4;
+}

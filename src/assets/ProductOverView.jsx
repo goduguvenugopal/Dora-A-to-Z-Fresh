@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { dataContext } from "../App"
 import { PiShareNetwork } from 'react-icons/pi'
-import { Loading } from './Loading'
+import { FlipkartSpin, Loading, SmallLoading } from './Loading'
 import { FaMinus, FaPhone, FaPlus, FaTruck } from 'react-icons/fa'
 import { Slide, toast, ToastContainer } from 'react-toastify'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
@@ -13,7 +13,7 @@ import axios from 'axios'
 
 const ProductOverView = () => {
   scrollToTop()
-  const { products, token } = useContext(dataContext)
+  const { products, token, api } = useContext(dataContext)
   const { itemId } = useParams()
   const [product, setProduct] = useState({})
   const [itemImg, setItemImg] = useState("")
@@ -26,6 +26,7 @@ const ProductOverView = () => {
   const [areaName, setAreaName] = useState("")
   const [orderType, setOrderType] = useState("buyonce")
   const [days, setDays] = useState(7)
+  const [cartSpin, setCartSpin] = useState(false)
   const initialData = {
     itemCategory: product?.itemCategory,
     itemCost: product?.itemCost,
@@ -51,7 +52,7 @@ const ProductOverView = () => {
     const results = products?.filter((item) => item?.itemSubCategory === product?.itemSubCategory)
     if (results.length > 1) {
       setRelatedProducts(results)
-       
+
     }
   }, [product, itemId])
 
@@ -59,7 +60,7 @@ const ProductOverView = () => {
   useEffect(() => {
     const results = products.find((item) => item._id === itemId)
     setProduct(results)
-   
+
   }, [products, itemId])
 
   // item weight,cost and qty initial value function 
@@ -149,22 +150,35 @@ const ProductOverView = () => {
   }, [product, itemId, products, itemCost, itemWeight, days, orderType])
 
 
+
   // add to cart function 
   const addToCartFunc = async () => {
-    try {
-      const res = await axios.post(`${api}/cart/add-to-cart`, cart, {
-        headers: {
-          token: null
+    if (itemQty < parseInt(product.minOrderQty) && orderType === "buyonce" && itemWeight === "250") {
+      toast.warning(`Minimum order qty is ${product.minOrderQty}`)
+    } else {
+      try {
+        setCartSpin(true)
+        const res = await axios.post(`${api}/cart/add-to-cart`, cart, {
+          headers: {
+            token: token
+          }
+        })
+        if (res) {
+          toast.success("Item added to Cart", {
+            className: "custom-toast",
+          })
+          setCartSpin(false)
+
         }
-      })
-      if (res) {
-        toast.success("Item Addded to Cart")
+      } catch (error) {
+        console.error(error);
+        setCartSpin(false)
+        toast.error("Please try again", {
+          className: "custom-toast",
+        })
       }
-    } catch (error) {
-      console.error(error);
     }
   }
-
 
 
   // Check if the product is still being retrieved or is empty
@@ -203,7 +217,6 @@ const ProductOverView = () => {
             <div className="flex flex-col gap-3 mb-3 ">
               <span className='text-2xl lg:text-3xl capitalize font-medium '>{product.itemName}</span>
               <div className='flex gap-3 mb-1 items-center'>
-
                 {orderType === "subscription" ? <>
                   <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(days * itemCost || 0).toFixed(2)}
                   </span>
@@ -221,6 +234,10 @@ const ProductOverView = () => {
                 }
 
               </div>
+              {product.minOrderQty && orderType === "buyonce" && itemWeight === "250" &&
+                <div className='bg-orange-900 mb-2 text-sm text-white w-fit p-1 px-2 rounded '>Minimum order qty {product.minOrderQty}</div>
+              }
+
               {product.itemStock === "0" ?
                 <div className='bg-red-500 rounded px-2 p-1 text-white font-medium w-fit'>
                   Out Of Stock
@@ -239,12 +256,12 @@ const ProductOverView = () => {
               <>
                 <div className="flex gap-1 mb-3 items-center pointer-events-none">
                   <span className='font-semibold text-nowrap'>Quantity : </span>
-                  <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemCategory === "milk" ? "ml" : "g"}</span>
+                  <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemSubCategory === "Milk" ? "ml" : "g"}</span>
                 </div>
                 <div className='flex gap-2 flex-wrap mb-3 pointer-events-none'>
                   {product.itemWeight.map((item, index) => (
                     <div onClick={() => weightSelectFunc(item)} key={index} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
-                      {item}{product.itemCategory === "milk" ? "ml" : "g"}
+                      {item}{product.itemSubCategory === "Milk" ? "ml" : "g"}
                     </div>
                   ))}
                 </div>
@@ -258,7 +275,9 @@ const ProductOverView = () => {
                       if (itemQty < parseInt(product.itemStock)) {
                         setItemQty(itemQty + 1)
                       } else {
-                        toast.warning(`Maximum quantity limit ${itemQty}`)
+                        toast.warning(`Maximum quantity limit ${itemQty}`, {
+                          className: "custom-toast",
+                        })
                       }
 
                     }} />
@@ -278,12 +297,12 @@ const ProductOverView = () => {
                   <>
                     <div className="flex gap-1 mb-3 items-center">
                       <span className='font-semibold text-nowrap'>Quantity : </span>
-                      <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemCategory === "milk" ? "ml" : "g"}</span>
+                      <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemSubCategory === "Milk" ? "ml" : "g"}</span>
                     </div>
                     <div className='flex gap-2 flex-wrap mb-5'>
                       {product.itemWeight.map((item, index) => (
                         <div onClick={() => weightSelectFunc(item)} key={index} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
-                          {item}{product.itemCategory === "milk" ? "ml" : "g"}
+                          {item}{product.itemSubCategory === "Milk" ? "ml" : "g"}
                         </div>
                       ))}
                     </div>
@@ -302,7 +321,9 @@ const ProductOverView = () => {
                       if (itemQty < parseInt(product.itemStock)) {
                         setItemQty(itemQty + 1)
                       } else {
-                        toast.warning(`Contact us for larger quantity orders.`)
+                        toast.warning(`Contact us for larger quantity orders.`, {
+                          className: "custom-toast",
+                        })
                       }
 
                     }} />
@@ -318,7 +339,7 @@ const ProductOverView = () => {
                   <>
                     <div className="flex gap-1 mb-3 items-center">
                       <span className='font-semibold text-nowrap'>Order Type : </span>
-                      <select onChange={orderTypeFunc} className='py-1 border-2 rounded  border-orange-600 focus:border-blue-500'>
+                      <select onChange={orderTypeFunc} className='py-1 outline-none border-2 rounded  border-orange-600 focus:border-blue-500'>
                         <option value="" disabled>Select Order Type</option>
                         <option value="buyonce">Buy Once</option>
                         <option value="subscription">Subscription</option>
@@ -346,7 +367,7 @@ const ProductOverView = () => {
                         </div>
                       </div>
                       <h5 className='font-semibold mb-2 flex items-center gap-2 text-green-600'><FaTruck className='text-blue-500' /> free delivery on all subscription orders.</h5>
-                      <p className='text-gray-500 mb-3 '>Subscription orders are delivered daily at 6 PM and 6 AM </p>
+                      <p className='text-gray-500 mb-3 '>Subscription orders are delivered daily at 6 AM to 8 AM and 6 PM to 8 AM </p>
 
                     </>}
 
@@ -381,10 +402,14 @@ const ProductOverView = () => {
                 {/* add to cart button  */}
                 <div className="flex gap-3 justify-start my-5 w-full">
                   {token ?
-
-                    <button onClick={addToCartFunc} className="w-full bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
-                      Add to cart
-                    </button>
+                    <>{cartSpin ?
+                      <FlipkartSpin />
+                      :
+                      <button onClick={addToCartFunc} className="w-full bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
+                        Add to cart
+                      </button>
+                    }
+                    </>
                     :
                     <Link to="/login" className="w-full text-center bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
                       Add to cart
