@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { toast, ToastContainer } from 'react-toastify';
+import { Slide, toast, ToastContainer } from 'react-toastify';
 import { dataContext } from '../App';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -7,10 +7,10 @@ import { FlipkartSpin } from './Loading';
 
 
 const Cart = () => {
-  const { cartItems, setCartItems, api } = useContext(dataContext)
+  const { cartItems, setCartItems, api, token } = useContext(dataContext)
   const [cartSpin, setCartSpin] = useState(false)
   const [totalAmount, setTotalAmount] = useState(null)
-  const [qty, setQty] = useState(null)
+  const [qtySpin, setQtySpin] = useState(false)
 
 
   useEffect(() => {
@@ -35,7 +35,7 @@ const Cart = () => {
       if (res) {
         const remain = cartItems.filter((item) => item._id !== cartItemId)
         setCartItems(remain)
-        toast.success(`${itemName} item removed from cart`, {
+        toast.success(`${itemName.substring(0,20)} item removed from cart`, {
           className: "custom-toast"
         })
         setCartSpin(false)
@@ -53,21 +53,41 @@ const Cart = () => {
 
 
   // qty select and update function 
-  const selectHandle = async (e) => {
+  const selectHandle = async (itemId, e, itemWeight, minOrderQty, orderType) => {
     const selectedQty = e.target.value
-    setQty(selectedQty)
-  }
+    if (selectedQty < parseInt(minOrderQty) && orderType === "buyonce" && itemWeight === "250") {
+      toast.warning(`Minimum order qty is ${minOrderQty}`, { className: "custom-toast" })
+    } else {
+      try {
+        setQtySpin(true);
+        await axios.put(`${api}/cart/update-cart/${itemId}`, { itemQty: selectedQty });
+        const response = await axios.get(`${api}/cart/get-user-cart-products`, {
+          headers: { token: token }
+        });
+        if (response.data?.retrievdProducts) {
+          setCartItems(response.data.retrievdProducts.reverse());
+        }
+      } catch (error) {
+        console.error("Error updating cart:", error);
+      } finally {
+        setQtySpin(false);
+      }
+    }
+  };
+
 
   return (
 
     <>
-      <ToastContainer position='bottom-center' theme='dark' />
+
+      <ToastContainer position='bottom-center' draggable transition={Slide} theme='dark' />
+
       <section className="text-gray-600 body-font overflow-hidden">
         {cartItems?.length ? <>
           <div className="container px-5 py-24 mx-auto ">
             <div className="-my-7 divide-y-2 divide-gray-100">
               {cartItems?.map((item) => (
-                <div key={item.id} className="py-8 flex gap-x-6 flex-nowrap">
+                <div key={item._id} className="py-8 flex gap-x-6 flex-nowrap">
                   <div className='flex flex-col gap-2 w-[8rem] h-fit lg:h-auto  lg:w-[12rem] '  >
                     <Link to={`/product_over_view/${item.productId}`}>
                       <img src={item?.products[0].itemImage[0]} alt={item.itemName} className='w-full h-full
@@ -78,8 +98,9 @@ const Cart = () => {
 
                       <h6 className='mb-1 text-sm font-semibold capitalize '>qty</h6>
                       <div className='relative'>
- <select
-                          onChange={selectHandle}
+                        {qtySpin && <FlipkartSpin />}
+                        <select
+                          onChange={(e) => selectHandle(item._id, e, item.products[0].itemWeight, item.products[0].minOrderQty, item.products[0].orderType)}
                           name="itemQty"
                           id="itemQty"
                           className=" p-[0.6rem]  rounded border-2 border-gray-500 w-12 h-6 "
@@ -95,9 +116,8 @@ const Cart = () => {
                           <option className="font-semibold text-[0.9rem]" value="6">6</option>
                           <option className="font-semibold text-[0.9rem]" value="7">7</option>
                         </select>
-                        <span className='absolute top-0 right-6'>{qty}</span>
+                        <span className='absolute top-0 right-6'>{item.itemQty}</span>
                       </div>
-
 
                     </div>
                   </div>

@@ -13,7 +13,7 @@ import axios from 'axios'
 
 const ProductOverView = () => {
   scrollToTop()
-  const { products, token, api, cartItems, setCartItems } = useContext(dataContext)
+  const { products, token, api, cartItems, setCartItems, defaultAddress } = useContext(dataContext)
   const { itemId } = useParams()
   const [product, setProduct] = useState({})
   const [itemImg, setItemImg] = useState("")
@@ -34,6 +34,7 @@ const ProductOverView = () => {
     itemName: product?.itemName,
     itemHalfKgCost: product?.itemHalfKgCost,
     itemKgCost: product?.itemKgCost,
+    minOrderQty: product?.minOrderQty,
     itemQty: itemQty,
     itemSubCategory: product?.itemSubCategory,
     itemWeight: itemWeight,
@@ -49,7 +50,7 @@ const ProductOverView = () => {
     products: []
   })
 
-  console.log(cart);
+
 
   // related products filter function 
   useEffect(() => {
@@ -161,7 +162,9 @@ const ProductOverView = () => {
   // add to cart function 
   const addToCartFunc = async () => {
     if (itemQty < parseInt(product.minOrderQty) && orderType === "buyonce" && itemWeight === "250") {
-      toast.warning(`Minimum order qty is ${product.minOrderQty}`, { className: "custom-toast" })
+      toast.info(`Minimum order qty is ${product.minOrderQty}`, { className: "custom-toast" })
+    } else if (!areaName) {
+      toast.warning("Check door delivery service for your location.", { className: "custom-toast" })
     } else {
       try {
         setCartSpin(true)

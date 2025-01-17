@@ -10,7 +10,7 @@ import { dataContext } from '../App';
 
 
 const Navbar = () => {
-  const { token, setToken } = useContext(dataContext)
+  const { token, setToken, cartItems } = useContext(dataContext)
   const [offcanvas, setOffcanvas] = useState(false)
   const [showNavbar, setShowNavbar] = useState(true);
   const [prevScrollPos, setPrevScrollPos] = useState(window.scrollY);
@@ -69,25 +69,29 @@ const Navbar = () => {
           <img className="md:w-full rounded-full" src="/dora-logo.jpeg" alt="dora-logo" />
         </Link>
         {token ?
-        <Link to="/cart">
-          <FaCartShopping
-            size={25}
-            title="Cart"
-            className="text-white cursor-pointer"
+          <Link className='relative' to="/cart">
+            <FaCartShopping
+              size={25}
+              title="Cart"
+              className="text-white cursor-pointer"
             />
-
-        </Link>
-          : 
+            <div className='absolute -top-3 right-0 p-2 bg-black w-5 h-5 rounded-full flex justify-center items-center'>
+              <span className='text-[0.8rem] text-white font-medium'>
+                {cartItems.length}
+              </span>
+            </div>
+          </Link>
+          :
           <Link to="/login">
-          <FaCartShopping
-            size={25}
-            title="Cart"
-            className="text-white cursor-pointer"
+            <FaCartShopping
+              size={25}
+              title="Cart"
+              className="text-white cursor-pointer"
             />
 
-        </Link>
-          
-          }
+          </Link>
+
+        }
       </div>
 
       {/* offcanvas  */}
@@ -95,18 +99,18 @@ const Navbar = () => {
       <div onClick={(e) => e.stopPropagation()} className={`offcanvas-menu fixed z-50 top-0 left-0  h-screen w-screen lg:w-[30%] p-2 transform transition-transform duration-300 ${offcanvas ? "translate-x-0" : "-translate-x-full"}`}>
         <div className='bg-gray-700 relative flex flex-col gap-4 text-white p-5  h-full w-full rounded-lg'>
           <Link onClick={() => setOffcanvas(false)} to="/" className='text-[1.2rem] flex items-center  border-b border-gray-700 hover:border-white gap-3  w-fit'><FaHome /> Home</Link>
-         {token ? <>
-         
-          <Link onClick={() => setOffcanvas(false)} to="/orders" className='text-[1.2rem] flex items-center  w-fit gap-[0.9rem] border-b  border-gray-700 hover:border-white'> <BsFillBoxSeamFill size={17} /> Orders </Link>
-          <Link onClick={() => setOffcanvas(false)} to="/profile" className='text-[1.2rem] flex items-center  w-fit gap-[0.7rem] border-b  border-gray-700 hover:border-white'><CgProfile size={22} /> Profile</Link>
-         </>
-         :
-<>
-         
-         <Link onClick={() => setOffcanvas(false)} to="/login" className='text-[1.2rem] flex items-center  w-fit gap-[0.9rem] border-b  border-gray-700 hover:border-white'> <BsFillBoxSeamFill size={17} /> Orders </Link>
-         <Link onClick={() => setOffcanvas(false)} to="/login" className='text-[1.2rem] flex items-center  w-fit gap-[0.7rem] border-b  border-gray-700 hover:border-white'><CgProfile size={22} /> Profile</Link>
-        </>
-        }
+          {token ? <>
+
+            <Link onClick={() => setOffcanvas(false)} to="/orders" className='text-[1.2rem] flex items-center  w-fit gap-[0.9rem] border-b  border-gray-700 hover:border-white'> <BsFillBoxSeamFill size={17} /> Orders </Link>
+            <Link onClick={() => setOffcanvas(false)} to="/profile" className='text-[1.2rem] flex items-center  w-fit gap-[0.7rem] border-b  border-gray-700 hover:border-white'><CgProfile size={22} /> Profile</Link>
+          </>
+            :
+            <>
+
+              <Link onClick={() => setOffcanvas(false)} to="/login" className='text-[1.2rem] flex items-center  w-fit gap-[0.9rem] border-b  border-gray-700 hover:border-white'> <BsFillBoxSeamFill size={17} /> Orders </Link>
+              <Link onClick={() => setOffcanvas(false)} to="/login" className='text-[1.2rem] flex items-center  w-fit gap-[0.7rem] border-b  border-gray-700 hover:border-white'><CgProfile size={22} /> Profile</Link>
+            </>
+          }
           <Link onClick={() => setOffcanvas(false)} to="/contact" className='text-[1.2rem] flex items-center  w-fit gap-[0.7rem] border-b  border-gray-700 hover:border-white'><MdPhone size={22} /> Contact Us</Link>
           {token ?
             <div onClick={() => {
