@@ -19,7 +19,7 @@ const ProductOverView = () => {
   const [itemImg, setItemImg] = useState("")
   const [itemWeight, setItemWeight] = useState("")
   const [itemCost, setItemCost] = useState("")
-  const [itemQty, setItemQty] = useState(null)
+  const [itemQty, setItemQty] = useState(1)
   const [relatedProducts, setRelatedProducts] = useState([])
   const [areas, setAreas] = useState([])
   const [noServiceText, setNoServiceText] = useState("")
@@ -44,10 +44,12 @@ const ProductOverView = () => {
 
   const [cart, setCart] = useState({
     productId: "",
+    itemQty: "",
     totalAmount: "",
     products: []
   })
 
+  console.log(cart);
 
   // related products filter function 
   useEffect(() => {
@@ -148,10 +150,11 @@ const ProductOverView = () => {
     setCart((prevCaart) => ({
       ...prevCaart,
       productId: product?._id,
+      itemQty: itemQty,
       totalAmount: orderType === "subscription" ? parseFloat(days * itemCost || 0).toFixed(2) : parseFloat(itemCost || 0).toFixed(2),
       products: [initialData]
     }))
-  }, [product, itemId, products, itemCost, itemWeight, days, orderType])
+  }, [product, itemId, products, itemCost, itemWeight, days, orderType, itemQty])
 
 
 
@@ -210,7 +213,7 @@ const ProductOverView = () => {
 
   return (
     <>
-      <ToastContainer position='top-center' draggable transition={Slide} theme='dark' />
+      <ToastContainer position='bottom-center' draggable transition={Slide} theme='dark' />
 
       <section className="text-gray-600 p-3 select-none mt-3 mb-7 pt-24">
 

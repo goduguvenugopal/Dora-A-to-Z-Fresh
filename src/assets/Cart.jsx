@@ -2,11 +2,53 @@ import React, { useContext, useEffect, useState } from 'react'
 import { toast, ToastContainer } from 'react-toastify';
 import { dataContext } from '../App';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { FlipkartSpin } from './Loading';
 
 
 const Cart = () => {
-  const { cartItems, setCartItems } = useContext(dataContext)
+  const { cartItems, setCartItems, api } = useContext(dataContext)
+  const [cartSpin, setCartSpin] = useState(false)
+  const [totalAmount, setTotalAmount] = useState(null)
 
+
+  useEffect(() => {
+    // total amount caluculating function 
+    const totalAmount = cartItems.reduce((acc, item) => {
+      const total = parseFloat(item.totalAmount || 0);
+      const qty = item.itemQty || 1;
+      return acc + total * qty;
+    }, 0);
+
+    setTotalAmount(totalAmount.toFixed(2))
+  }, [cartItems])
+
+
+
+
+  // remove cart items function 
+  const removeCartItem = async (cartItemId, itemName) => {
+    try {
+      setCartSpin(true)
+      const res = await axios.delete(`${api}/cart/delete-user-cart-product/${cartItemId}`)
+      if (res) {
+        const remain = cartItems.filter((item) => item._id !== cartItemId)
+        setCartItems(remain)
+        toast.success(`${itemName} item removed from cart`, {
+          className: "custom-toast"
+        })
+        setCartSpin(false)
+
+      }
+    } catch (error) {
+      console.error(error);
+      setCartSpin(false)
+      toast.success("Please try again", {
+        className: "custom-toast"
+      })
+
+    }
+  }
 
 
   return (
@@ -19,33 +61,43 @@ const Cart = () => {
             <div className="-my-7 divide-y-2 divide-gray-100">
               {cartItems?.map((item) => (
                 <div key={item.id} className="py-8 flex gap-x-6 flex-nowrap">
-                  <Link className='flex w-[10rem]   lg:w-[15rem] ' to={`/product_over_view/${item.productId}`} >
-
-                    <img src={item?.products[0].itemImage[0]} alt={item.itemName} className='w-full h-full
+                  <div className='flex flex-col gap-2 w-[8rem] h-fit lg:h-auto  lg:w-[12rem] '  >
+                    <Link to={`/product_over_view/${item.productId}`}>
+                      <img src={item?.products[0].itemImage[0]} alt={item.itemName} className='w-full h-full
                     rounded-lg' />
-                  </Link>
-                  {/* details section  */}
-                  <div className='flex flex-col items-start w-[10rem]  lg:w-[15rem]'>
-                    <Link to={`/product_over_view/${item.productId}`} className="flex gap-1 mb-2 justify-start  items-start ">
-                      <span className='text-sm lg:text-xl font-semibold'>{item.products[0].itemName.substring(0,20)}...</span>
+
                     </Link>
-                    <h6 className="text-lg lg:text-2xl mb-2 text-gray-700 font-medium">
-                    Rs. {item.totalAmount}
-                    </h6>
-                    <div className='items-center mt-2 flex gap-2'>
+                    <div className='flex justify-center items-center mt-2  gap-[0.4rem]'>
 
-                      <h6 className='mb-1 font-semibold capitalize '>qty</h6>
+                      <h6 className='mb-1 text-sm font-semibold capitalize '>qty</h6>
 
-                      <div className='flex items-center justify-center p-1 rounded border-2 border-gray-500 w-7 h-7'>
-                        <h5 className='font-semibold'>{item.products[0].itemQty}</h5>
+                      <div className='flex items-center justify-center p-[0.6rem] rounded border-2 border-gray-500 w-8 h-5'>
+                        <h5 className='font-semibold text-[0.9rem]'>{item.itemQty}</h5>
                       </div>
 
                     </div>
+                  </div>
+                  {/* details section  */}
+                  <div className='flex flex-col items-start w-[12rem]  lg:w-[17rem]'>
+                    <Link to={`/product_over_view/${item.productId}`} className="flex gap-1 mb-2 justify-start  items-start ">
+                      <span className='text-sm lg:text-xl font-semibold'>{item.products[0].itemName.substring(0, 25)}...</span>
+                    </Link>
+                    <h6 className="text-lg lg:text-2xl mb-1 text-gray-700 font-medium">
+                      Rs. {parseFloat(item.totalAmount * item.itemQty || 0).toFixed(2)}
+                    </h6>
+                    <div className='mt-1'>
 
+                      <div className='flex items-center justify-center'>
+                        <h5 className='font-semibold text-[0.9rem]'>{item.products[0].itemWeight}{item.products[0].itemSubCategory === "Milk" ? "ml" : "g"}</h5>
+                      </div>
 
-                    <button className="font-semibold border-2 p-1 bg-red-600 rounded-full  hover:text-white border-none w-32 text-center text-white mt-4">
-                      REMOVE
-                    </button>
+                    </div>
+                    {cartSpin ?
+                      <FlipkartSpin />
+                      : <button onClick={() => removeCartItem(item._id, item.products[0].itemName)} className="font-semibold text-sm  p-1 bg-red-500 hover:bg-red-700 rounded-full  hover:text-white border-none w-28 text-center text-white mt-4">
+                        REMOVE
+                      </button>
+                    }
                   </div>
 
 
@@ -61,15 +113,15 @@ const Cart = () => {
                 <h2 class="text-gray-700 font-bold text-lg mb-4">PRICE DETAILS</h2>
                 <div class="flex justify-between py-2 border-b">
                   <span class="text-gray-900">Price ({cartItems?.length} items)</span>
-                  <span class="font-semibold text-gray-700">526</span>
+                  <span class="font-semibold text-gray-700">Rs. {totalAmount}</span>
                 </div>
 
 
                 <div class="flex justify-between py-4 border-t mt-4">
                   <span class="font-semibold text-lg text-gray-700">Total Amount</span>
-                  <span class="font-bold text-lg text-gray-700"> </span>
+                  <span class="font-bold text-lg text-gray-700">Rs. {totalAmount}</span>
                 </div>
-                <Link to="/order" class="mt-2">
+                <Link to="/orders" class="mt-2">
                   <button className='w-full bg-orange-500 text-white h-[3rem] rounded text-lg font-semibold hover:bg-orange-700'>PLACE ORDER</button>
                 </Link>
 
