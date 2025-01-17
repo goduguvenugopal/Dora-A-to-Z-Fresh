@@ -10,13 +10,14 @@ const Cart = () => {
   const { cartItems, setCartItems, api } = useContext(dataContext)
   const [cartSpin, setCartSpin] = useState(false)
   const [totalAmount, setTotalAmount] = useState(null)
+  const [qty, setQty] = useState(null)
 
 
   useEffect(() => {
     // total amount caluculating function 
     const totalAmount = cartItems.reduce((acc, item) => {
       const total = parseFloat(item.totalAmount || 0);
-      const qty = item.itemQty || 1;
+      const qty = item.itemQty;
       return acc + total * qty;
     }, 0);
 
@@ -51,6 +52,12 @@ const Cart = () => {
   }
 
 
+  // qty select and update function 
+  const selectHandle = async (e) => {
+    const selectedQty = e.target.value
+    setQty(selectedQty)
+  }
+
   return (
 
     <>
@@ -67,20 +74,37 @@ const Cart = () => {
                     rounded-lg' />
 
                     </Link>
-                    <div className='flex justify-center items-center mt-2  gap-[0.4rem]'>
+                    <div className='flex  justify-center  mt-2  gap-[0.4rem]'>
 
                       <h6 className='mb-1 text-sm font-semibold capitalize '>qty</h6>
-
-                      <div className='flex items-center justify-center p-[0.6rem] rounded border-2 border-gray-500 w-8 h-5'>
-                        <h5 className='font-semibold text-[0.9rem]'>{item.itemQty}</h5>
+                      <div className='relative'>
+ <select
+                          onChange={selectHandle}
+                          name="itemQty"
+                          id="itemQty"
+                          className=" p-[0.6rem]  rounded border-2 border-gray-500 w-12 h-6 "
+                        >
+                          <option className="font-semibold text-[0.9rem]" disabled value="">
+                            Select Quantity
+                          </option>
+                          <option className="font-semibold text-[0.9rem]" value="1">1</option>
+                          <option className="font-semibold text-[0.9rem]" value="2">2</option>
+                          <option className="font-semibold text-[0.9rem]" value="3">3</option>
+                          <option className="font-semibold text-[0.9rem]" value="4">4</option>
+                          <option className="font-semibold text-[0.9rem]" value="5">5</option>
+                          <option className="font-semibold text-[0.9rem]" value="6">6</option>
+                          <option className="font-semibold text-[0.9rem]" value="7">7</option>
+                        </select>
+                        <span className='absolute top-0 right-6'>{qty}</span>
                       </div>
+
 
                     </div>
                   </div>
                   {/* details section  */}
                   <div className='flex flex-col items-start w-[12rem]  lg:w-[17rem]'>
                     <Link to={`/product_over_view/${item.productId}`} className="flex gap-1 mb-2 justify-start  items-start ">
-                      <span className='text-sm lg:text-xl font-semibold'>{item.products[0].itemName.substring(0, 25)}...</span>
+                      <span className='text-sm lg:text-xl text-black lg:text-gray-600 font-semibold'>{item.products[0].itemName.substring(0, 25)}...</span>
                     </Link>
                     <h6 className="text-lg lg:text-2xl mb-1 text-gray-700 font-medium">
                       Rs. {parseFloat(item.totalAmount * item.itemQty || 0).toFixed(2)}
