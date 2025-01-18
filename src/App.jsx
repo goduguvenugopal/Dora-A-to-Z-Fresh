@@ -87,6 +87,7 @@ function App() {
         const res = await axios.get(`${api}/carousel/get-carousel`);
         if (res) {
           setCarousel(res.data.retrievedCarousel[0]);
+          setSpinner(false)
         }
       } catch (error) {
         console.error(error);
@@ -109,7 +110,7 @@ function App() {
         if (res) {
           console.log(res.data.retrievdProducts.reverse());
           setCartItems(res.data.retrievdProducts.reverse())
-          setSpinner(false)
+         
         }
       } catch (error) {
         console.error(error);
