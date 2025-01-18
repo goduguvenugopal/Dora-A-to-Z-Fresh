@@ -16,6 +16,7 @@ import ProductOverView from "./assets/ProductOverView"
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import Orders from "./assets/Orders";
 import Login from "./assets/Login";
+import OrderCheckOut from "./assets/OrderCheckOut";
 
 
 
@@ -33,7 +34,7 @@ function App() {
   const [defaultAddress, setDefaultAddress] = useState([])
   const [cartItems, setCartItems] = useState([])
   const [discount, setDiscount] = useState({})
-
+  const [orderProducts, setOrderProducts] = useState([])
 
   useEffect(() => {
     // retrieving token from localStorage
@@ -150,7 +151,8 @@ function App() {
       user, setUser,
       defaultAddress, setDefaultAddress,
       cartItems, setCartItems,
-      discount, setDiscount
+      discount, setDiscount,
+      orderProducts, setOrderProducts
     }}>
 
       <Navbar />
@@ -161,6 +163,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/order_check_out" element={<OrderCheckOut />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/login" element={<Login />} />

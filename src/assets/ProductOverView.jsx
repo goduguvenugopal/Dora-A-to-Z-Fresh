@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { dataContext } from "../App"
 import { PiShareNetwork } from 'react-icons/pi'
 import { FlipkartSpin, Loading, SmallLoading } from './Loading'
@@ -13,7 +13,7 @@ import axios from 'axios'
 
 const ProductOverView = () => {
   scrollToTop()
-  const { products, token, api, cartItems, setCartItems, defaultAddress, discount } = useContext(dataContext)
+  const { products, token, api, cartItems, orderProducts, setOrderProducts, setCartItems, defaultAddress, discount } = useContext(dataContext)
   const { itemId } = useParams()
   const [product, setProduct] = useState({})
   const [itemImg, setItemImg] = useState("")
@@ -27,6 +27,7 @@ const ProductOverView = () => {
   const [orderType, setOrderType] = useState("buyonce")
   const [days, setDays] = useState(7)
   const [dis, setDis] = useState(null)
+  const navigate = useNavigate()
   const [cartSpin, setCartSpin] = useState(false)
   const initialData = {
     itemCategory: product?.itemCategory,
@@ -50,6 +51,14 @@ const ProductOverView = () => {
     totalAmount: "",
     products: []
   })
+
+
+  // when order type changes set to default value to all
+  useEffect(() => {
+    setDays(7)
+    setItemQty(1)
+    setItemWeight("250")
+  }, [orderType])
 
 
   // retrieving area name from localStorage
@@ -218,8 +227,7 @@ const ProductOverView = () => {
     }
   }
 
-  console.log(cart);
-  console.log(dis);
+
 
   useEffect(() => {
     if (days === 7) {
@@ -231,7 +239,24 @@ const ProductOverView = () => {
     } else if (days === 30) {
       setDis(discount.thirtyDays)
     }
+
   }, [product, itemId, products, itemCost, itemWeight, days, orderType, itemQty, discount])
+
+
+
+  // order check out function 
+  const orderCheckOutFunc = () => {
+    if (itemQty < parseInt(product.minOrderQty) && orderType === "buyonce" && itemWeight === "250") {
+      toast.info(`Minimum order qty is ${product.minOrderQty}`, { className: "custom-toast" })
+    } else if (defaultAddress.length > 0) {
+      setOrderProducts([cart])
+      navigate("/order_check_out")
+    } else {
+      toast.warning("Please add address before placing order", { className: "custom-toast" })
+    }
+  }
+
+
 
   // Check if the product is still being retrieved or is empty
   if (!product || Object.keys(product).length === 0) {
@@ -271,21 +296,21 @@ const ProductOverView = () => {
               <span className='text-2xl lg:text-3xl capitalize font-medium '>{product.itemName}</span>
               <div className='flex gap-3 mb-1 items-center'>
                 {orderType === "subscription" ? <>
-                  <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat((days * itemCost) - dis || 0).toFixed(2)}
+                  <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(((days * itemCost) - dis) * itemQty || 0).toFixed(2)}
                   </span>
                   {
                     dis ?
-                      <span className='text-md line-through text-red-700 font-medium'>Rs. {parseFloat(days * itemCost || 0).toFixed(2)}
+                      <span className='text-md line-through text-red-700 font-medium'>Rs. {parseFloat((days * itemCost) * itemQty || 0).toFixed(2)}
                       </span> : null
                   }
                 </>
                   :
                   <>
-                    <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(itemCost || 0).toFixed(2)}
+                    <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(itemCost * itemQty || 0).toFixed(2)}
                     </span>
                     {
                       itemWeight === "250" || product.itemCategory === "food" || product.itemCategory === "non-veg" ?
-                        <span className='text-md line-through text-red-700 font-medium'>Rs. {parseFloat(product.offerCost || 0).toFixed(2)}
+                        <span className='text-md line-through text-red-700 font-medium'>Rs. {parseFloat(product.offerCost * itemQty || 0).toFixed(2)}
                         </span> : null
                     }
                   </>
@@ -486,32 +511,63 @@ const ProductOverView = () => {
                 </div>
 
                 {/* add to cart button  */}
-                <div className="flex gap-3 justify-start my-5 w-full">
+                <div className="flex gap-3 justify-start flex-wrap lg:flex-nowrap my-5 w-full">
                   {token ?
-                    <>{cartSpin ?
-                      <FlipkartSpin />
-                      :
-                      <>
-                        {cartItems?.some((item) => item.productId === product?._id) ?
-                          <Link to="/cart" className="w-full text-center bg-orange-900 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-orange-700 rounded-full">
-                            Go to cart
-                          </Link>
-                          :
-                          <button onClick={addToCartFunc} className="w-full bg-blue-800  font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
-                            Add to cart
-                          </button>
-                        }
+                    <>
 
-                      </>
-                    }
+                      {cartSpin ?
+                        <FlipkartSpin />
+                        :
+                        <>
+                          {cartItems?.some((item) => item.productId === product?._id) ?
+                            <Link to="/cart" className="w-full text-center bg-orange-900 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-orange-700 rounded-full">
+                              Go to cart
+                            </Link>
+                            :
+                            <button onClick={addToCartFunc} className="w-full bg-blue-800  font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
+                              Add to cart
+                            </button>
+                          }
+
+                        </>
+                      }
+
+                      <div onClick={orderCheckOutFunc} className="w-full text-center cursor-pointer bg-yellow-300 font-semibold text-black border-0 py-3 px-6 focus:outline-none hover:bg-yellow-400 rounded-full">
+                        Buy now
+                      </div>
+
                     </>
                     :
-                    <Link to="/login" className="w-full text-center bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
-                      Add to cart
-                    </Link>
-
+                    <>
+                      <Link to="/login" className="w-full text-center bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
+                        Add to cart
+                      </Link>
+                      <Link to="/login" className="w-full text-center bg-yellow-300 font-semibold text-black border-0 py-3 px-6 focus:outline-none hover:bg-yellow-400 rounded-full">
+                        Buy now
+                      </Link>
+                    </>
                   }
+
                 </div>
+
+                {/* add address section  */}
+                <div className='mb-3 py-3 flex items-start gap-2 justify-between w-full '>
+                  <div className='w-[60%]  '>
+                    <h5 className='text-sm font-medium text-black'>Delivery to : <span className='text-gray-600'>{defaultAddress[0]?.name} {defaultAddress[0]?.street.substring(0, 27)}, {defaultAddress[0]?.village}, {defaultAddress[0]?.district}, {defaultAddress[0]?.postalCode}</span></h5>
+                  </div>
+                  <div className='w-[30%]  '>
+                    {defaultAddress.length > 0 ?
+                      <Link to="/profile" className="font-semibold text-sm block p-1 bg-blue-600 hover:bg-blue-500 rounded-full   border-none w-[7rem] text-center text-white">
+                        Change
+                      </Link> :
+                      <Link to="/profile" className="font-semibold text-sm block  p-1 bg-blue-600 hover:bg-blue-500 rounded-full   border-none w-full text-center text-white">
+                        Add Address
+                      </Link>
+                    }
+                  </div>
+
+                </div>
+
 
               </>
             }

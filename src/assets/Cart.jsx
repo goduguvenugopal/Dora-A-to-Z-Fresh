@@ -8,7 +8,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 
 const Cart = () => {
-  const { cartItems, setCartItems, api, token } = useContext(dataContext)
+  const { cartItems, setCartItems, api, token, defaultAddress, orderProducts, setOrderProducts } = useContext(dataContext)
   const [cartSpin, setCartSpin] = useState(false)
   const [totalAmount, setTotalAmount] = useState(null)
   const [qtySpin, setQtySpin] = useState(false)
@@ -77,6 +77,25 @@ const Cart = () => {
   };
 
 
+  // order check out function 
+  const orderCheckOutFunc = (orderItem) => {
+    if (defaultAddress.length <= 0) {
+      toast.warning(`Please Add address`, { className: "custom-toast" })
+    } else if (defaultAddress.length > 0) {
+      if (orderItem.length > 0) {
+        setOrderProducts(orderItem)
+        navigate("/order_check_out")
+      } else {
+        setOrderProducts([orderItem])
+        navigate("/order_check_out")
+
+      }
+    }
+
+  }
+
+ 
+
   // if token not navigate to home 
   useEffect(() => {
     if (!token) {
@@ -90,13 +109,34 @@ const Cart = () => {
 
       <ToastContainer position='bottom-center' draggable transition={Slide} theme='dark' />
 
-      <section className="text-gray-600 body-font overflow-hidden">
+      <section className="text-gray-600 body-font overflow-hidden p-3">
         {cartItems?.length ? <>
-          <div className="container px-5 py-24 mx-auto ">
+
+          <div className="container py-24 mx-auto ">
+
             <div className="-my-7 divide-y-2 divide-gray-100">
+
+              {/* add address section  */}
+              <div className='py-6 flex items-center justify-between w-full lg:w-[60%] '>
+                <div className='w-[60%]'>
+                  <h5 className='text-sm font-medium text-black'>Delivery to : <span className='text-gray-600'>{defaultAddress[0]?.name} {defaultAddress[0]?.street.substring(0, 27)}, {defaultAddress[0]?.village}, {defaultAddress[0]?.district}, {defaultAddress[0]?.postalCode}</span></h5>
+
+                </div>
+
+                {defaultAddress.length > 0 ?
+                  <Link to="/profile" className="font-semibold text-sm  p-1 bg-blue-600 hover:bg-blue-500 rounded-full   border-none w-[6rem] text-center text-white">
+                    Change
+                  </Link> :
+                  <Link to="/profile" className="font-semibold text-sm  p-1 bg-blue-600 hover:bg-blue-500 rounded-full   border-none w-28 text-center text-white">
+                    Add Address
+                  </Link>
+                }
+              </div>
+
               {cartItems?.map((item) => (
-                <div key={item._id} className="py-8 flex gap-x-6 flex-nowrap">
-                  <div className='flex flex-col gap-2 w-[8rem] h-fit lg:h-auto  lg:w-[12rem] '  >
+                <div key={item._id} className="py-8 flex gap-x-[1.1rem] lg:gap-x-6 flex-nowrap">
+                  {/* image section  */}
+                  <div className='flex flex-col gap-2 w-[30%] h-fit lg:h-auto  lg:w-[12rem] '  >
                     <Link to={`/product_over_view/${item.productId}`}>
                       <LazyLoadImage effect='blur' src={item?.products[0].itemImage[0]} alt={item.itemName} className='w-full h-full
                     rounded-lg' />
@@ -133,8 +173,9 @@ const Cart = () => {
 
                     </div>
                   </div>
+
                   {/* details section  */}
-                  <div className='flex flex-col items-start w-[12rem]  lg:w-[17rem]'>
+                  <div className='flex flex-col items-start w-[60%]  lg:w-[17rem]  '>
                     <Link to={`/product_over_view/${item.productId}`} className="flex gap-1 mb-2 justify-start  items-start ">
                       <span className='text-sm lg:text-xl text-black lg:text-gray-600 font-semibold'>{item.products[0].itemName.substring(0, 25)}...</span>
                     </Link>
@@ -149,12 +190,20 @@ const Cart = () => {
                       }
 
                     </div>
-                    {cartSpin ?
-                      <FlipkartSpin />
-                      : <button onClick={() => removeCartItem(item._id, item.products[0].itemName)} className="font-semibold text-sm  p-1 bg-red-500 hover:bg-red-700 rounded-full  hover:text-white border-none w-28 text-center text-white mt-4">
-                        REMOVE
+
+                    {/* buy button and remove btn section  */}
+                    <div className='flex items-center gap-2 mt-3 flex-wrap w-full'>
+
+                      {cartSpin ?
+                        <FlipkartSpin />
+                        : <button onClick={() => removeCartItem(item._id, item.products[0].itemName)} className="font-semibold text-sm  p-1 bg-red-500 hover:bg-red-700 rounded-full  hover:text-white border-none w-24 text-center text-white ">
+                          Remove
+                        </button>
+                      }
+                      <button onClick={() => orderCheckOutFunc(item)} className="font-semibold text-sm  p-1 bg-yellow-400 hover:bg-yellow-500 rounded-full   border-none w-24 text-center text-black ">
+                        Buy now
                       </button>
-                    }
+                    </div>
                   </div>
 
 
@@ -178,9 +227,9 @@ const Cart = () => {
                   <span class="font-semibold text-lg text-gray-700">Total Amount</span>
                   <span class="font-bold text-lg text-gray-700">Rs. {totalAmount}</span>
                 </div>
-                <Link to="/orders" class="mt-2">
-                  <button className='w-full bg-orange-500 text-white h-[3rem] rounded text-lg font-semibold hover:bg-orange-700'>PLACE ORDER</button>
-                </Link>
+                <div class="mt-2">
+                  <button onClick={() => orderCheckOutFunc(cartItems)} className='w-full bg-orange-500 text-white h-[3rem] rounded text-lg font-semibold hover:bg-orange-700'>PLACE ORDER</button>
+                </div>
 
                 <h5 className='text-md text-center mt-3 font-semibold'>or <Link to="/" className='text-blue-700 font-medium'>Continue Shopping</Link></h5>
               </div>

@@ -122,6 +122,7 @@ const Profile = () => {
                 className: "custom-toast",
               })
               setDefaultAddress([retrievedAddress[0]])
+              localStorage.setItem("address", JSON.stringify([retrievedAddress[0]]))
               setAddressForm(initialData)
               setAddressForm((prevData) => ({
                 ...prevData, email: user.email
@@ -161,6 +162,8 @@ const Profile = () => {
   }
 
 
+
+
   // delete address function 
   const deleteAddress = async (delId) => {
     const isOkay = confirm("Address will be deleted permanently, are you sure ?")
@@ -174,9 +177,15 @@ const Profile = () => {
           })
           const remain = address.filter((item) => item._id !== delId)
           setAddress(remain)
-          localStorage.removeItem("address")
-          setDefaultAddress([])
+          if (remain.length > 0) {
+            localStorage.setItem("address", JSON.stringify([remain[0]]))
+            setDefaultAddress([remain[0]])
+          } else if (remain.length <= 0) {
+            setDefaultAddress([])
+            localStorage.removeItem("address")
+          }
           setDelSpin("")
+
 
         }
       } catch (error) {
@@ -217,7 +226,12 @@ const Profile = () => {
           <div className="mt-6">
             <div className="flex items-center justify-between lg:justify-start lg:gap-4">
               <h2 className="text-lg font-semibold text-gray-800">Addresses</h2>
-              <button onClick={() => setAddressToggle(true)} className="text-blue-600 font-bold hover:text-blue-800 text-sm">
+              <button onClick={() => {
+                setAddressToggle(true)
+                setAddressForm((prevData) => ({
+                  ...prevData, email: user.email
+                }))
+              }} className="text-blue-600 font-bold hover:text-blue-800 text-sm">
                 + Add
               </button>
             </div>
@@ -233,7 +247,7 @@ const Profile = () => {
                       <h6 className='capitalize font-semibold'>{item.village}, {item.district}</h6>
                       <h6 className='capitalize text-gray-500'>{item.street} </h6>
                       <h6 className='font-medium capitalize'>{item.state}, {item.postalCode} </h6>
-                      <div onClick={() => setDefaultAddressFunc(item._id)} className={`   cursor-pointer absolute border-2  rounded-full h-4 w-4 right-3 p-2 ${defaultAddress[0]?._id === item._id ? "bg-blue-500 border-white" : "border-gray-400"}`}></div>
+                      <div onClick={() => setDefaultAddressFunc(item._id)} className={` cursor-pointer absolute border-2  rounded-full h-4 w-4 right-3 p-2 ${defaultAddress[0]?._id === item._id ? "bg-blue-500 border-white" : "border-gray-400"}`}></div>
                       {delSpin === item._id ?
                         <FlipkartSpin />
                         :
