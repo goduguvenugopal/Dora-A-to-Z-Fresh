@@ -162,7 +162,7 @@ const ProductOverView = () => {
       ...prevCaart,
       productId: product?._id,
       itemQty: itemQty,
-      totalAmount: orderType === "subscription" ?  parseFloat((days * itemCost) - dis || 0).toFixed(2) : parseFloat(itemCost || 0).toFixed(2),
+      totalAmount: orderType === "subscription" ? parseFloat((days * itemCost) - dis || 0).toFixed(2) : parseFloat(itemCost || 0).toFixed(2),
       products: [initialData]
     }))
   }, [product, itemId, products, itemCost, itemWeight, days, orderType, itemQty])
@@ -220,7 +220,7 @@ const ProductOverView = () => {
 
   console.log(cart);
   console.log(dis);
-  
+
   useEffect(() => {
     if (days === 7) {
       setDis(discount.sevenDays)
@@ -274,10 +274,10 @@ const ProductOverView = () => {
                   <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat((days * itemCost) - dis || 0).toFixed(2)}
                   </span>
                   {
-                      discount.sevenDays || discount.tenDays || discount.twentyDays || discount.thirtyDays  ?
-                        <span className='text-md line-through text-red-700 font-medium'>Rs. {parseFloat(days * itemCost || 0).toFixed(2)}
-                        </span> : null
-                    }
+                    dis ?
+                      <span className='text-md line-through text-red-700 font-medium'>Rs. {parseFloat(days * itemCost || 0).toFixed(2)}
+                      </span> : null
+                  }
                 </>
                   :
                   <>
@@ -419,28 +419,36 @@ const ProductOverView = () => {
                           <div onClick={() => setDays(7)} className='border-2 flex items-center justify-center border-green-700 h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
                             7 days
                           </div>
-                          <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.sevenDays} off</h5>
+                          {discount.sevenDays &&
+                            <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.sevenDays} off</h5>
+                          }
                         </div>
 
                         <div className='text-center'>
                           <div onClick={() => setDays(10)} className='border-2 flex items-center justify-center border-green-700  h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
                             10 days
                           </div>
-                          <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.tenDays} off</h5>
+                          {discount.tenDays &&
+                            <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.tenDays} off</h5>
+                          }
                         </div>
 
                         <div className='text-center'>
                           <div onClick={() => setDays(20)} className='border-2 flex items-center justify-center border-green-700  h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
                             20 days
                           </div>
-                          <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.twentyDays} off</h5>
+                          {discount.twentyDays &&
+                            <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.twentyDays} off</h5>
+                          }
                         </div>
 
                         <div className='text-center'>
                           <div onClick={() => setDays(30)} className='border-2 flex items-center justify-center border-green-700  h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
                             30 days
                           </div>
-                          <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.thirtyDays} off</h5>
+                          {discount.thirtyDays &&
+                            <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.thirtyDays} off</h5>
+                          }
                         </div>
 
                       </div>
