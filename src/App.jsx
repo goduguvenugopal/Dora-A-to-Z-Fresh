@@ -32,7 +32,7 @@ function App() {
   const [user, setUser] = useState({})
   const [defaultAddress, setDefaultAddress] = useState([])
   const [cartItems, setCartItems] = useState([])
-
+  const [discount, setDiscount] = useState({})
 
 
   useEffect(() => {
@@ -56,7 +56,6 @@ function App() {
         const res = await axios.get(`${api}/product/get-all-products`)
         if (res) {
           setProducts(res.data.retrievdProducts.reverse())
-
         }
       } catch (error) {
         console.error(error);
@@ -72,7 +71,6 @@ function App() {
         const res = await axios.get(`${api}/category/get-category-products`)
         if (res) {
           setCategories(res.data.retrievedProducts)
-
         }
       } catch (error) {
         console.error(error);
@@ -87,7 +85,6 @@ function App() {
         const res = await axios.get(`${api}/carousel/get-carousel`);
         if (res) {
           setCarousel(res.data.retrievedCarousel[0]);
-          setSpinner(false)
         }
       } catch (error) {
         console.error(error);
@@ -95,6 +92,23 @@ function App() {
     };
 
     getCarousel();
+
+    // fetching discount function 
+    const fetchDiscount = async () => {
+      try {
+        const res = await axios.get(`${api}/offer/get-offer`)
+        if (res) {
+          setDiscount(res.data.offers[0])
+          setSpinner(false)
+
+        }
+      } catch (error) {
+        console.error(error);
+
+      }
+    }
+
+    fetchDiscount()
 
   }, [])
 
@@ -108,9 +122,7 @@ function App() {
           }
         })
         if (res) {
-          console.log(res.data.retrievdProducts.reverse());
           setCartItems(res.data.retrievdProducts.reverse())
-         
         }
       } catch (error) {
         console.error(error);
@@ -137,7 +149,8 @@ function App() {
       token, setToken,
       user, setUser,
       defaultAddress, setDefaultAddress,
-      cartItems, setCartItems
+      cartItems, setCartItems,
+      discount, setDiscount
     }}>
 
       <Navbar />

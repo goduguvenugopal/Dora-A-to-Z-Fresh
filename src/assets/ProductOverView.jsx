@@ -13,7 +13,7 @@ import axios from 'axios'
 
 const ProductOverView = () => {
   scrollToTop()
-  const { products, token, api, cartItems, setCartItems, defaultAddress } = useContext(dataContext)
+  const { products, token, api, cartItems, setCartItems, defaultAddress, discount } = useContext(dataContext)
   const { itemId } = useParams()
   const [product, setProduct] = useState({})
   const [itemImg, setItemImg] = useState("")
@@ -26,6 +26,7 @@ const ProductOverView = () => {
   const [areaName, setAreaName] = useState()
   const [orderType, setOrderType] = useState("buyonce")
   const [days, setDays] = useState(7)
+  const [dis, setDis] = useState(null)
   const [cartSpin, setCartSpin] = useState(false)
   const initialData = {
     itemCategory: product?.itemCategory,
@@ -161,7 +162,7 @@ const ProductOverView = () => {
       ...prevCaart,
       productId: product?._id,
       itemQty: itemQty,
-      totalAmount: orderType === "subscription" ? parseFloat(days * itemCost || 0).toFixed(2) : parseFloat(itemCost || 0).toFixed(2),
+      totalAmount: orderType === "subscription" ?  parseFloat((days * itemCost) - dis || 0).toFixed(2) : parseFloat(itemCost || 0).toFixed(2),
       products: [initialData]
     }))
   }, [product, itemId, products, itemCost, itemWeight, days, orderType, itemQty])
@@ -217,6 +218,20 @@ const ProductOverView = () => {
     }
   }
 
+  console.log(cart);
+  console.log(dis);
+  
+  useEffect(() => {
+    if (days === 7) {
+      setDis(discount.sevenDays)
+    } else if (days === 10) {
+      setDis(discount.tenDays)
+    } else if (days === 20) {
+      setDis(discount.twentyDays)
+    } else if (days === 30) {
+      setDis(discount.thirtyDays)
+    }
+  }, [product, itemId, products, itemCost, itemWeight, days, orderType, itemQty, discount])
 
   // Check if the product is still being retrieved or is empty
   if (!product || Object.keys(product).length === 0) {
@@ -256,8 +271,13 @@ const ProductOverView = () => {
               <span className='text-2xl lg:text-3xl capitalize font-medium '>{product.itemName}</span>
               <div className='flex gap-3 mb-1 items-center'>
                 {orderType === "subscription" ? <>
-                  <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(days * itemCost || 0).toFixed(2)}
+                  <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat((days * itemCost) - dis || 0).toFixed(2)}
                   </span>
+                  {
+                      discount.sevenDays || discount.tenDays || discount.twentyDays || discount.thirtyDays  ?
+                        <span className='text-md line-through text-red-700 font-medium'>Rs. {parseFloat(days * itemCost || 0).toFixed(2)}
+                        </span> : null
+                    }
                 </>
                   :
                   <>
@@ -298,7 +318,7 @@ const ProductOverView = () => {
                     <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemSubCategory === "Milk" ? "ml" : "g"}</span>
                   </div>
                 }
-                <div className='flex gap-2 flex-wrap mb-3 pointer-events-none'>
+                <div className='flex gap-3 flex-wrap mb-3 pointer-events-none'>
                   {product.itemWeight.map((item, index) => (
                     <div onClick={() => weightSelectFunc(item)} key={index} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
                       {item}{product.itemSubCategory === "Milk" ? "ml" : "g"}
@@ -341,7 +361,7 @@ const ProductOverView = () => {
                         <span className='font-semibold text-nowrap'>Quantity : </span>
                         <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemSubCategory === "Milk" ? "ml" : "g"}</span>
                       </div>}
-                    <div className='flex gap-2 flex-wrap mb-5'>
+                    <div className='flex gap-3 flex-wrap mb-5'>
                       {product.itemWeight.map((item, index) => (
                         <div onClick={() => weightSelectFunc(item)} key={index} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
                           {item}{product.itemSubCategory === "Milk" ? "ml" : "g"}
@@ -394,19 +414,35 @@ const ProductOverView = () => {
                         <span className='font-semibold text-nowrap'>Days : </span>
                         <span className='text-lg font-semibold text-black'>{days} days</span>
                       </div>
-                      <div className='flex gap-2 flex-wrap mb-5'>
-                        <div onClick={() => setDays(7)} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
-                          7 days
+                      <div className='flex gap-3 flex-wrap mb-5'>
+                        <div className='text-center'>
+                          <div onClick={() => setDays(7)} className='border-2 flex items-center justify-center border-green-700 h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
+                            7 days
+                          </div>
+                          <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.sevenDays} off</h5>
                         </div>
-                        <div onClick={() => setDays(10)} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
-                          10 days
+
+                        <div className='text-center'>
+                          <div onClick={() => setDays(10)} className='border-2 flex items-center justify-center border-green-700  h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
+                            10 days
+                          </div>
+                          <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.tenDays} off</h5>
                         </div>
-                        <div onClick={() => setDays(20)} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
-                          20 days
+
+                        <div className='text-center'>
+                          <div onClick={() => setDays(20)} className='border-2 flex items-center justify-center border-green-700  h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
+                            20 days
+                          </div>
+                          <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.twentyDays} off</h5>
                         </div>
-                        <div onClick={() => setDays(30)} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
-                          30 days
+
+                        <div className='text-center'>
+                          <div onClick={() => setDays(30)} className='border-2 flex items-center justify-center border-green-700  h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
+                            30 days
+                          </div>
+                          <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.thirtyDays} off</h5>
                         </div>
+
                       </div>
                       <h5 className='font-semibold mb-2 flex items-center gap-2 text-green-600'><FaTruck className='text-blue-500' /> free delivery on all subscription orders.</h5>
                       <p className='text-gray-500 mb-3 '>Subscription orders are delivered daily at 6 AM to 8 AM and 6 PM to 8 AM </p>
