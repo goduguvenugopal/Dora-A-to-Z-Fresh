@@ -95,6 +95,9 @@ function App() {
 
     getCarousel();
 
+  }, [])
+
+  useEffect(() => {
     // fetching cart products
     const fetchCartItems = async () => {
       try {
@@ -113,12 +116,9 @@ function App() {
       }
     }
 
-if(token){
-  fetchCartItems()
-}
-
-
-
+    if (token) {
+      fetchCartItems()
+    }
   }, [token])
 
 
@@ -136,7 +136,7 @@ if(token){
       token, setToken,
       user, setUser,
       defaultAddress, setDefaultAddress,
-      cartItems , setCartItems
+      cartItems, setCartItems
     }}>
 
       <Navbar />
