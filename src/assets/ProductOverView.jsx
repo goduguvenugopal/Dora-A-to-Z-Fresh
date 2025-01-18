@@ -23,7 +23,7 @@ const ProductOverView = () => {
   const [relatedProducts, setRelatedProducts] = useState([])
   const [areas, setAreas] = useState([])
   const [noServiceText, setNoServiceText] = useState("")
-  const [areaName, setAreaName] = useState("")
+  const [areaName, setAreaName] = useState()
   const [orderType, setOrderType] = useState("buyonce")
   const [days, setDays] = useState(7)
   const [cartSpin, setCartSpin] = useState(false)
@@ -50,6 +50,14 @@ const ProductOverView = () => {
     products: []
   })
 
+
+  // retrieving area name from localStorage
+  useEffect(() => {
+    const areaName = localStorage.getItem("areaName")
+    if (areaName) {
+      setAreaName(JSON.parse(areaName))
+    }
+  }, [])
 
 
   // related products filter function 
@@ -132,6 +140,7 @@ const ProductOverView = () => {
   const areaSelectFunc = (param) => {
     setNoServiceText("Door delivery service is available at your location.")
     setAreaName(param)
+    localStorage.setItem("areaName", JSON.stringify(param))
     setAreas([])
   }
 
@@ -159,13 +168,12 @@ const ProductOverView = () => {
 
 
 
+
   // add to cart function 
   const addToCartFunc = async () => {
     if (itemQty < parseInt(product.minOrderQty) && orderType === "buyonce" && itemWeight === "250") {
       toast.info(`Minimum order qty is ${product.minOrderQty}`, { className: "custom-toast" })
-    } else if (!areaName) {
-      toast.warning("Check door delivery service for your location.", { className: "custom-toast" })
-    } else {
+    } else if (areaName || defaultAddress.length > 0) {
       try {
         setCartSpin(true)
         const res = await axios.post(`${api}/cart/add-to-cart`, cart, {
@@ -183,6 +191,8 @@ const ProductOverView = () => {
           className: "custom-toast",
         })
       }
+    } else {
+      toast.warning("Check door delivery service for your location.", { className: "custom-toast" })
     }
   }
 
@@ -223,16 +233,17 @@ const ProductOverView = () => {
         <div className="flex flex-row lg:pb-2 gap-2 lg:gap-0 gap-x-[3rem] lg:gap-x-0 lg:justify-around flex-wrap">
           {/* image section  */}
           <div className='relative flex flex-col gap-3 w-full sm:w-[48%]'>
-            <img
+            <LazyLoadImage
               alt="ecommerce"
               className=" w-full h-auto rounded-lg "
               src={itemImg}
+              effect='blur'
             />
             <PiShareNetwork title='Share' onClick={shareFunc} className='absolute top-2 bg-black p-1 h-8 w-10 cursor-pointer  text-white rounded-full  right-2  ' />
 
             <div className=' flex gap-3 flex-wrap'>
               {product?.itemImage?.map((item, index) => (
-                <img key={index} src={item} alt={product.itemName} onClick={() => setItemImg(item)} className='w-[5rem] h-[4rem] lg:w-32 lg:h-24 rounded-lg cursor-pointer hover:border-2 hover:border-blue-600' />
+                <LazyLoadImage effect='blur' key={index} src={item} alt={product.itemName} onClick={() => setItemImg(item)} className='w-[5rem] h-[4rem] lg:w-32 lg:h-24 rounded-lg cursor-pointer hover:border-2 hover:border-blue-600' />
 
               ))}
             </div>
@@ -281,10 +292,12 @@ const ProductOverView = () => {
             {/* rendering elements based on stock availability  */}
             {product.itemStock === "0" ?
               <>
-                <div className="flex gap-1 mb-3 items-center pointer-events-none">
-                  <span className='font-semibold text-nowrap'>Quantity : </span>
-                  <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemSubCategory === "Milk" ? "ml" : "g"}</span>
-                </div>
+                {product.itemWeight.length > 0 &&
+                  <div className="flex gap-1 mb-3 items-center pointer-events-none">
+                    <span className='font-semibold text-nowrap'>Quantity : </span>
+                    <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemSubCategory === "Milk" ? "ml" : "g"}</span>
+                  </div>
+                }
                 <div className='flex gap-2 flex-wrap mb-3 pointer-events-none'>
                   {product.itemWeight.map((item, index) => (
                     <div onClick={() => weightSelectFunc(item)} key={index} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
@@ -292,6 +305,7 @@ const ProductOverView = () => {
                     </div>
                   ))}
                 </div>
+                {/* item qty increment and decrement section when stock zero */}
                 <div className="flex gap-1 mb-3 items-center pointer-events-none">
                   <span className='font-semibold text-nowrap'>Quantity : </span>
                   <span className='text-lg font-semibold text-black'> {itemQty}</span>
@@ -322,10 +336,11 @@ const ProductOverView = () => {
                 {/* item weight quantity selection section  */}
                 {product.itemWeight.length > 0 ?
                   <>
-                    <div className="flex gap-1 mb-3 items-center">
-                      <span className='font-semibold text-nowrap'>Quantity : </span>
-                      <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemSubCategory === "Milk" ? "ml" : "g"}</span>
-                    </div>
+                    {product.itemWeight.length > 0 &&
+                      <div className="flex gap-1 mb-3 items-center">
+                        <span className='font-semibold text-nowrap'>Quantity : </span>
+                        <span className='text-lg font-semibold text-black'> {itemWeight}{product.itemSubCategory === "Milk" ? "ml" : "g"}</span>
+                      </div>}
                     <div className='flex gap-2 flex-wrap mb-5'>
                       {product.itemWeight.map((item, index) => (
                         <div onClick={() => weightSelectFunc(item)} key={index} className='border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
@@ -438,7 +453,7 @@ const ProductOverView = () => {
                             Go to cart
                           </Link>
                           :
-                          <button onClick={addToCartFunc} className="w-full bg-blue-800 font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
+                          <button onClick={addToCartFunc} className="w-full bg-blue-800  font-semibold text-white border-0 py-3 px-6 focus:outline-none hover:bg-indigo-600 rounded-full">
                             Add to cart
                           </button>
                         }

@@ -174,6 +174,8 @@ const Profile = () => {
           })
           const remain = address.filter((item) => item._id !== delId)
           setAddress(remain)
+          localStorage.removeItem("address")
+          setDefaultAddress([])
           setDelSpin("")
 
         }

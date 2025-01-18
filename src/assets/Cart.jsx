@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { Slide, toast, ToastContainer } from 'react-toastify';
 import { dataContext } from '../App';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FlipkartSpin } from './Loading';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 
 const Cart = () => {
@@ -11,7 +12,7 @@ const Cart = () => {
   const [cartSpin, setCartSpin] = useState(false)
   const [totalAmount, setTotalAmount] = useState(null)
   const [qtySpin, setQtySpin] = useState(false)
-
+  const navigate = useNavigate()
 
   useEffect(() => {
     // total amount caluculating function 
@@ -35,7 +36,7 @@ const Cart = () => {
       if (res) {
         const remain = cartItems.filter((item) => item._id !== cartItemId)
         setCartItems(remain)
-        toast.success(`${itemName.substring(0,20)} item removed from cart`, {
+        toast.success(`${itemName.substring(0, 20)} item removed from cart`, {
           className: "custom-toast"
         })
         setCartSpin(false)
@@ -76,6 +77,13 @@ const Cart = () => {
   };
 
 
+  // if token not navigate to home 
+  useEffect(() => {
+    if (!token) {
+      navigate("/")
+    }
+  }, [token])
+
   return (
 
     <>
@@ -90,7 +98,7 @@ const Cart = () => {
                 <div key={item._id} className="py-8 flex gap-x-6 flex-nowrap">
                   <div className='flex flex-col gap-2 w-[8rem] h-fit lg:h-auto  lg:w-[12rem] '  >
                     <Link to={`/product_over_view/${item.productId}`}>
-                      <img src={item?.products[0].itemImage[0]} alt={item.itemName} className='w-full h-full
+                      <LazyLoadImage effect='blur' src={item?.products[0].itemImage[0]} alt={item.itemName} className='w-full h-full
                     rounded-lg' />
 
                     </Link>
@@ -115,7 +123,11 @@ const Cart = () => {
                           <option className="font-semibold text-[0.9rem]" value="5">5</option>
                           <option className="font-semibold text-[0.9rem]" value="6">6</option>
                           <option className="font-semibold text-[0.9rem]" value="7">7</option>
+                          <option className="font-semibold text-[0.9rem]" value="8">8</option>
+                          <option className="font-semibold text-[0.9rem]" value="9">9</option>
+                          <option className="font-semibold text-[0.9rem]" value="10">10</option>
                         </select>
+
                         <span className='absolute top-0 right-6'>{item.itemQty}</span>
                       </div>
 
@@ -130,10 +142,11 @@ const Cart = () => {
                       Rs. {parseFloat(item.totalAmount * item.itemQty || 0).toFixed(2)}
                     </h6>
                     <div className='mt-1'>
-
-                      <div className='flex items-center justify-center'>
-                        <h5 className='font-semibold text-[0.9rem]'>{item.products[0].itemWeight}{item.products[0].itemSubCategory === "Milk" ? "ml" : "g"}</h5>
-                      </div>
+                      {item.products[0].itemWeight &&
+                        <div className='flex items-center justify-center'>
+                          <h5 className='font-semibold text-[0.9rem]'>{item.products[0].itemWeight}{item.products[0].itemSubCategory === "Milk" ? "ml" : "g"}</h5>
+                        </div>
+                      }
 
                     </div>
                     {cartSpin ?
