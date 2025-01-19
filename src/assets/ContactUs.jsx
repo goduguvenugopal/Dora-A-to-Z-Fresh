@@ -7,20 +7,17 @@ import { FaLocationDot, } from "react-icons/fa6";
 import Footer from "./Footer";
 import { dataContext } from "../App";
 import { scrollToTop } from "./RouteHandler";
+import Faq from "./Faq";
 
 
 const ContactUs = () => {
   scrollToTop()
   const { api } = useContext(dataContext)
-  const [activeIndex, setActiveIndex] = useState(null);
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [submitSpin, setSubmitSpin] = useState(false);
 
-  const toggleAccordion = (index) => {
-    setActiveIndex(activeIndex === index ? null : index);
-  };
 
   const formData = {
     email: "dora.a.to.z.fresh@gmail.com",
@@ -201,116 +198,7 @@ const ContactUs = () => {
 
       <hr className="my-3" />
 
-      <div className="max-w-3xl mx-auto p-4">
-        <h2 className="text-2xl font-bold mb-4 text-center">
-          Frequently Asked Questions (FAQ)
-        </h2>
-        <div className="space-y-4">
-          {/* Accordion Item 1 */}
-          <div className="border-2 rounded-lg">
-            <button
-              onClick={() => toggleAccordion(0)}
-              className="w-full text-left p-4 bg-gray-100 focus:outline-none flex justify-between items-center"
-            >
-              <span className="text-lg font-medium">
-                How do I track my order?
-              </span>
-              <span>{activeIndex === 0 ? "-" : "+"}</span>
-            </button>
-            <div
-              className={`p-4 text-gray-700 ${activeIndex === 0 ? "" : "hidden"
-                }`}
-            >
-              Once your order has been shipped, you will receive an email with
-              your tracking number and a link to track your shipment.
-            </div>
-          </div>
-
-          {/* Accordion Item 2 */}
-          <div className="border-2 rounded-lg">
-            <button
-              onClick={() => toggleAccordion(1)}
-              className="w-full text-left p-4 bg-gray-100 focus:outline-none flex justify-between items-center"
-            >
-              <span className="text-lg font-medium">
-                What if my book arrives damaged?
-              </span>
-              <span>{activeIndex === 1 ? "-" : "+"}</span>
-            </button>
-            <div
-              className={`p-4 text-gray-700 ${activeIndex === 1 ? "" : "hidden"
-                }`}
-            >
-              If your book arrives in less-than-perfect condition, please
-              contact our customer support team within 7 days of receiving your
-              order. We will be happy to assist you with a replacement or
-              refund.
-            </div>
-          </div>
-
-          {/* Accordion Item 3 */}
-          <div className="border-2 rounded-lg">
-            <button
-              onClick={() => toggleAccordion(2)}
-              className="w-full text-left p-4 bg-gray-100 focus:outline-none flex justify-between items-center"
-            >
-              <span className="text-lg font-medium">
-                Can I change or cancel my order?
-              </span>
-              <span>{activeIndex === 2 ? "-" : "+"}</span>
-            </button>
-            <div
-              className={`p-4 text-gray-700 ${activeIndex === 2 ? "" : "hidden"
-                }`}
-            >
-              Once dispatched, we are unable to make changes. Contact our
-              support team as soon as possible if you need assistance.
-            </div>
-          </div>
-
-          {/* Accordion Item 4 */}
-          <div className="border-2 rounded-lg">
-            <button
-              onClick={() => toggleAccordion(3)}
-              className="w-full text-left p-4 bg-gray-100 focus:outline-none flex justify-between items-center"
-            >
-              <span className="text-lg font-medium">
-                Do you ship internationally?
-              </span>
-              <span>{activeIndex === 3 ? "-" : "+"}</span>
-            </button>
-            <div
-              className={`p-4 text-gray-700 ${activeIndex === 3 ? "" : "hidden"
-                }`}
-            >
-              Thank you for your interest! Unfortunately, we currently do not
-              offer international shipping. We appreciate your understanding!
-            </div>
-          </div>
-
-          {/* Accordion Item 5 */}
-          <div className="border-2 rounded-lg">
-            <button
-              onClick={() => toggleAccordion(4)}
-              className="w-full text-left p-4 bg-gray-100 focus:outline-none flex justify-between items-center"
-            >
-              <span className="text-lg font-medium">
-                What if my order is delayed?
-              </span>
-              <span>{activeIndex === 4 ? "-" : "+"}</span>
-            </button>
-            <div
-              className={`p-4 text-gray-700 ${activeIndex === 4 ? "" : "hidden"
-                }`}
-            >
-              While we work with trusted carriers, sometimes delays may occur
-              due to unforeseen circumstances. If your order is delayed beyond
-              the estimated delivery time, please contact us for further
-              assistance.
-            </div>
-          </div>
-        </div>
-      </div>
+      <Faq />
 
       <Footer />
     </>

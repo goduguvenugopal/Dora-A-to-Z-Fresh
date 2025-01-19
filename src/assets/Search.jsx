@@ -31,7 +31,7 @@ const Search = () => {
   }, [])
 
   return (
-    <div className='mt-20 px-5 pb-10'>
+    <div className='mt-20 px-3 pb-10'>
       <div className='flex justify-center pt-9 mb-7'>
         <div className='relative w-full sm:w-auto'>
 
@@ -42,12 +42,12 @@ const Search = () => {
 
       <h5 className='text-xl font-semibold mt-4'>Search Results</h5>
 
-      <div className="mt-6 grid grid-cols-2 gap-y-6 gap-x-5 md:gap-y-7 lg:gap-y-6  md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+      {searchProducts.length ? <>
+        <div className="mt-6 grid grid-cols-2 gap-y-6 gap-x-5 md:gap-y-7 lg:gap-y-6  md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
 
-        {searchProducts.length ? <>
           {searchProducts.map((item) => (
 
-            <Link to={`/product_over_view/${item._id}`}   key={item._id} className="group  w-full h-full  md:w-52   lg:w-72   relative  hover:opacity-85">
+            <Link to={`/product_over_view/${item._id}`} key={item._id} className="group  w-full h-full  md:w-52   lg:w-72   relative  hover:opacity-85">
               <div>
                 <LazyLoadImage
                   src={item.itemImage[0]}
@@ -67,12 +67,13 @@ const Search = () => {
               </div>
             </Link>
           ))}
-        </> :
-          <div className="text-lg flex items-center justify-center font-medium h-[45vh]  w-screen">
-            No results found
-          </div>
-        }
-      </div>
+        </div>
+      </>
+        :
+        <div className="text-lg flex items-center justify-center font-medium h-[45vh]">
+          No results found
+        </div>
+      }
     </div>
   )
 }

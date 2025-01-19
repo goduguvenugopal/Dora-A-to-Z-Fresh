@@ -94,7 +94,7 @@ const Cart = () => {
 
   }
 
- 
+
 
   // if token not navigate to home 
   useEffect(() => {
@@ -119,8 +119,7 @@ const Cart = () => {
               {/* add address section  */}
               <div className='py-6 flex items-center justify-between w-full lg:w-[60%] '>
                 <div className='w-[60%]'>
-                  <h5 className='text-sm font-medium text-black'>Delivery to : <span className='text-gray-600'>{defaultAddress[0]?.name} {defaultAddress[0]?.street.substring(0, 27)}, {defaultAddress[0]?.village}, {defaultAddress[0]?.district}, {defaultAddress[0]?.postalCode}</span></h5>
-
+                  <h5 className='text-sm font-medium text-black'>Delivery to : <span className='text-gray-600'>{defaultAddress[0]?.name}, {defaultAddress[0]?.postalCode}, {defaultAddress[0]?.village}, {defaultAddress[0]?.district}, {defaultAddress[0]?.street.substring(0, 35)}...</span></h5>
                 </div>
 
                 {defaultAddress.length > 0 ?
@@ -136,15 +135,14 @@ const Cart = () => {
               {cartItems?.map((item) => (
                 <div key={item._id} className="py-8 flex gap-x-[1.1rem] lg:gap-x-6 flex-nowrap">
                   {/* image section  */}
-                  <div className='flex flex-col gap-2 w-[30%] h-fit lg:h-auto  lg:w-[12rem] '  >
+                  <div className='flex flex-col gap-1 w-[30%] h-fit lg:h-auto  lg:w-[12rem] '  >
                     <Link to={`/product_over_view/${item.productId}`}>
                       <LazyLoadImage effect='blur' src={item?.products[0].itemImage[0]} alt={item.itemName} className='w-full h-full
                     rounded-lg' />
 
                     </Link>
-                    <div className='flex  justify-center  mt-2  gap-[0.4rem]'>
-
-                      <h6 className='mb-1 text-sm font-semibold capitalize '>qty</h6>
+                    <div className='flex justify-center gap-[0.4rem]'>
+                      <h6 className='text-sm font-semibold capitalize '>qty</h6>
                       <div className='relative'>
                         {qtySpin && <FlipkartSpin />}
                         <select
@@ -167,20 +165,21 @@ const Cart = () => {
                           <option className="font-semibold text-[0.9rem]" value="9">9</option>
                           <option className="font-semibold text-[0.9rem]" value="10">10</option>
                         </select>
-
                         <span className='absolute top-0 right-6'>{item.itemQty}</span>
                       </div>
-
                     </div>
                   </div>
 
-                  {/* details section  */}
+                  {/* details section */}
                   <div className='flex flex-col items-start w-[60%]  lg:w-[17rem]  '>
-                    <Link to={`/product_over_view/${item.productId}`} className="flex gap-1 mb-2 justify-start  items-start ">
+                    <Link to={`/product_over_view/${item.productId}`} className="flex gap-1 mb-1 justify-start  items-start ">
                       <span className='text-sm lg:text-xl text-black lg:text-gray-600 font-semibold'>{item.products[0].itemName.substring(0, 25)}...</span>
                     </Link>
                     <h6 className="text-lg lg:text-2xl mb-1 text-gray-700 font-medium">
                       Rs. {parseFloat(item.totalAmount * item.itemQty || 0).toFixed(2)}
+                    </h6>
+                    <h6 className="text-sm  mb-1 text-gray-700 font-medium capitalize">
+                      {item.products[0].orderType.replace("buyonce", "buy once")}
                     </h6>
                     <div className='mt-1'>
                       {item.products[0].itemWeight &&
@@ -194,8 +193,12 @@ const Cart = () => {
                     {/* buy button and remove btn section  */}
                     <div className='flex items-center gap-2 mt-3 flex-wrap w-full'>
 
-                      {cartSpin ?
+                      {cartSpin ? <>
                         <FlipkartSpin />
+                        <button className="font-semibold text-sm  p-1 bg-red-500 hover:bg-red-700 rounded-full  hover:text-white border-none w-24 text-center text-white ">
+                          Remove
+                        </button>
+                      </>
                         : <button onClick={() => removeCartItem(item._id, item.products[0].itemName)} className="font-semibold text-sm  p-1 bg-red-500 hover:bg-red-700 rounded-full  hover:text-white border-none w-24 text-center text-white ">
                           Remove
                         </button>
@@ -205,11 +208,7 @@ const Cart = () => {
                       </button>
                     </div>
                   </div>
-
-
-
                 </div>
-
               ))}
 
             </div>
@@ -222,7 +221,6 @@ const Cart = () => {
                   <span class="font-semibold text-gray-700">Rs. {totalAmount}</span>
                 </div>
 
-
                 <div class="flex justify-between py-4 border-t mt-4">
                   <span class="font-semibold text-lg text-gray-700">Total Amount</span>
                   <span class="font-bold text-lg text-gray-700">Rs. {totalAmount}</span>
@@ -230,12 +228,9 @@ const Cart = () => {
                 <div class="mt-2">
                   <button onClick={() => orderCheckOutFunc(cartItems)} className='w-full bg-orange-500 text-white h-[3rem] rounded text-lg font-semibold hover:bg-orange-700'>PLACE ORDER</button>
                 </div>
-
                 <h5 className='text-md text-center mt-3 font-semibold'>or <Link to="/" className='text-blue-700 font-medium'>Continue Shopping</Link></h5>
               </div>
-
             </div>
-
 
           </div>
         </> : <div className='h-[100vh] w-full flex justify-center flex-col gap-2 items-center font-semibold text-xl'>

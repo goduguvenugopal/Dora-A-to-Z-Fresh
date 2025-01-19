@@ -101,13 +101,13 @@ const Navbar = () => {
           <Link onClick={() => setOffcanvas(false)} to="/" className='text-[1.2rem] flex items-center  border-b border-gray-700 hover:border-white gap-3  w-fit'><FaHome /> Home</Link>
           {token ? <>
 
-            <Link onClick={() => setOffcanvas(false)} to="/orders" className='text-[1.2rem] flex items-center  w-fit gap-[0.9rem] border-b  border-gray-700 hover:border-white'> <BsFillBoxSeamFill size={17} /> Orders </Link>
+            <Link onClick={() => setOffcanvas(false)} to="/orders" className='text-[1.2rem] flex items-center  w-fit gap-[0.9rem] border-b  border-gray-700 hover:border-white'> <BsFillBoxSeamFill size={17} />My Orders </Link>
             <Link onClick={() => setOffcanvas(false)} to="/profile" className='text-[1.2rem] flex items-center  w-fit gap-[0.7rem] border-b  border-gray-700 hover:border-white'><CgProfile size={22} /> Profile</Link>
           </>
             :
             <>
 
-              <Link onClick={() => setOffcanvas(false)} to="/login" className='text-[1.2rem] flex items-center  w-fit gap-[0.9rem] border-b  border-gray-700 hover:border-white'> <BsFillBoxSeamFill size={17} /> Orders </Link>
+              <Link onClick={() => setOffcanvas(false)} to="/login" className='text-[1.2rem] flex items-center  w-fit gap-[0.9rem] border-b  border-gray-700 hover:border-white'> <BsFillBoxSeamFill size={17} />My Orders </Link>
               <Link onClick={() => setOffcanvas(false)} to="/login" className='text-[1.2rem] flex items-center  w-fit gap-[0.7rem] border-b  border-gray-700 hover:border-white'><CgProfile size={22} /> Profile</Link>
             </>
           }

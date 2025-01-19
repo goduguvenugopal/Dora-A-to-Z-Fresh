@@ -5,6 +5,7 @@ import { dataContext } from '../App'
 import { Link } from 'react-router-dom'
 import { FaDownload, FaShareSquare } from 'react-icons/fa'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
+import Faq from './Faq'
 
 
 
@@ -103,7 +104,7 @@ const Home = () => {
 
 
             {/* milk description section  */}
-            <div className='mb-9 p-3 bg-orange-100  rounded mt-5 flex justify-around flex-wrap gap-3'>
+            <div className='mb-4 p-3 bg-orange-100  rounded mt-5 flex justify-around flex-wrap gap-3'>
                 <img src="/buffalomilk.jpg" alt="buffalomilk"
                     className='rounded w-full lg:w-[40%]' />
                 <div className='w-full lg:w-[45%]'>
@@ -116,7 +117,7 @@ const Home = () => {
                     </p>
                 </div>
             </div>
-
+            <Faq />
             <Footer />
         </>
     )
