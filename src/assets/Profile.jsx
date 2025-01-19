@@ -231,7 +231,7 @@ const Profile = () => {
                 setAddressForm((prevData) => ({
                   ...prevData, email: user.email
                 }))
-              }} className="text-blue-600 font-bold hover:text-blue-800 text-sm">
+              }} className="text-blue-600 border-2 border-blue-500 hover:border-blue-600 rounded-full px-1 h-7 w-20 font-bold hover:text-blue-800 text-sm">
                 + Add
               </button>
             </div>
