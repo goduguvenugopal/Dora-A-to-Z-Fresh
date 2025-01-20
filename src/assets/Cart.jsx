@@ -179,7 +179,7 @@ const Cart = () => {
                       Rs. {parseFloat(item.totalAmount * item.itemQty || 0).toFixed(2)}
                     </h6>
                     <h6 className="text-sm  mb-1 text-gray-700 font-medium capitalize">
-                      {item.products[0].orderType.replace("buyonce", "buy once")}
+                      {item.orderType.replace("buyonce", "buy once")}
                     </h6>
                     <div className='mt-1'>
                       {item.products[0].itemWeight &&
@@ -214,18 +214,18 @@ const Cart = () => {
             </div>
             {/* place order out card  */}
             <div className='pt-10 lg:pt-0 lg:fixed  lg:top-0 lg:right-0 bg-white '>
-              <div class="lg:w-[24rem] lg:h-[100vh] lg:mx-auto bg-white lg:shadow-md  lg:p-6 lg:border lg:pt-24">
-                <h2 class="text-gray-700 font-bold text-lg mb-4">PRICE DETAILS</h2>
-                <div class="flex justify-between py-2 border-b">
-                  <span class="text-gray-900">Price ({cartItems?.length} items)</span>
-                  <span class="font-semibold text-gray-700">Rs. {totalAmount}</span>
+              <div className="lg:w-[24rem] lg:h-[100vh] lg:mx-auto bg-white lg:shadow-md  lg:p-6 lg:border lg:pt-24">
+                <h2 className="text-gray-700 font-bold text-lg mb-4">PRICE DETAILS</h2>
+                <div className="flex justify-between py-2 border-b">
+                  <span className="text-gray-900">Price ({cartItems?.length} items)</span>
+                  <span className="font-semibold text-gray-700">Rs. {totalAmount}</span>
                 </div>
 
-                <div class="flex justify-between py-4 border-t mt-4">
-                  <span class="font-semibold text-lg text-gray-700">Total Amount</span>
-                  <span class="font-bold text-lg text-gray-700">Rs. {totalAmount}</span>
+                <div className="flex justify-between py-4 border-t mt-4">
+                  <span className="font-semibold text-lg text-gray-700">Total Amount</span>
+                  <span className="font-bold text-lg text-gray-700">Rs. {totalAmount}</span>
                 </div>
-                <div class="mt-2">
+                <div className="mt-2">
                   <button onClick={() => orderCheckOutFunc(cartItems)} className='w-full bg-orange-500 text-white h-[3rem] rounded text-lg font-semibold hover:bg-orange-700'>PLACE ORDER</button>
                 </div>
                 <h5 className='text-md text-center mt-3 font-semibold'>or <Link to="/" className='text-blue-700 font-medium'>Continue Shopping</Link></h5>

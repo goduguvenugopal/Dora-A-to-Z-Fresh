@@ -49,6 +49,7 @@ const ProductOverView = () => {
     productId: "",
     itemQty: "",
     totalAmount: "",
+    orderType: "",
     products: []
   })
 
@@ -171,6 +172,7 @@ const ProductOverView = () => {
       ...prevCaart,
       productId: product?._id,
       itemQty: itemQty,
+      orderType: orderType,
       totalAmount: orderType === "subscription" ? parseFloat((days * itemCost) - dis || 0).toFixed(2) : parseFloat(itemCost || 0).toFixed(2),
       products: [initialData]
     }))
