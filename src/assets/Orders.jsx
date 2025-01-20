@@ -33,9 +33,8 @@ const Orders = () => {
   }, [user]);
 
 
-  console.log(orders);
 
-
+  // filter orders function based on order status 
   const inputSelectHandleFunc = (e) => {
     const selectInput = e.target.value
     const results = filterOrders.filter((item) => item.orderStatus === selectInput)
@@ -46,20 +45,27 @@ const Orders = () => {
     }
   }
 
+  //  if token not navigate to home
+  useEffect(() => {
+    if (!token) {
+      navigate("/")
+    }
+  }, [token])
+
 
   if (!orderSpin) {
     return <Loading />
   }
 
   return (
-    <div className="mt-20 px-3 pt-4 pb-10">
+    <div className="mt-20 px-3 lg:px-10 pt-4 pb-10">
       <div className="flex justify-between">
         <h1 className="text-2xl font-semibold mb-4">My Orders</h1>
         <select
           name="options"
           id="options"
           onChange={inputSelectHandleFunc}
-          className="border-2 outline-none border-blue-500 rounded h-10"
+          className="border-2 outline-none border-blue-500 rounded h-8"
           defaultValue=""
         >
           <option
@@ -89,7 +95,7 @@ const Orders = () => {
             {/* Product Image */}
             <div className="flex gap-3">
 
-              <div className="w-[6rem] h-fit lg:w-32 ">
+              <div className="w-[6rem] h-fit lg:w-[9rem] ">
                 <img
                   src={product?.orderedProdcuts[0]?.products[0]?.itemImage[0]}
                   alt={product?.orderedProdcuts[0]?.products[0]?.itemName}
@@ -117,13 +123,13 @@ const Orders = () => {
             </div>
 
             {product?.orderedProdcuts.length > 1 && <h6 className="text-sm">Check out the remaining products from your order by clicking below!</h6>}
-            {/* combo order section  */}
+            {/* remain products ordered section  */}
             {product?.orderedProdcuts.length > 1 &&
               <details className="flex flex-col gap-3">
                 <summary className="text-gray-600 cursor-pointer">See products ordered together</summary>
                 {product?.orderedProdcuts.map((item) => (
                   <div className="flex gap-3 mb-3" key={item._id}>
-                    <div className="w-[6rem] h-fit lg:w-32 ">
+                    <div className="w-[4rem] h-fit lg:w-[6.5rem] ">
                       <img
                         src={item.products[0]?.itemImage[0]}
                         alt={item.products[0]?.itemName}
