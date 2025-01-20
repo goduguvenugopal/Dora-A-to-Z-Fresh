@@ -305,7 +305,7 @@ const OrderCheckOut = () => {
                   {ChargesToggle ?
                     <span className="font-semibold text-gray-700">Rs. {discount?.deliveryCharges}</span>
                     :
-                    <span className="fxont-semibold text-gray-700">Rs. 00</span>
+                    <span className="fxont-semibold text-green-600">Rs. 00</span>
 
                   }
                 </div>
@@ -318,7 +318,10 @@ const OrderCheckOut = () => {
               <h5 className='mt-2 '><span className='font-bold text-red-500'>Note : </span>Orders will be processed only after full payment. Please send the payment receipt to given below WhatsApp number the same day of the order.
 
               </h5>
+              <div className='flex justify-center pt-2'>
               <a href='https://wa.me/919603669236' className='text-green-700 font-bold flex items-center gap-1 '> <FaWhatsapp size={21} />9603669236</a>
+              </div>
+
               <button onClick={placeOrder} type='submit' className="mt-4  bg-yellow-500 hover:bg-yellow-700 text-white w-full font-bold h-12 rounded-full"
               >
                 PLACE ORDER

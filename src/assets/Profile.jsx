@@ -41,6 +41,7 @@ const Profile = () => {
         })
         if (response) {
           setUser(response.data.singleUser)
+          localStorage.setItem("user", JSON.stringify(response.data.singleUser))
           setLoading(false)
         }
       } catch (error) {

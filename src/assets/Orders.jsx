@@ -1,9 +1,159 @@
-import React from 'react'
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { dataContext } from "../App";
+import { useNavigate } from "react-router-dom";
+import { Loading } from "./Loading";
 
 const Orders = () => {
-  return (
-    <div>Orders</div>
-  )
-}
+  const { api, token, user } = useContext(dataContext)
+  const navigate = useNavigate()
+  const [orders, setOrders] = useState([]);
+  const [orderSpin, setOrderSpin] = useState(false)
+  const [filterOrders, setFilterOrders] = useState([])
 
-export default Orders
+
+  useEffect(() => {
+    // Fetch orders from the API
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(`${api}/order/get-all-orders`)
+        if (response) {
+          const allOrders = response.data.retrievedAllOrders
+          const userOrders = allOrders.filter((item) => item.userId === user._id)
+          setOrders(userOrders);
+          setFilterOrders(userOrders)
+          setOrderSpin(true)
+        }
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
+    };
+
+    fetchOrders();
+  }, [user]);
+
+
+  console.log(orders);
+
+
+  const inputSelectHandleFunc = (e) => {
+    const selectInput = e.target.value
+    const results = filterOrders.filter((item) => item.orderStatus === selectInput)
+    setOrders(results)
+    if (selectInput === "all") {
+      setOrders(filterOrders)
+
+    }
+  }
+
+
+  if (!orderSpin) {
+    return <Loading />
+  }
+
+  return (
+    <div className="mt-20 px-3 pt-4 pb-10">
+      <div className="flex justify-between">
+        <h1 className="text-2xl font-semibold mb-4">My Orders</h1>
+        <select
+          name="options"
+          id="options"
+          onChange={inputSelectHandleFunc}
+          className="border-2 outline-none border-blue-500 rounded h-10"
+          defaultValue=""
+        >
+          <option
+            value=""
+            disabled
+            className="text-gray-400 "
+          >
+            Filter
+          </option>
+          <option value="all">All</option>
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="shipped">Shipped</option>
+          <option value="outofdelivery">Out of Delivery</option>
+          <option value="delivered">Delivered</option>
+          <option value="cancelled">Cancelled</option>
+
+        </select>
+      </div>
+      <hr className="border  mb-5" />
+      {orders.length > 0 ? (
+        orders.map((product) => (
+          <div
+            key={product._id}
+            className="flex flex-col items-start gap-2 border-b border-gray-400 pb-4 mb-4"
+          >
+            {/* Product Image */}
+            <div className="flex gap-3">
+
+              <div className="w-[6rem] h-fit lg:w-32 ">
+                <img
+                  src={product?.orderedProdcuts[0]?.products[0]?.itemImage[0]}
+                  alt={product?.orderedProdcuts[0]?.products[0]?.itemName}
+                  className="w-full h-fit object-cover rounded-lg"
+                />
+              </div>
+
+              {/* Product Details */}
+              <div className="">
+                <h3 className="text-[0.65rem] lg:text-[0.8rem] font-bold uppercase  text-gray-500">
+                  {product?.orderedProdcuts[0]?.orderType.replace("buyonce", "buy once")}
+                </h3>
+                <h2 className=" text-sm lg:text-lg font-semibold text-black">
+                  {product?.orderedProdcuts[0]?.products[0]?.itemName.substring(0, 25)}..
+                </h2>
+                <p className={` text-sm lg:text-lg  ${product?.orderStatus === "pending" ? "text-orange-700" : ""}
+                     ${product?.orderStatus === "cancelled" ? " text-red-600  " : ""} 
+                     ${product?.orderStatus === "confirmed" ? " text-green-600  " : ""}
+                      ${product?.orderStatus === "delivered" ? " text-green-600  " : ""} 
+                      ${product?.orderStatus === "shipped" ? " text-green-600  " : ""}
+                       ${product?.orderStatus === "outofdelivery" ? " text-green-600  " : ""}`}>
+                  Order {product.orderStatus.replace("outofdelivery", "out of delivery")} on {product.orderStatusDate}
+                </p>
+              </div>
+            </div>
+
+            {product?.orderedProdcuts.length > 1 && <h6 className="text-sm">Check out the remaining products from your order by clicking below!</h6>}
+            {/* combo order section  */}
+            {product?.orderedProdcuts.length > 1 &&
+              <details className="flex flex-col gap-3">
+                <summary className="text-gray-600 cursor-pointer">See products ordered together</summary>
+                {product?.orderedProdcuts.map((item) => (
+                  <div className="flex gap-3 mb-3" key={item._id}>
+                    <div className="w-[6rem] h-fit lg:w-32 ">
+                      <img
+                        src={item.products[0]?.itemImage[0]}
+                        alt={item.products[0]?.itemName}
+                        className="w-full h-fit object-cover rounded-lg"
+                      />
+                    </div>
+
+                    {/* Product Details */}
+                    <div>
+                      <h3 className="text-[0.65rem] lg:text-[0.8rem] font-bold uppercase  text-gray-500">
+                        {item.orderType.replace("buyonce", "buy once")}
+                      </h3>
+                      <h2 className=" text-sm lg:text-lg font-semibold text-black">
+                        {item.products[0]?.itemName.substring(0, 25)}..
+                      </h2>
+
+                    </div>
+                  </div>
+                )).slice(1)}
+              </details>
+
+            }
+
+          </div>
+        ))
+      ) : (
+        <div className="text-lg text-center font-medium flex items-center justify-center h-[70vh]">No orders found</div>
+      )}
+    </div>
+  );
+};
+
+export default Orders;

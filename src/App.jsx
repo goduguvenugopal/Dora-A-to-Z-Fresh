@@ -47,6 +47,12 @@ function App() {
     if (address) {
       setDefaultAddress(JSON.parse(address))
     }
+
+    // retrieving user details 
+    const userDetails = localStorage.getItem("user")
+    if (user) {
+      setUser(JSON.parse(userDetails))
+    }
   }, [])
 
   // fetching all products 
