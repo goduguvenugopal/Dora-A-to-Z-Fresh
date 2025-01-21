@@ -5,9 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Loading } from "./Loading";
 
 const Orders = () => {
-  const { api, token, user } = useContext(dataContext)
+  const { api, token, user, orders, setOrders } = useContext(dataContext)
   const navigate = useNavigate()
-  const [orders, setOrders] = useState([]);
   const [orderSpin, setOrderSpin] = useState(false)
   const [filterOrders, setFilterOrders] = useState([])
 
@@ -93,7 +92,7 @@ const Orders = () => {
             className="flex flex-col items-start gap-2 border-b border-gray-400 pb-4 mb-4"
           >
             {/* Product Image */}
-            <Link  to={`/orders/order_over_view/${product._id}`}  className="flex gap-3">
+            <Link to={`/orders/order_over_view/${product._id}`} className="flex gap-3">
 
               <div className="w-[6.8rem] h-fit lg:w-[9.5rem] ">
                 <img
@@ -122,13 +121,13 @@ const Orders = () => {
               </div>
             </Link>
 
-            {product?.orderedProdcuts.length > 1 && <h6 className="text-sm">Check out the remaining products from your order by clicking below!</h6>}
+            {product?.orderedProdcuts.length > 1 && <h6 className="text-sm mt-[0.35rem]">Check out the remaining products from your order by clicking below!</h6>}
             {/* remain products ordered section  */}
             {product?.orderedProdcuts.length > 1 &&
               <details className="flex flex-col gap-3 ">
                 <summary className="text-gray-600 cursor-pointer">See products ordered together</summary>
                 {product?.orderedProdcuts.map((item) => (
-                  <Link  to={`/orders/order_over_view/${product._id}`}  className="flex gap-3 mb-3 mt-3" key={item._id}>
+                  <Link to={`/orders/order_over_view/${product._id}`} className="flex gap-3 mb-3 mt-3" key={item._id}>
                     <div className="w-[5.3rem] h-fit lg:w-[6.8rem] ">
                       <img
                         src={item.products[0]?.itemImage[0]}

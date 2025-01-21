@@ -1,9 +1,255 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react';
+import { dataContext } from '../App';
+import { Link, useParams } from 'react-router-dom';
+import { Loading } from './Loading';
+import { FaCheck, FaInfo } from 'react-icons/fa';
 
 const OrderOverView = () => {
-  return (
-    <div>OrderOverView</div>
-  )
-}
+  const { orders } = useContext(dataContext);
+  const { orderId } = useParams();
+  const [singleOrder, setSingleOrder] = useState(null);
+  const [totalAmount, setTotalAmount] = useState("")
 
-export default OrderOverView
+
+
+  // Filtering single order
+  useEffect(() => {
+    if (orders) {
+      const order = orders.find((item) => item._id === orderId);
+      setSingleOrder(order || null); // Fallback to null if not found
+    }
+  }, [orderId, orders]);
+
+
+  useEffect(() => {
+    // total amount caluculating function 
+    const totalAmount = singleOrder?.orderedProdcuts.reduce((acc, item) => {
+      const total = parseFloat(item.totalAmount || 0);
+      const qty = item.itemQty;
+      return acc + total * qty;
+    }, 0);
+    setTotalAmount(parseInt(totalAmount).toFixed(2))
+  }, [singleOrder])
+
+
+  // Handle loading state
+  if (!singleOrder) {
+    return <Loading />
+  }
+
+  return (
+    <div className="mt-20 px-3 lg:px-10 pt-4 pb-10">
+      <h1 className="text-2xl font-semibold mb-2">Order Details</h1>
+      <hr className="border my-2" />
+      <span className='flex items-center text-gray-500 font-semibold'>Order ID : {singleOrder._id}</span>
+      <hr className="border my-2" />
+
+      <div className='flex flex-wrap gap-5 mt-6'>
+        {/* Order details section */}
+        <div className="flex flex-col w-full lg:w-[45%] items-start gap-2 pb-3 border-b border-gray-400 ">
+          {/* Product Image */}
+          <Link to={`/product_over_view/${singleOrder?.orderedProdcuts[0]?.productId}`} className="flex gap-5">
+            <div className="w-[6.8rem] h-fit lg:w-[9.5rem]">
+              <img
+                src={singleOrder?.orderedProdcuts[0]?.products[0]?.itemImage[0]}
+                alt={singleOrder?.orderedProdcuts[0]?.products[0]?.itemName}
+                className="w-full h-fit object-cover rounded-lg"
+              />
+            </div>
+
+            {/* Product Details */}
+            <div>
+              <h3 className="text-[0.65rem] lg:text-[0.8rem] font-bold uppercase text-gray-500">
+                {singleOrder?.orderedProdcuts[0]?.orderType.replace('buyonce', 'buy once')}
+              </h3>
+              <h2 className="text-sm lg:text-lg font-semibold text-black">
+                {singleOrder?.orderedProdcuts[0]?.products[0]?.itemName.substring(0, 30)}...
+              </h2>
+              <h2 className="text-sm lg:text-lg font-semibold text-black">
+                Rs. {singleOrder?.orderedProdcuts[0]?.totalAmount * singleOrder?.orderedProdcuts[0]?.itemQty}
+              </h2>
+              <h2 className="text-sm lg:text-lg font-semibold text-black">
+                Qty : {singleOrder?.orderedProdcuts[0]?.itemQty}
+              </h2>
+              <h2 className="text-sm lg:text-lg font-semibold text-black">
+                {singleOrder?.orderedProdcuts[0]?.products[0]?.itemWeight}gm
+              </h2>
+            </div>
+
+          </Link>
+
+          <span className='text-[1.3rem] font-medium '>Total Amount : Rs. {totalAmount?.toLocaleString("en-In")}</span>
+          <span className='text-gray-600 font-semibold'>Order Date : {singleOrder.orderDate}</span>
+
+          {singleOrder?.orderedProdcuts.length > 1 && (
+            <>
+              <h6 className="text-sm mt-2">
+                Check out the remaining products from your order by clicking below!
+              </h6>
+              {/* Remaining products ordered section */}
+              <details className="flex flex-col gap-3 w-full">
+                <summary className="text-gray-600 cursor-pointer">See products ordered together</summary>
+                {singleOrder?.orderedProdcuts.slice(1).map((item) => (
+                  <Link to={`/product_over_view/${item.productId}`} className="flex gap-5 pb-3 mt-3 border-b border-gray-500" key={item._id}>
+                    <div className="w-[6.8rem] h-fit lg:w-[9.5rem]">
+                      <img
+                        src={item.products[0]?.itemImage[0]}
+                        alt={item.products[0]?.itemName}
+                        className="w-full h-fit object-cover rounded-lg"
+                      />
+                    </div>
+
+                    {/* Product Details */}
+                    <div>
+                      <h3 className="text-[0.65rem] lg:text-[0.8rem] font-bold uppercase text-gray-500">
+                        {item.orderType.replace('buyonce', 'buy once')}
+                      </h3>
+                      <h2 className="text-sm lg:text-lg font-semibold text-black">
+                        {item.products[0]?.itemName.substring(0, 30)}...
+                      </h2>
+                      <h2 className="text-sm lg:text-lg font-semibold text-black">
+                        Rs. {item.totalAmount * item.itemQty}
+                      </h2>
+                      <h2 className="text-sm lg:text-lg font-semibold text-black">
+                        Qty : {item.itemQty}
+                      </h2>
+                      <h2 className="text-sm lg:text-lg font-semibold text-black">
+                        {item.products[0]?.itemWeight}gm
+                      </h2>
+                    </div>
+
+                  </Link>
+
+                ))}
+              </details>
+            </>
+          )}
+        </div>
+
+        {/* order status section  */}
+
+        <div className="w-full lg:w-[45%]">
+          {/* Status Steps */}
+          <div className="space-y-2 ">
+            {/* Order Confirmed and pending */}
+            {singleOrder.orderStatus === "pending" ?
+              <div className='bg-red-200 text-black rounded flex items-center gap-3 p-3'>
+                <div className="w-5 h-5 flex items-center  justify-center rounded-full bg-red-500 text-white">
+                  <FaInfo size={13} />
+                </div>
+                <div className="rounded-md w-full">
+                  <div className="font-bold text-lg">Order In Pending {singleOrder.orderDate}</div>
+                  <h5 className='text-sm'>
+                    <span className='font-bold text-red-500'>Note:</span> Orders will be processed after full payment. Send the payment receipt to WhatsApp at <a href='https://wa.me/919603669236' className='text-green-700 font-bold'>9603669236</a> on the same day.
+                  </h5>
+
+                </div>
+              </div>
+              :
+              <div className='bg-green-200 text-black rounded flex items-center gap-3 p-3'>
+                <div className="w-5 h-5 flex items-center  justify-center rounded-full bg-green-500 text-white">
+                  <FaCheck size={13} className='' />
+                </div>
+                <div className=" rounded-md ">
+                  <div className="font-bold text-lg">Order Confirmed</div>
+                  {singleOrder.orderStatus === "confirmed" &&
+                    <p className="text-sm">Your Order has been Placed on {singleOrder?.orderStatusDate}</p>
+                  }
+                </div>
+              </div>
+            }
+
+            {/* Shipped */}
+
+            {singleOrder.orderStatus === "shipped" || singleOrder.orderStatus === "outofdelivery" || singleOrder.orderStatus === "delivered" ?
+              <div className='bg-green-200  rounded flex items-center gap-3 p-3'>
+                <div className="w-5 h-5 flex items-center justify-center rounded-full bg-green-500 text-white">
+                  <FaCheck size={13} />
+                </div>
+                <div className=" rounded-md ">
+                  <div className="font-bold text-lg">Order Shipped</div>
+                  {singleOrder.orderStatus === "shipped" &&
+                    <p className="text-sm">Your Order has been Shipped on {singleOrder?.orderStatusDate}</p>
+
+                  }   </div>
+              </div>
+              :
+              <div className='bg-gray-100  rounded flex items-center gap-3 p-3'>
+                <div className="w-5 h-5 flex items-center justify-center rounded-full border-2 border-gray-500 text-white">
+
+                </div>
+                <div className=" rounded-md ">
+                  <div className="font-bold text-lg">Order Shipping</div>
+                  <p className="text-sm">Your Order will be shipped after order confirmed</p>
+                </div>
+              </div>
+
+            }
+
+            {/* out of delivery  */}
+            {singleOrder.orderStatus === "outofdelivery" || singleOrder.orderStatus === "delivered" ?
+              <div className='bg-green-200  rounded flex items-center gap-3 p-3'>
+                <div className="w-5 h-5 flex items-center justify-center rounded-full bg-green-500 text-white">
+                  <FaCheck size={13} />
+                </div>
+                <div className=" rounded-md ">
+                  <div className="font-bold text-lg">Order Out Of Delivery</div>
+                  {singleOrder.orderStatus === "outofdelivery" &&
+                    <p className="text-sm">Your Order has been out of delivery on {singleOrder?.orderStatusDate}</p>
+
+                  }   </div>
+              </div>
+              :
+              <div className='bg-gray-100  rounded flex items-center gap-3 p-3'>
+                <div className="w-5 h-5 flex items-center justify-center rounded-full border-2 border-gray-500 text-white">
+
+                </div>
+                <div className=" rounded-md ">
+                  <div className="font-bold text-lg">Order Out Of Delivery</div>
+                  <p className="text-sm">Your Order will be out of delivery after order shipped</p>
+                </div>
+              </div>
+            }
+
+            {/* Delivery */}
+            {singleOrder?.orderStatus === "delivered" ?
+              <div className='bg-green-200  rounded flex items-center gap-3 p-3'>
+                <div className="w-5 h-5 flex items-center justify-center rounded-full bg-green-500 text-white">
+                  <FaCheck size={13} />
+                </div>
+                <div className=" rounded-md ">
+                  <div className="font-bold text-lg">Order Delivered</div>
+                  {singleOrder?.orderStatus === "delivered" &&
+                    <p className="text-sm">Your Order has been delivered on {singleOrder?.orderStatusDate}</p>
+                  }   </div>
+              </div>
+              :
+              <div className='bg-gray-100  rounded flex items-center gap-3 p-3'>
+                <div className="w-5 h-5 flex items-center justify-center rounded-full border-2 border-gray-500 text-white">
+
+                </div>
+                <div className=" rounded-md ">
+                  <div className="font-bold text-lg">Order Delivery</div>
+                  <p className="text-sm">Your Order will be delivered in one day after order confirmed</p>
+                </div>
+              </div>
+
+            }
+
+
+
+
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+    </div >
+  );
+};
+
+export default OrderOverView;

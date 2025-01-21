@@ -35,6 +35,7 @@ function App() {
   const [cartItems, setCartItems] = useState([])
   const [discount, setDiscount] = useState({})
   const [orderProducts, setOrderProducts] = useState([])
+  const [orders , setOrders] = useState([])
 
   useEffect(() => {
     // retrieving token from localStorage
@@ -71,6 +72,22 @@ function App() {
     }
     fetchProducts()
 
+
+    // fetching carousel 
+    const getCarousel = async () => {
+      try {
+        const res = await axios.get(`${api}/carousel/get-carousel`);
+        if (res) {
+          setCarousel(res.data.retrievedCarousel[0]);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getCarousel();
+
+
     // fetching all categories
     const fetchAllCategories = async () => {
       try {
@@ -86,19 +103,7 @@ function App() {
     }
     fetchAllCategories()
 
-    // fetching carousel 
-    const getCarousel = async () => {
-      try {
-        const res = await axios.get(`${api}/carousel/get-carousel`);
-        if (res) {
-          setCarousel(res.data.retrievedCarousel[0]);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
-    getCarousel();
 
     // fetching discount function 
     const fetchDiscount = async () => {
@@ -158,7 +163,8 @@ function App() {
       defaultAddress, setDefaultAddress,
       cartItems, setCartItems,
       discount, setDiscount,
-      orderProducts, setOrderProducts
+      orderProducts, setOrderProducts,
+      orders, setOrders
     }}>
 
       <Navbar />
