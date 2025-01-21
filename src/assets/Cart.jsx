@@ -236,10 +236,14 @@ const Cart = () => {
             </div>
 
           </div>
-        </> : <div className='h-[95vh] w-full flex justify-center flex-col gap-2 items-center font-semibold text-xl'>
+        </> : 
+        <>
+        <div className='h-[95vh] lg:mt-8 w-full flex justify-center flex-col gap-2 items-center font-semibold text-xl'>
           <Lottie animationData={cart} className=' w-[13rem]' />
           <Link to="/" className='text-white px-3 py-[0.1rem] rounded-full text-[0.8rem]  font-medium bg-blue-700 hover:bg-blue-500'>Continue Shopping</Link>
-        </div>}
+        </div>
+        </> 
+        }
       </section>
 
 

@@ -4,9 +4,16 @@ import { dataContext } from "../App";
 
 const Carousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const {carousel} = useContext(dataContext);
-  const [offerTitle, setOfferTitle] = useState(carousel.offerTitle);
-  const [images, setImages] = useState(carousel.carouselImage);
+  const { carousel } = useContext(dataContext);
+  const [offerTitle, setOfferTitle] = useState("");
+  const [images, setImages] = useState([]);
+
+
+  useEffect(() => {
+    setImages(carousel.carouselImage)
+    setOfferTitle(carousel.offerTitle)
+  }, [carousel])
+
 
   const totalItems = images?.length;
 

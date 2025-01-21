@@ -17,7 +17,7 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import Orders from "./assets/Orders";
 import Login from "./assets/Login";
 import OrderCheckOut from "./assets/OrderCheckOut";
-
+import OrderOverView from "./assets/OrderOverView"
 
 
 export const dataContext = createContext();
@@ -172,6 +172,7 @@ function App() {
         <Route path="/order_check_out" element={<OrderCheckOut />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/orders" element={<Orders />} />
+        <Route path="/orders/order_over_view/:orderId" element={<OrderOverView />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
