@@ -18,7 +18,7 @@ const Orders = () => {
       try {
         const response = await axios.get(`${api}/order/get-all-orders`)
         if (response) {
-          const allOrders = response.data.retrievedAllOrders
+          const allOrders = response.data.retrievedAllOrders.reverse()
           const userOrders = allOrders.filter((item) => item.userId === user._id)
           setOrders(userOrders);
           setFilterOrders(userOrders)
@@ -95,7 +95,7 @@ const Orders = () => {
             {/* Product Image */}
             <div className="flex gap-3">
 
-              <div className="w-[6rem] h-fit lg:w-[9rem] ">
+              <div className="w-[6.8rem] h-fit lg:w-[9.5rem] ">
                 <img
                   src={product?.orderedProdcuts[0]?.products[0]?.itemImage[0]}
                   alt={product?.orderedProdcuts[0]?.products[0]?.itemName}
@@ -125,11 +125,11 @@ const Orders = () => {
             {product?.orderedProdcuts.length > 1 && <h6 className="text-sm">Check out the remaining products from your order by clicking below!</h6>}
             {/* remain products ordered section  */}
             {product?.orderedProdcuts.length > 1 &&
-              <details className="flex flex-col gap-3">
+              <details className="flex flex-col gap-3 ">
                 <summary className="text-gray-600 cursor-pointer">See products ordered together</summary>
                 {product?.orderedProdcuts.map((item) => (
-                  <div className="flex gap-3 mb-3" key={item._id}>
-                    <div className="w-[4rem] h-fit lg:w-[6.5rem] ">
+                  <div className="flex gap-3 mb-3 mt-3" key={item._id}>
+                    <div className="w-[5.3rem] h-fit lg:w-[6.8rem] ">
                       <img
                         src={item.products[0]?.itemImage[0]}
                         alt={item.products[0]?.itemName}

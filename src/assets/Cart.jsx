@@ -5,6 +5,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FlipkartSpin } from './Loading';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Lottie from 'lottie-react';
+import cart from "./animations/cart.json"
+
 
 
 const Cart = () => {
@@ -233,9 +236,9 @@ const Cart = () => {
             </div>
 
           </div>
-        </> : <div className='h-[100vh] w-full flex justify-center flex-col gap-2 items-center font-semibold text-xl'>
-          Cart Is Empty
-          <Link to="/" className='text-white px-3 py-[0.2rem] rounded-full text-[0.9rem]  font-medium bg-blue-500'>Continue Shopping</Link>
+        </> : <div className='h-[95vh] w-full flex justify-center flex-col gap-2 items-center font-semibold text-xl'>
+          <Lottie animationData={cart} className=' w-[13rem]' />
+          <Link to="/" className='text-white px-3 py-[0.1rem] rounded-full text-[0.8rem]  font-medium bg-blue-700 hover:bg-blue-500'>Continue Shopping</Link>
         </div>}
       </section>
 

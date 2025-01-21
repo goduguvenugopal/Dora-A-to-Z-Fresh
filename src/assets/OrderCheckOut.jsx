@@ -4,6 +4,9 @@ import { dataContext } from "../App"
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
 import { Slide, toast, ToastContainer } from 'react-toastify'
+import success from "./animations/success.json"
+import Lottie from 'lottie-react'
+
 
 
 const OrderCheckOut = () => {
@@ -319,7 +322,7 @@ const OrderCheckOut = () => {
 
               </h5>
               <div className='flex justify-center pt-2'>
-              <a href='https://wa.me/919603669236' className='text-green-700 font-bold flex items-center gap-1 '> <FaWhatsapp size={21} />9603669236</a>
+                <a href='https://wa.me/919603669236' className='text-green-700 font-bold flex items-center gap-1 '> <FaWhatsapp size={21} />9603669236</a>
               </div>
 
               <button onClick={placeOrder} type='submit' className="mt-4  bg-yellow-500 hover:bg-yellow-700 text-white w-full font-bold h-12 rounded-full"
@@ -348,8 +351,9 @@ const OrderCheckOut = () => {
         {/* order placed card  */}
         {orderOk && <div className='px-5 fixed flex justify-center h-screen w-screen items-center top-0 left-0 bg-white text-black'>
           <div className='text-center flex flex-col items-center justify-center'>
-            <FaCircleCheck size={150} className='text-green-500' />
-            <h4 className='mt-4 text-2xl font-semibold'> </h4>
+            {/* <FaCircleCheck size={150} className='text-green-500' /> */}
+            <Lottie animationData={success} className='w-[15rem]' />
+            <h4 className=' text-2xl font-semibold'> </h4>
             <h2 className="text-black text-2xl mt-1">Order Placed Successfully!</h2>
 
             <h5 className='mt-2'><span className='font-bold text-red-500'>Note : </span>Orders will be processed only after full payment. Please send the payment receipt to WhatsApp at <a href='https://wa.me/919603669236' className='text-green-700 font-bold'>9603669236</a> on the same day of the order.
