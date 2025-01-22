@@ -7,6 +7,7 @@ import { MdClose } from "react-icons/md";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import { locations } from "./hardCodeData";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { FaPlus } from "react-icons/fa";
 
 
 const Profile = () => {
@@ -232,8 +233,8 @@ const Profile = () => {
                 setAddressForm((prevData) => ({
                   ...prevData, email: user.email
                 }))
-              }} className="text-blue-600 border-2 border-blue-500 hover:border-blue-600 rounded-full px-1 h-7 w-20 font-bold hover:text-blue-800 text-sm">
-                + Add
+              }} className="text-blue-600 border-2 border-blue-500 hover:border-blue-600 rounded-full px-3 h-8 flex items-center justify-center gap-2 font-bold hover:text-blue-800 text-sm">
+                <FaPlus size={14} /> Add
               </button>
             </div>
             {/* No Address Placeholder */}

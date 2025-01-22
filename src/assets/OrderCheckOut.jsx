@@ -114,6 +114,7 @@ const OrderCheckOut = () => {
     `,
   };
 
+ 
 
   useEffect(() => {
     // total amount caluculating function 

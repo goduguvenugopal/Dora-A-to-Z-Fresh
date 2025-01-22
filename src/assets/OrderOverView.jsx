@@ -5,6 +5,10 @@ import { FlipkartSpin, Loading } from './Loading';
 import { FaCheck, FaInfo, FaSleigh } from 'react-icons/fa';
 import axios from 'axios';
 import { Slide, toast, ToastContainer } from 'react-toastify';
+import Lottie from 'lottie-react';
+import warning from "./animations/warning.json"
+import check from "./animations/check.json"
+
 
 const OrderOverView = () => {
   const { orders, setOrders, api } = useContext(dataContext);
@@ -40,7 +44,7 @@ const OrderOverView = () => {
 
     if (!isOkay) return
     if (singleOrder.orderStatus === "shipped" || singleOrder.orderStatus === "outofdelivery") {
-      toast.warning(`Orders cannot be canceled once ${singleOrder.orderStatus.replace("outofdelivery" , "out of delivery")}. For any queries, please contact us`, {
+      toast.warning(`Orders cannot be canceled once ${singleOrder.orderStatus.replace("outofdelivery", "out of delivery")}. For any queries, please contact us`, {
         className: "custom-toast"
       })
     } else {
@@ -106,7 +110,7 @@ const OrderOverView = () => {
                   Rs. {singleOrder?.orderedProdcuts[0]?.totalAmount * singleOrder?.orderedProdcuts[0]?.itemQty}
                 </h2>
                 <h2 className="text-sm lg:text-lg font-semibold text-black">
-                  Qty : {singleOrder?.orderedProdcuts[0]?.itemQty},   {singleOrder?.orderedProdcuts[0]?.products[0]?.itemWeight}gm
+                  {singleOrder?.orderedProdcuts[0]?.products[0]?.itemWeight}gm, Qty : {singleOrder?.orderedProdcuts[0]?.itemQty}
                 </h2>
 
               </div>
@@ -146,7 +150,7 @@ const OrderOverView = () => {
                           Rs. {item.totalAmount * item.itemQty}
                         </h2>
                         <h2 className="text-sm lg:text-lg font-semibold text-black">
-                          Qty : {item.itemQty},  {item.products[0]?.itemWeight}gm
+                          {item.products[0]?.itemWeight}gm,  Qty : {item.itemQty}
                         </h2>
 
                       </div>
@@ -180,9 +184,9 @@ const OrderOverView = () => {
                 {/* Order Confirmed and pending */}
                 {singleOrder.orderStatus === "pending" ?
                   <div className='bg-red-200 text-black rounded flex items-center gap-3 p-3'>
-                    <div className="w-5 h-5 flex items-center  justify-center rounded-full bg-red-500 text-white">
-                      <FaInfo size={13} />
-                    </div>
+
+                    <Lottie className='w-14  lg:w-16  bg-red-200 rounded-full' animationData={warning} />
+
                     <div className="rounded-md w-full">
                       <div className="font-bold text-[0.9rem] lg:text-lg">Order In Pending {singleOrder.orderDate}</div>
                       <h5 className='text-sm'>
@@ -193,9 +197,13 @@ const OrderOverView = () => {
                   </div>
                   :
                   <div className='bg-green-200 text-black rounded flex items-center gap-3 p-3'>
-                    <div className="w-5 h-5 flex items-center  justify-center rounded-full bg-green-500 text-white">
-                      <FaCheck size={13} className='' />
-                    </div>
+                    {singleOrder?.orderStatus === "confirmed" ?
+                      <Lottie className='w-5 rounded-full bg-green-500' animationData={check} />
+                      :
+                      <div className="w-5 h-5 flex items-center  justify-center rounded-full bg-green-500 text-white">
+                        <FaCheck size={13} className='' />
+                      </div>
+                    }
                     <div className=" rounded-md ">
                       <div className="font-bold  text-[0.9rem] lg:text-lg">Order Confirmed</div>
                       {singleOrder.orderStatus === "confirmed" &&
@@ -205,81 +213,100 @@ const OrderOverView = () => {
                   </div>
                 }
 
-                {/* Shipped */}
 
-                {singleOrder.orderStatus === "shipped" || singleOrder.orderStatus === "outofdelivery" || singleOrder.orderStatus === "delivered" ?
-                  <div className='bg-green-200  rounded flex items-center gap-3 p-3'>
-                    <div className="w-5 h-5 flex items-center justify-center rounded-full bg-green-500 text-white">
-                      <FaCheck size={13} />
-                    </div>
-                    <div className=" rounded-md ">
-                      <div className="font-bold  text-[0.9rem] lg:text-lg">Order Shipped</div>
-                      {singleOrder.orderStatus === "shipped" &&
-                        <p className="text-sm">Your Order has been Shipped on {singleOrder?.orderStatusDate}</p>
-
-                      }   </div>
-                  </div>
+                {singleOrder?.orderStatus === "pending" ? null
                   :
-                  <div className='bg-gray-100  rounded flex items-center gap-3 p-3'>
-                    <div className="w-5 h-5 flex items-center justify-center rounded-full border-2 border-gray-500 text-white">
+                  <>
+                    {/* Shipped */}
+                    {
+                      singleOrder.orderStatus === "shipped" || singleOrder.orderStatus === "outofdelivery" || singleOrder.orderStatus === "delivered" ?
+                        <div className='bg-green-200  rounded flex items-center gap-3 p-3'>
+                          {singleOrder?.orderStatus === "shipped" ?
+                            <Lottie className='w-5 rounded-full bg-green-500' animationData={check} />
+                            :
+                            <div className="w-5 h-5 flex items-center  justify-center rounded-full bg-green-500 text-white">
+                              <FaCheck size={13} className='' />
+                            </div>
+                          }
+                          <div className=" rounded-md ">
+                            <div className="font-bold  text-[0.9rem] lg:text-lg">Order Shipped</div>
+                            {singleOrder.orderStatus === "shipped" &&
+                              <p className="text-sm">Your Order has been Shipped on {singleOrder?.orderStatusDate}</p>
 
-                    </div>
-                    <div className=" rounded-md ">
-                      <div className="font-bold  text-[0.9rem] lg:text-lg">Order Shipping</div>
-                      <p className="text-sm">Your Order will be shipped after order confirmed</p>
-                    </div>
-                  </div>
+                            }   </div>
+                        </div>
+                        :
+                        <div className='bg-gray-100  rounded flex items-center gap-3 p-3'>
+                          <div className="w-5 h-5 flex items-center justify-center rounded-full border-2 border-gray-500 text-white">
 
-                }
+                          </div>
+                          <div className=" rounded-md ">
+                            <div className="font-bold  text-[0.9rem] lg:text-lg">Order Shipping</div>
+                            <p className="text-sm">Your Order will be shipped after order confirmed</p>
+                          </div>
+                        </div>
 
-                {/* out of delivery  */}
-                {singleOrder.orderStatus === "outofdelivery" || singleOrder.orderStatus === "delivered" ?
-                  <div className='bg-green-200  rounded flex items-center gap-3 p-3'>
-                    <div className="w-5 h-5 flex items-center justify-center rounded-full bg-green-500 text-white">
-                      <FaCheck size={13} />
-                    </div>
-                    <div className=" rounded-md ">
-                      <div className="font-bold  text-[0.9rem] lg:text-lg">Order Out Of Delivery</div>
-                      {singleOrder.orderStatus === "outofdelivery" &&
-                        <p className="text-sm">Your Order has been out of delivery on {singleOrder?.orderStatusDate}</p>
+                    }
 
-                      }   </div>
-                  </div>
-                  :
-                  <div className='bg-gray-100  rounded flex items-center gap-3 p-3'>
-                    <div className="w-5 h-5 flex items-center justify-center rounded-full border-2 border-gray-500 text-white">
+                    {/* out of delivery  */}
+                    {singleOrder.orderStatus === "outofdelivery" || singleOrder.orderStatus === "delivered" ?
+                      <div className='bg-green-200  rounded flex items-center gap-3 p-3'>
+                        {singleOrder?.orderStatus === "outofdelivery" ?
+                          <Lottie className='w-5 rounded-full bg-green-500' animationData={check} />
+                          :
+                          <div className="w-5 h-5 flex items-center  justify-center rounded-full bg-green-500 text-white">
+                            <FaCheck size={13} className='' />
+                          </div>
+                        }
+                        <div className=" rounded-md ">
+                          <div className="font-bold  text-[0.9rem] lg:text-lg">Order Out Of Delivery</div>
+                          {singleOrder.orderStatus === "outofdelivery" &&
+                            <p className="text-sm">Your Order has been out of delivery on {singleOrder?.orderStatusDate}</p>
 
-                    </div>
-                    <div className=" rounded-md ">
-                      <div className="font-bold text-[0.9rem] lg:text-lg">Order Out Of Delivery</div>
-                      <p className="text-sm">Your Order will be out of delivery after order shipped</p>
-                    </div>
-                  </div>
-                }
+                          }   </div>
+                      </div>
+                      :
+                      <div className='bg-gray-100  rounded flex items-center gap-3 p-3'>
+                        <div className="w-5 h-5 flex items-center justify-center rounded-full border-2 border-gray-500 text-white">
 
-                {/* Delivery */}
-                {singleOrder?.orderStatus === "delivered" ?
-                  <div className='bg-green-200  rounded flex items-center gap-3 p-3'>
-                    <div className="w-5 h-5 flex items-center justify-center rounded-full bg-green-500 text-white">
-                      <FaCheck size={13} />
-                    </div>
-                    <div className=" rounded-md ">
-                      <div className="font-bold  text-[0.9rem] lg:text-lg">Order Delivered</div>
-                      {singleOrder?.orderStatus === "delivered" &&
-                        <p className="text-sm">Your Order has been delivered on {singleOrder?.orderStatusDate}</p>
-                      }   </div>
-                  </div>
-                  :
-                  <div className='bg-gray-100  rounded flex items-center gap-3 p-3'>
-                    <div className="w-5 h-5 flex items-center justify-center rounded-full border-2 border-gray-500 text-white">
+                        </div>
+                        <div className=" rounded-md ">
+                          <div className="font-bold text-[0.9rem] lg:text-lg">Order Out Of Delivery</div>
+                          <p className="text-sm">Your Order will be out of delivery after order shipped</p>
+                        </div>
+                      </div>
+                    }
 
-                    </div>
-                    <div className=" rounded-md ">
-                      <div className="font-bold  text-[0.9rem] lg:text-lg">Order Delivery</div>
-                      <p className="text-sm">Your Order will be delivered in 1 day after order confirmed</p>
-                    </div>
-                  </div>
+                    {/* Delivery */}
+                    {singleOrder?.orderStatus === "delivered" ?
+                      <div className='bg-green-200  rounded flex items-center gap-3 p-3'>
+                        {singleOrder?.orderStatus === "delivered" ?
+                          <Lottie className='w-5 rounded-full bg-green-500' animationData={check} />
+                          :
+                          <div className="w-5 h-5 flex items-center  justify-center rounded-full bg-green-500 text-white">
+                            <FaCheck size={13} className='' />
+                          </div>
+                        }
+                        <div className=" rounded-md ">
+                          <div className="font-bold  text-[0.9rem] lg:text-lg">Order Delivered</div>
+                          {singleOrder?.orderStatus === "delivered" &&
+                            <p className="text-sm">Your Order has been delivered on {singleOrder?.orderStatusDate}</p>
+                          }   </div>
+                      </div>
+                      :
+                      <div className='bg-gray-100  rounded flex items-center gap-3 p-3'>
+                        <div className="w-5 h-5 flex items-center justify-center rounded-full border-2 border-gray-500 text-white">
 
+                        </div>
+                        <div className=" rounded-md ">
+                          <div className="font-bold  text-[0.9rem] lg:text-lg">Order Delivery</div>
+                          <p className="text-sm">Your Order will be delivered in 1 day after order confirmed</p>
+                        </div>
+                      </div>
+
+                    }
+
+                  </>
                 }
 
               </div>
@@ -287,11 +314,11 @@ const OrderOverView = () => {
 
 
             {/* delay message section  */}
-            {singleOrder.orderStatus !== "delivered" || singleOrder.orderStatus !== "cancelled" && <>
+            {singleOrder.orderStatus === "pending" || singleOrder.orderStatus === "shipped" || singleOrder.orderStatus === "outofdelivery" || singleOrder.orderStatus === "confirmed" ? <>
               {singleOrder.delayMessage &&
                 <p className="text-sm my-3 font-medium text-red-600"><strong>Note : </strong>{singleOrder?.delayMessage}</p>
               }
-            </>
+            </> : null
             }
 
             {cancelSpin && <FlipkartSpin />}
@@ -357,7 +384,7 @@ const OrderOverView = () => {
           </div>
         </div>
 
-      </div>
+      </div >
 
     </>
 

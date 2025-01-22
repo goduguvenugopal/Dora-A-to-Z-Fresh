@@ -51,7 +51,7 @@ const Faq = () => {
                                 }`}
                         >
                             If your book arrives in less-than-perfect condition, please
-                            <Link className='text-blue-600' to="/contact"> contact us</Link> customer support team within 7 days of receiving your
+                            <Link className='text-blue-600' to="/contact"> contact us</Link> customer support team within 1 day of receiving your
                             order. We will be happy to assist you with a replacement or
                             refund.
                         </div>
