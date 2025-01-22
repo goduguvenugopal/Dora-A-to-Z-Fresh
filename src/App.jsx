@@ -26,6 +26,7 @@ function App() {
   RouteHandler()
   const [token, setToken] = useState("")
   const api = import.meta.env.VITE_API;
+  const number = import.meta.env.VITE_NUMBER;
   const [carousel, setCarousel] = useState({});
   const [products, setProducts] = useState([])
   const [spinner, setSpinner] = useState(false)
@@ -154,7 +155,7 @@ function App() {
   return (
     // useContext provider wrapped to child components for state management 
     <dataContext.Provider value={{
-      api,
+      api, number,
       carousel, setCarousel,
       products, setProducts,
       categories, setCategories,

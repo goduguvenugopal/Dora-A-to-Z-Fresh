@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { MdEmail } from "react-icons/md";
 import { FaDownload, FaFacebook, FaInstagram, FaShareSquare, FaYoutube } from 'react-icons/fa';
+import { dataContext } from '../App';
 
 
 const Footer = () => {
-
+const {number} = useContext(dataContext)
 
   // share app function 
 
@@ -87,8 +88,8 @@ const Footer = () => {
 
               </li>
               <li className='flex items-center lg:items-start flex-col'>
-                <a href="tel:+919603669236" className="flex items-center gap-3">
-                  Customer Care : 9603669236
+                <a href={`tel:+91${number}`} className="flex items-center gap-3">
+                  Customer Care : {number}
                 </a>
                 <a href="mailto:dora.a.to.z.fresh@gmail.com" className="flex items-center gap-3">
                   Email us

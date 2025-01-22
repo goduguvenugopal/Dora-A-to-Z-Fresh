@@ -11,7 +11,7 @@ import check from "./animations/check.json"
 
 
 const OrderOverView = () => {
-  const { orders, setOrders, api } = useContext(dataContext);
+  const { orders, setOrders, api, number } = useContext(dataContext);
   const { orderId } = useParams();
   const [singleOrder, setSingleOrder] = useState(null);
   const [totalAmount, setTotalAmount] = useState("")
@@ -190,7 +190,7 @@ const OrderOverView = () => {
                     <div className="rounded-md w-full">
                       <div className="font-bold text-[0.9rem] lg:text-lg">Order In Pending {singleOrder.orderDate}</div>
                       <h5 className='text-sm'>
-                        <span className='font-bold text-red-500'>Note:</span> Orders will be processed after full payment. Send the payment receipt to WhatsApp at <a href='https://wa.me/919603669236' className='text-green-700 font-bold'>9603669236</a> on the same day.
+                        <span className='font-bold text-red-500'>Note:</span> Orders will be processed after full payment. Send the payment receipt to WhatsApp at <a href={`https://wa.me/91${number}`} className='text-green-700 font-bold'>{number}</a> on the same day.
                       </h5>
 
                     </div>

@@ -13,7 +13,7 @@ import axios from 'axios'
 
 const ProductOverView = () => {
   scrollToTop()
-  const { products, token, api, cartItems, orderProducts, setOrderProducts, setCartItems, defaultAddress, discount } = useContext(dataContext)
+  const { products, token, api, cartItems, orderProducts,number, setOrderProducts, setCartItems, defaultAddress, discount } = useContext(dataContext)
   const { itemId } = useParams()
   const [product, setProduct] = useState({})
   const [itemImg, setItemImg] = useState("")
@@ -419,7 +419,7 @@ const ProductOverView = () => {
                   </div>
                 </div>
                 {itemQty === parseInt(product.itemStock) && <div className='mb-5 text-blue-600 flex items-center flex-wrap gap-2'>
-                  <span className='text-gray-500'>Contact us for larger quantity orders</span> <a href="tel:+919603669236" className='underline flex items-center gap-2 '><FaPhone /> 9603669236</a>
+                  <span className='text-gray-500'>Contact us for larger quantity orders</span> <a href={`tel:+91${number}`} className='underline flex items-center gap-2 '><FaPhone />{number}</a>
                 </div>}
 
                 {/* order type and suscription section */}

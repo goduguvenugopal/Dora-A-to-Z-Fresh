@@ -12,12 +12,13 @@ import Faq from "./Faq";
 
 const ContactUs = () => {
   scrollToTop()
-  const { api } = useContext(dataContext)
+  const { api ,number} = useContext(dataContext)
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [submitSpin, setSubmitSpin] = useState(false);
 
+ 
 
   const formData = {
     email: "dora.a.to.z.fresh@gmail.com",
@@ -79,18 +80,18 @@ const ContactUs = () => {
               </a>
 
 
-              <a href="tel:+919603669236" className="flex items-center gap-3">
+              <a href={`tel:+91${number}`} className="flex items-center gap-3">
                 <FaPhoneAlt className="h-6 w-6 text-blue-500" />
                 <div>
                   <p className="text-lg font-medium">Phone Number</p>
-                  <p className="text-sm text-gray-600">+919603669236</p>
+                  <p className="text-sm text-gray-600">{number}</p>
                 </div>
               </a>
-              <a href="https://wa.me/919603669236" className="flex items-center gap-3">
+              <a href={`https://wa.me/91${number}`} className="flex items-center gap-3">
                 <FaWhatsapp className="h-6 w-6 font-bold text-green-500" />
                 <div>
                   <p className="text-lg font-medium">WhatsApp Number</p>
-                  <p className="text-sm text-gray-600">+919603669236</p>
+                  <p className="text-sm text-gray-600">{number}</p>
                 </div>
               </a>
               <a href="https://maps.app.goo.gl/YmA4dbsdDkvRfr6t5" className="flex items-center gap-3">

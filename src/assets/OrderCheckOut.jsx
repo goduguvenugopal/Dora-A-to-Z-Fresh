@@ -10,7 +10,7 @@ import Lottie from 'lottie-react'
 
 
 const OrderCheckOut = () => {
-  const { orderProducts, api, token, defaultAddress, cartItems, discount } = useContext(dataContext)
+  const { orderProducts, api,number, token, defaultAddress, cartItems, discount } = useContext(dataContext)
   const [orderOk, setOrderOk] = useState(false)
   const [orderSpin, setOrderSpin] = useState(false)
   const [totalAmount, setTotalAmount] = useState(null)
@@ -95,7 +95,7 @@ const OrderCheckOut = () => {
 
 <h3>Dora A to Z Fresh Address:</h3>
       <ul>
-      <li><strong>Mobile :</strong> <a href="tel:+919603669236"> +919603669236</a></li>
+      <li><strong>Mobile :</strong> <a href="tel:+91${number}"> ${number}</a></li>
       <li><strong>Address :</strong> Noori majid opposite,
                      Pathabazar, Gopalpet road,
                      Wanaparthy 509103</li>
@@ -323,7 +323,7 @@ const OrderCheckOut = () => {
 
               </h5>
               <div className='flex justify-center pt-2'>
-                <a href='https://wa.me/919603669236' className='text-green-700 font-bold flex items-center gap-1 '> <FaWhatsapp size={21} />9603669236</a>
+                <a href={`https://wa.me/91${number}`} className='text-green-700 font-bold flex items-center gap-1 '> <FaWhatsapp size={21} />{number}</a>
               </div>
 
               <button onClick={placeOrder} type='submit' className="mt-4  bg-yellow-500 hover:bg-yellow-700 text-white w-full font-bold h-12 rounded-full"
@@ -357,7 +357,7 @@ const OrderCheckOut = () => {
             <h4 className=' text-2xl font-semibold'> </h4>
             <h2 className="text-black text-2xl mt-1">Order Placed Successfully!</h2>
 
-            <h5 className='mt-2'><span className='font-bold text-red-500'>Note : </span>Orders will be processed only after full payment. Please send the payment receipt to WhatsApp at <a href='https://wa.me/919603669236' className='text-green-700 font-bold'>9603669236</a> on the same day of the order.
+            <h5 className='mt-2'><span className='font-bold text-red-500'>Note : </span>Orders will be processed only after full payment. Please send the payment receipt to WhatsApp at <a href={`https://wa.me/91${number}`} className='text-green-700 font-bold'>{number}</a> on the same day of the order.
 
             </h5>
             <p className="text-black text-lg mt-2">
