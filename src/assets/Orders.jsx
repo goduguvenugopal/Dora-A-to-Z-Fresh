@@ -72,7 +72,7 @@ const Orders = () => {
             disabled
             className="text-gray-400 "
           >
-            Filter
+            Filters
           </option>
           <option value="all">All</option>
           <option value="pending">Pending</option>
