@@ -7,7 +7,6 @@ import { scrollToTop } from './RouteHandler'
 
 
 
-
 const AllProducts = () => {
   scrollToTop()
   const { category } = useParams()
@@ -16,7 +15,7 @@ const AllProducts = () => {
 
   useEffect(() => {
     const results = products.filter((item) => item.itemCategory?.toLowerCase().includes(category.toLowerCase()))
-    setCategoryItems(results)
+    setCategoryItems(results.reverse())
   }, [category, products])
 
 
@@ -103,7 +102,7 @@ const AllProducts = () => {
           }
         </div>
       </div>
-      <Footer />
+    
     </>
   )
 }

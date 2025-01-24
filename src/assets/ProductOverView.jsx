@@ -13,7 +13,7 @@ import axios from 'axios'
 
 const ProductOverView = () => {
   scrollToTop()
-  const { products, token, api, cartItems, orderProducts,number, setOrderProducts, setCartItems, defaultAddress, discount } = useContext(dataContext)
+  const { products, token, api, cartItems, orderProducts, number, setOrderProducts, setCartItems, defaultAddress, discount } = useContext(dataContext)
   const { itemId } = useParams()
   const [product, setProduct] = useState({})
   const [itemImg, setItemImg] = useState("")
@@ -39,7 +39,7 @@ const ProductOverView = () => {
     minOrderQty: product?.minOrderQty,
     itemQty: itemQty,
     itemSubCategory: product?.itemSubCategory,
-    itemWeight: itemWeight,
+    itemWeight: product?.itemWeight?.length > 0 ? itemWeight : null,
     _id: product?._id,
     orderType: orderType,
     days: days
@@ -103,6 +103,7 @@ const ProductOverView = () => {
   // item weight and cost radio input handle function 
   const weightSelectFunc = (weightParam) => {
     if (weightParam === "250") {
+      setDis("")
       setItemWeight(weightParam)
       setItemCost(product?.itemCost)
     } else if (weightParam === "500") {
@@ -230,19 +231,55 @@ const ProductOverView = () => {
   }
 
 
-
+  // discount adding function based on weight and days 
   useEffect(() => {
     if (days === 7) {
-      setDis(discount.sevenDays)
+      if (itemWeight === "500" || itemWeight === "1000") {
+        if (itemWeight === "500") {
+          const halfDiscount = discount.sevenDays / 2
+          console.log(halfDiscount);
+          setDis(halfDiscount)
+        } else {
+          setDis(discount.sevenDays)
+        }
+      }
     } else if (days === 10) {
-      setDis(discount.tenDays)
-    } else if (days === 20) {
-      setDis(discount.twentyDays)
-    } else if (days === 30) {
-      setDis(discount.thirtyDays)
-    }
+      if (itemWeight === "500" || itemWeight === "1000") {
 
+        if (itemWeight === "500") {
+          const halfDiscount = discount.tenDays / 2
+          console.log(halfDiscount);
+          setDis(halfDiscount)
+        } else {
+          setDis(discount.tenDays)
+        }
+      }
+
+    } else if (days === 20) {
+      if (itemWeight === "500" || itemWeight === "1000") {
+        if (itemWeight === "500") {
+          const halfDiscount = discount.twentyDays / 2
+          console.log(halfDiscount);
+          setDis(halfDiscount)
+        } else {
+          setDis(discount.twentyDays)
+        }
+      }
+    } else if (days === 30) {
+      if (itemWeight === "500" || itemWeight === "1000") {
+        if (itemWeight === "500") {
+          const halfDiscount = discount.thirtyDays / 2
+          console.log(halfDiscount);
+          setDis(halfDiscount)
+        } else {
+          setDis(discount.thirtyDays)
+        }
+      }
+    }
   }, [product, itemId, products, itemCost, itemWeight, days, orderType, itemQty, discount])
+
+  console.log(itemWeight);
+  console.log(dis);
 
 
 
@@ -283,7 +320,7 @@ const ProductOverView = () => {
             />
             <PiShareNetwork title='Share' onClick={shareFunc} className='absolute top-2 bg-black p-1 h-8 w-10 cursor-pointer  text-white rounded-full  right-2  ' />
 
-            <div className=' flex gap-3 flex-wrap'>
+            <div className='flex gap-3 flex-wrap'>
               {product?.itemImage?.map((item, index) => (
                 <LazyLoadImage effect='blur' key={index} src={item} alt={product.itemName} onClick={() => setItemImg(item)} className='w-[5rem] h-[4rem] lg:w-32 lg:h-24 rounded-lg cursor-pointer hover:border-2 hover:border-blue-600' />
 
