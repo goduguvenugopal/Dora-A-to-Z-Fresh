@@ -10,13 +10,14 @@ import Lottie from 'lottie-react'
 
 
 const OrderCheckOut = () => {
-  const { orderProducts, api,number, token, defaultAddress, cartItems, discount } = useContext(dataContext)
+  const { orderProducts, api, number, token, defaultAddress, cartItems, discount } = useContext(dataContext)
   const [orderOk, setOrderOk] = useState(false)
   const [orderSpin, setOrderSpin] = useState(false)
   const [totalAmount, setTotalAmount] = useState(null)
   const navigate = useNavigate()
   const [originalAmount, setOriginalAmount] = useState(null)
   const [ChargesToggle, setChargesToggle] = useState(false)
+  const [modal, setModal] = useState(false)
   const initialOrderData = {
     orderedProdcuts: [],
     shippingAddress: [],
@@ -114,7 +115,7 @@ const OrderCheckOut = () => {
     `,
   };
 
- 
+
 
   useEffect(() => {
     // total amount caluculating function 
@@ -153,11 +154,16 @@ const OrderCheckOut = () => {
   }, [orderProducts, totalAmount])
 
 
+
   // placing order function 
   const placeOrder = async () => {
     if (defaultAddress.length <= 0) {
       toast.warning("Please add address next place the order", { className: "custom-toast" })
-    } else {
+    } else if (totalAmount < 120) {
+      setModal(true)
+
+    }
+    else {
       try {
         setOrderSpin(true)
         const res = await axios.post(`${api}/order/place-order`, orderForm, {
@@ -193,7 +199,7 @@ const OrderCheckOut = () => {
   return (
     <>
       <ToastContainer position='bottom-center' draggable transition={Slide} theme='dark' />
-      <div className="mt-20 py-5 px-3 pb-10">
+      <div className="mt-20 py-5 px-3 pb-10 ">
 
         <div className=" flex flex-wrap gap-5 lg:gap-0 justify-around ">
 
@@ -370,6 +376,31 @@ const OrderCheckOut = () => {
         </div>}
 
       </div>
+
+      {/* modal section  */}
+      {modal && <div onClick={()=> setModal(false)}  className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-3">
+        <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full">
+          <h2 className="text-lg font-semibold mb-3 text-orange-600">Complete Your Order</h2>
+          <p className="mb-4">Orders below ₹120 are not allowed. Please add more products, increase the quantity of existing items, or place the order directly from your cart if you already have products.</p>
+          <div className='text-end'>
+            {cartItems.length > 0 ?
+              <Link to="/cart"
+                onClick={() => setModal(false)}
+                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Go to cart
+              </Link>
+              :
+              <Link to="/"
+                onClick={() => setModal(false)}
+                className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                Add More Products
+              </Link>
+            }
+          </div>
+        </div>
+      </div>}
     </>
 
   )

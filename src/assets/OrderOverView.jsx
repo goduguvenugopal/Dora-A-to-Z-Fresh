@@ -79,7 +79,7 @@ const OrderOverView = () => {
     <>
       <ToastContainer position='bottom-center' draggable transition={Slide} theme='dark' />
 
-      <div className="mt-20 px-3 lg:px-10 pt-4 pb-10">
+      <div className="mt-20 px-3 lg:px-10 pt-4 pb-10 capitalize">
         <h1 className="text-2xl font-semibold mb-2">Order Details</h1>
         <hr className="border my-2" />
         <span className='flex items-center text-gray-500 font-semibold'>Order ID : {singleOrder._id}</span>

@@ -120,7 +120,7 @@ const Cart = () => {
             <div className="-my-7 divide-y-2 divide-gray-100">
 
               {/* add address section  */}
-              <div className='py-6 flex items-center justify-between w-full lg:w-[60%] '>
+              <div className='py-6 flex items-center justify-between w-full lg:w-[60%] capitalize'>
                 <div className='w-[60%]'>
                   <h5 className='text-sm font-medium text-black'>Delivery to : <span className='text-gray-600'>{defaultAddress[0]?.name}, {defaultAddress[0]?.postalCode}, {defaultAddress[0]?.village}, {defaultAddress[0]?.district}, {defaultAddress[0]?.street.substring(0, 35)}...</span></h5>
                 </div>
@@ -174,7 +174,7 @@ const Cart = () => {
                   </div>
 
                   {/* details section */}
-                  <div className='flex flex-col items-start w-[60%]  lg:w-[17rem]  '>
+                  <div className='flex flex-col items-start w-[60%]  lg:w-[17rem]  capitalize'>
                     <Link to={`/product_over_view/${item.productId}`} className="flex gap-1 mb-1 justify-start  items-start ">
                       <span className='text-sm lg:text-xl text-black lg:text-gray-600 font-semibold'>{item.products[0].itemName.substring(0, 25)}...</span>
                     </Link>

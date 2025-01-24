@@ -40,7 +40,7 @@ const AllProducts = () => {
   return (
     <>
       <div className='p-3 mt-3 mb-7 pt-24'>
-        <h5 className='text-center text-2xl font-semibold capitalize'>{category} Products</h5>
+        <h5 className='text-center text-2xl font-semibold capitalize'>{category.replace("vegetables" ,"vegetable")} Products</h5>
         <hr className='my-2 border border-orange-500' />
 
 
@@ -84,9 +84,9 @@ const AllProducts = () => {
                   />
                 </div>
 
-                <div className="mt-2 text-center">
+                <div className="mt-2 text-center ">
 
-                  <h3 className="text-[0.9rem] lg:text-[1rem] font-bold text-black">
+                  <h3 className="text-[0.9rem] lg:text-[1rem] font-bold text-black capitalize">
 
                     {item?.itemName?.substring(0, 18)}..
                   </h3>

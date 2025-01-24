@@ -57,7 +57,7 @@ const Orders = () => {
   }
 
   return (
-    <div className="mt-20 px-3 lg:px-10 pt-4 pb-10">
+    <div className="mt-20 px-3 lg:px-10 pt-4 pb-10 capitalize">
       <div className="flex justify-between">
         <h1 className="text-2xl font-semibold mb-4">My Orders</h1>
         <select

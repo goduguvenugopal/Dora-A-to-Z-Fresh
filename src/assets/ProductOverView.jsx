@@ -237,7 +237,7 @@ const ProductOverView = () => {
       if (itemWeight === "500" || itemWeight === "1000") {
         if (itemWeight === "500") {
           const halfDiscount = discount.sevenDays / 2
-          console.log(halfDiscount);
+
           setDis(halfDiscount)
         } else {
           setDis(discount.sevenDays)
@@ -248,7 +248,7 @@ const ProductOverView = () => {
 
         if (itemWeight === "500") {
           const halfDiscount = discount.tenDays / 2
-          console.log(halfDiscount);
+
           setDis(halfDiscount)
         } else {
           setDis(discount.tenDays)
@@ -259,7 +259,7 @@ const ProductOverView = () => {
       if (itemWeight === "500" || itemWeight === "1000") {
         if (itemWeight === "500") {
           const halfDiscount = discount.twentyDays / 2
-          console.log(halfDiscount);
+
           setDis(halfDiscount)
         } else {
           setDis(discount.twentyDays)
@@ -269,7 +269,7 @@ const ProductOverView = () => {
       if (itemWeight === "500" || itemWeight === "1000") {
         if (itemWeight === "500") {
           const halfDiscount = discount.thirtyDays / 2
-          console.log(halfDiscount);
+
           setDis(halfDiscount)
         } else {
           setDis(discount.thirtyDays)
@@ -278,8 +278,7 @@ const ProductOverView = () => {
     }
   }, [product, itemId, products, itemCost, itemWeight, days, orderType, itemQty, discount])
 
-  console.log(itemWeight);
-  console.log(dis);
+
 
 
 
@@ -590,7 +589,7 @@ const ProductOverView = () => {
                 </div>
 
                 {/* add address section  */}
-                <div className='mb-3 py-3 flex items-center gap-2 justify-between w-full '>
+                <div className='mb-3 py-3 capitalize flex items-center gap-2 justify-between w-full '>
                   <div className='w-[60%]  '>
                     <h5 className='text-sm font-medium text-black'>Delivery to : <span className='text-gray-600'>{defaultAddress[0]?.name}, {defaultAddress[0]?.postalCode}, {defaultAddress[0]?.village}, {defaultAddress[0]?.district}, {defaultAddress[0]?.street.substring(0, 35)}...</span></h5>
                   </div>

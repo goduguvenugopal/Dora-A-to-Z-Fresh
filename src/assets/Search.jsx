@@ -59,7 +59,7 @@ const Search = () => {
 
               <div className="mt-2 text-center">
 
-                <h3 className="text-[0.9rem] lg:text-[1rem] font-bold text-black">
+                <h3 className="text-[0.9rem] capitalize lg:text-[1rem] font-bold text-black">
 
                   {item?.itemName?.substring(0, 25)}..
                 </h3>
