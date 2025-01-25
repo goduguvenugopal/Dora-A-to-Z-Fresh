@@ -287,7 +287,7 @@ const OrderCheckOut = () => {
                           {item.products[0].itemWeight}{item.products[0].itemSubCategory === "Milk" ? "ml ," : "g ,"}
                         </span>
                       } Qty :
-                        <span className="font-medium text-sm   text-gray-500 pl-1">
+                        <span className="font-medium text-sm   text-gray-700 pl-1">
                           {item.itemQty} 
                         </span>
                       </p>
