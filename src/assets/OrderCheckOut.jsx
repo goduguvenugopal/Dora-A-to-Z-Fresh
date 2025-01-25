@@ -282,20 +282,20 @@ const OrderCheckOut = () => {
                         </span>
                       </p>
                       <p className="font-semibold text-sm  ">
-                        Qty :
-                        <span className="font-medium text-sm   text-black pl-1">
-                          {item.itemQty}
+                      {item.products[0].itemWeight &&
+                        <span className="font-semibold text-sm text-gray-600 ">
+                          {item.products[0].itemWeight}{item.products[0].itemSubCategory === "Milk" ? "ml ," : "g ,"}
+                        </span>
+                      } Qty :
+                        <span className="font-medium text-sm   text-gray-500 pl-1">
+                          {item.itemQty} 
                         </span>
                       </p>
                       <p className="font-semibold capitalize text-sm text-blue-600">
-                        {item.products[0].orderType.replace("buyonce", "buy once")}
+                        {item.products[0].orderType === "buyonce" ? null : item.products[0].orderType }
                       </p>
 
-                      {item.products[0].itemWeight &&
-                        <p className="font-semibold text-sm text-gray-600 ">
-                          {item.products[0].itemWeight}{item.products[0].itemSubCategory === "Milk" ? "ml" : "g"}
-                        </p>
-                      }
+                      
                     </div>
                   </div>
                 ))}

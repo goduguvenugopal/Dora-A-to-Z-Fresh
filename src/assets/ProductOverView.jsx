@@ -10,6 +10,7 @@ import Footer from './Footer'
 import { scrollToTop } from './RouteHandler'
 import { locations } from "./hardCodeData"
 import axios from 'axios'
+import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi'
 
 const ProductOverView = () => {
   scrollToTop()
@@ -24,6 +25,7 @@ const ProductOverView = () => {
   const [areas, setAreas] = useState([])
   const [noServiceText, setNoServiceText] = useState("")
   const [areaName, setAreaName] = useState()
+  const [zoomImg, setZoomImg] = useState("")
   const [orderType, setOrderType] = useState("buyonce")
   const [days, setDays] = useState(7)
   const [dis, setDis] = useState(null)
@@ -312,12 +314,14 @@ const ProductOverView = () => {
           {/* image section  */}
           <div className='relative flex flex-col gap-3 w-full sm:w-[48%]'>
             <LazyLoadImage
+            onClick={() => setZoomImg(itemImg)}
               alt="ecommerce"
               className=" w-full h-auto rounded-lg "
               src={itemImg}
               effect='blur'
             />
-            <PiShareNetwork title='Share' onClick={shareFunc} className='absolute top-2 bg-black p-1 h-8 w-10 cursor-pointer  text-white rounded-full  right-2  ' />
+            <PiShareNetwork title='Share' onClick={shareFunc} className='absolute top-2 bg-black p-1 h-7 w-9 cursor-pointer  text-white rounded-full  right-2  ' />
+            <BiFullscreen onClick={() => setZoomImg(itemImg)} title='FullScreen' className='absolute top-[3rem] bg-black p-1 h-7 w-9 cursor-pointer  text-white rounded-full  right-2  ' />
 
             <div className='flex gap-3 flex-wrap'>
               {product?.itemImage?.map((item, index) => (
@@ -326,6 +330,18 @@ const ProductOverView = () => {
               ))}
             </div>
           </div>
+
+
+          {/* FullScreen product image section  */}
+          {zoomImg &&
+            <div onClick={() => setZoomImg("")} className='w-screen h-screen py-2 flex flex-col items-center justify-center fixed top-0 left-0 bg-gray-600 z-50'>
+              <div className='w-full lg:h-[100%] lg:w-[50%]  overflow-auto flex items-center justify-center scrollbar-hide-card'>
+                <img onClick={(e) => e.stopPropagation()} src={zoomImg} alt="zoom-in-img" className='w-full h-fit rounded-lg' />
+              </div>
+              <BiExitFullscreen onClick={() => setZoomImg("")} title='ExitFullScreen' className='fixed bottom-[2rem] lg:top-[2rem] bg-black p-1 h-9 w-9 cursor-pointer  text-white rounded-full right-[1rem] lg:right-[2rem]  ' />
+
+            </div>
+          }
 
           <hr className='border w-full sm:hidden border-gray-200 mt-3' />
           {/* item name and cost section  */}
@@ -347,15 +363,16 @@ const ProductOverView = () => {
                     <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(itemCost * itemQty || 0).toFixed(2)}
                     </span>
                     {
-                      itemWeight === "250" || product.itemCategory === "food" || product.itemCategory === "non-veg" ?
-                        <span className='text-md line-through text-red-700 font-medium'>Rs. {parseFloat(product.offerCost * itemQty || 0).toFixed(2)}
-                        </span> : null
+                      product.itemCategory === "curd" || product.itemCategory === "milk" ?
+                        null :
+                        <span className={` text-md line-through text-red-700 font-medium ${product.offerCost ? "block" : "hidden"}`}>Rs. {parseFloat(product.offerCost * itemQty || 0).toFixed(2)}
+                        </span>
                     }
                   </>
                 }
 
               </div>
-              {product.minOrderQty && orderType === "buyonce" && itemWeight === "250" &&
+              {product.minOrderQty > 1 && orderType === "buyonce" && itemWeight === "250" &&
                 <div className='bg-orange-900 mb-2 text-sm text-white w-fit p-1 px-2 rounded '>Minimum order qty {product.minOrderQty}</div>
               }
 
@@ -614,11 +631,13 @@ const ProductOverView = () => {
 
           {/* Description section  */}
         </div>
-        <div className='lg:px-9'>
-          <hr className='border   border-gray-200 mb-2 lg:mt-5' />
-          <h5 className='font-bold text-lg mb-2'>Description</h5>
-          <p className='font-serif'>{product.itemDescription}</p>
-        </div>
+        {product.itemDescription &&
+          <div className='lg:px-9'>
+            <hr className='border  border-gray-200 mb-2 lg:mt-5' />
+            <h5 className='font-bold text-lg mb-2'>Description</h5>
+            <p className='font-serif'>{product.itemDescription}</p>
+          </div>
+        }
 
 
         {/* related products section  */}
@@ -641,7 +660,7 @@ const ProductOverView = () => {
 
                   <div className="mt-2 text-center">
 
-                    <h3 className="text-[0.9rem] lg:text-[1rem] font-bold text-black">
+                    <h3 className="text-[0.9rem] capitalize lg:text-[1rem] font-bold text-black">
 
                       {item?.itemName?.substring(0, 18)}..
                     </h3>

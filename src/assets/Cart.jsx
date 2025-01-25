@@ -178,13 +178,13 @@ const Cart = () => {
                     <Link to={`/product_over_view/${item.productId}`} className="flex gap-1 mb-1 justify-start  items-start ">
                       <span className='text-sm lg:text-xl text-black lg:text-gray-600 font-semibold'>{item.products[0].itemName.substring(0, 25)}...</span>
                     </Link>
-                    <h6 className="text-lg lg:text-2xl mb-1 text-gray-700 font-medium">
+                    <h6 className="text-lg lg:text-2xl  text-gray-700 font-medium">
                       Rs. {parseFloat(item.totalAmount * item.itemQty || 0).toFixed(2)}
                     </h6>
-                    <h6 className="text-sm  mb-1 text-gray-700 font-medium capitalize">
-                      {item.orderType.replace("buyonce", "buy once")}
+                    <h6 className="text-sm mb-1 text-gray-700 font-medium capitalize">
+                      {item.orderType === "buyonce" ? null : item.orderType}
                     </h6>
-                    <div className='mt-1'>
+                    <div className='mb-3'>
                       {item.products[0].itemWeight &&
                         <div className='flex items-center justify-center'>
                           <h5 className='font-semibold text-[0.9rem]'>{item.products[0].itemWeight}{item.products[0].itemSubCategory === "Milk" ? "ml" : "g"}</h5>
@@ -194,7 +194,7 @@ const Cart = () => {
                     </div>
 
                     {/* buy button and remove btn section  */}
-                    <div className='flex items-center gap-2 mt-3 flex-wrap w-full'>
+                    <div className='flex items-center gap-2  flex-wrap w-full'>
 
                       {cartSpin ? <>
                         <FlipkartSpin />

@@ -79,7 +79,7 @@ const OrderOverView = () => {
     <>
       <ToastContainer position='bottom-center' draggable transition={Slide} theme='dark' />
 
-      <div className="mt-20 px-3 lg:px-10 pt-4 pb-10 capitalize">
+      <div className="mt-20 px-3 lg:px-10 pt-4 pb-10 ">
         <h1 className="text-2xl font-semibold mb-2">Order Details</h1>
         <hr className="border my-2" />
         <span className='flex items-center text-gray-500 font-semibold'>Order ID : {singleOrder._id}</span>
@@ -89,7 +89,7 @@ const OrderOverView = () => {
           {/* Order details section */}
           <div className="flex flex-col w-full lg:w-[45%] items-start gap-2 pb-3 border-b border-gray-400 ">
             {/* Product Image */}
-            <Link to={`/product_over_view/${singleOrder?.orderedProdcuts[0]?.productId}`} className="flex gap-5">
+            <Link to={`/product_over_view/${singleOrder?.orderedProdcuts[0]?.productId}`} className="flex gap-5 capitalize">
               <div className="w-[6.8rem] h-fit lg:w-[9.5rem]">
                 <img
                   src={singleOrder?.orderedProdcuts[0]?.products[0]?.itemImage[0]}
@@ -101,7 +101,7 @@ const OrderOverView = () => {
               {/* Product Details */}
               <div>
                 <h3 className="text-[0.65rem] lg:text-[0.8rem] font-bold uppercase text-gray-500">
-                  {singleOrder?.orderedProdcuts[0]?.orderType.replace('buyonce', 'buy once')}
+                  {singleOrder?.orderedProdcuts[0]?.orderType === "buyonce" ? null : singleOrder?.orderedProdcuts[0]?.orderType}
                 </h3>
                 <h2 className="text-sm lg:text-lg font-semibold text-black">
                   {singleOrder?.orderedProdcuts[0]?.products[0]?.itemName.substring(0, 30)}...
@@ -109,10 +109,9 @@ const OrderOverView = () => {
                 <h2 className="text-sm lg:text-lg font-semibold text-black">
                   Rs. {singleOrder?.orderedProdcuts[0]?.totalAmount * singleOrder?.orderedProdcuts[0]?.itemQty}
                 </h2>
-                <h2 className="text-sm lg:text-lg font-semibold text-black">
-                  {singleOrder?.orderedProdcuts[0]?.products[0]?.itemWeight}gm, Qty : {singleOrder?.orderedProdcuts[0]?.itemQty}
+                <h2 className="text-sm lg:text-lg font-semibold text-black  ">
+                  {singleOrder?.orderedProdcuts[0]?.products[0]?.itemWeight}{singleOrder?.orderedProdcuts[0]?.products[0]?.itemWeight && "g ,"} qty : {singleOrder?.orderedProdcuts[0]?.itemQty}
                 </h2>
-
               </div>
 
             </Link>
@@ -141,16 +140,16 @@ const OrderOverView = () => {
                       {/* Product Details */}
                       <div>
                         <h3 className="text-[0.65rem] lg:text-[0.8rem] font-bold uppercase text-gray-500">
-                          {item.orderType.replace('buyonce', 'buy once')}
+                          {item.orderType === "buyonce" ? null : item.orderType}
                         </h3>
-                        <h2 className="text-sm lg:text-lg font-semibold text-black">
+                        <h2 className="text-sm lg:text-lg font-semibold text-black capitalize">
                           {item.products[0]?.itemName.substring(0, 30)}...
                         </h2>
                         <h2 className="text-sm lg:text-lg font-semibold text-black">
                           Rs. {item.totalAmount * item.itemQty}
                         </h2>
                         <h2 className="text-sm lg:text-lg font-semibold text-black">
-                          {item.products[0]?.itemWeight}gm,  Qty : {item.itemQty}
+                          {item.products[0]?.itemWeight}{item.products[0]?.itemWeight && "g ,"} Qty : {item.itemQty}
                         </h2>
 
                       </div>

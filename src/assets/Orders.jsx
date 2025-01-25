@@ -105,7 +105,7 @@ const Orders = () => {
               {/* Product Details */}
               <div className="">
                 <h3 className="text-[0.65rem] lg:text-[0.8rem] font-bold uppercase  text-gray-500">
-                  {product?.orderedProdcuts[0]?.orderType.replace("buyonce", "buy once")}
+                  {product?.orderedProdcuts[0]?.orderType === "buyonce" ? null : product?.orderedProdcuts[0]?.orderType}
                 </h3>
                 <h2 className=" text-sm lg:text-lg font-semibold text-black">
                   {product?.orderedProdcuts[0]?.products[0]?.itemName.substring(0, 25)}..
@@ -118,6 +118,9 @@ const Orders = () => {
                        ${product?.orderStatus === "outofdelivery" ? " text-green-600  " : ""}`}>
                   Order {product.orderStatus.replace("outofdelivery", "out of delivery")} on {product.orderStatusDate}
                 </p>
+                <h2 className=" text-sm lg:text-lg font-semibold text-gray-500">
+                  qty : {product?.orderedProdcuts[0]?.itemQty}
+                </h2>
               </div>
             </Link>
 
@@ -139,10 +142,13 @@ const Orders = () => {
                     {/* Product Details */}
                     <div>
                       <h3 className="text-[0.65rem] lg:text-[0.8rem] font-bold uppercase  text-gray-500">
-                        {item.orderType.replace("buyonce", "buy once")}
+                        {item.orderType === "buyonce" ? null : item.orderType}
                       </h3>
                       <h2 className=" text-sm lg:text-lg font-semibold text-black">
                         {item.products[0]?.itemName.substring(0, 25)}..
+                      </h2>
+                      <h2 className=" text-sm lg:text-lg font-semibold text-gray-500">
+                        qty : {item.itemQty}
                       </h2>
 
                     </div>
