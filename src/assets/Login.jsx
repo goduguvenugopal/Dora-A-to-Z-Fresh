@@ -138,9 +138,9 @@ const Login = () => {
                                     </div>
                                 </form>
                                 <h5 onClick={() => { setLoginToggle(false), setOtpError(false), setOtp("") }} className='text-sm font-semibold mt-4 text-blue-700 cursor-pointer'>Log in with a different email</h5>
-                                <p className="mt-2  text-sm/6 text-gray-500">
-                                    <span className='mr-1'>
-                                        If you didn’t receive the login code to email, check your spam folder or
+                                <p className="mt-2  text-sm/6 text-black">
+                                    <span className='mr-1 font-medium'>
+                                        If you didn’t receive the login code to email Inbox, check your spam folder or
                                     </span>
                                     <a
                                         href="mailto:dora.a.to.z.fresh@gmail.com"
@@ -228,9 +228,9 @@ const Login = () => {
                                             </button>
                                         </div>
                                     </form>
-                                    <p className="mt-5 text-center text-sm/6 text-gray-500">
-                                        <span className='mr-1'>
-                                            If you didn’t receive the login code to email, check your spam folder or
+                                    <p className="mt-5 text-center text-sm/6 text-black-500">
+                                        <span className='mr-1 font-medium'>
+                                            If you didn’t receive the login code to email Inbox, check your spam folder or
                                         </span>
                                         <a
                                             href="mailto:dora.a.to.z.fresh@gmail.com"
