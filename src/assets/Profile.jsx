@@ -16,6 +16,7 @@ const Profile = () => {
   const navigate = useNavigate()
   const [address, setAddress] = useState([])
   const [delSpin, setDelSpin] = useState("")
+  const [delModal , setDelModal] = useState(false)
   const [addressToggle, setAddressToggle] = useState(false)
   const initialData = {
     name: "",
@@ -168,8 +169,7 @@ const Profile = () => {
 
   // delete address function 
   const deleteAddress = async (delId) => {
-    const isOkay = confirm("Address will be deleted permanently, are you sure ?")
-    if (isOkay) {
+    setDelModal(false)
       try {
         setDelSpin(delId)
         const res = await axios.delete(`${api}/address/delete-address/${delId}`)
@@ -198,7 +198,7 @@ const Profile = () => {
         });
 
       }
-    }
+     
   }
 
   // loading when fetching user detailes 
@@ -253,7 +253,31 @@ const Profile = () => {
                       {delSpin === item._id ?
                         <FlipkartSpin />
                         :
-                        <RiDeleteBin6Line onClick={() => deleteAddress(item._id)} size={20} className='hover:text-red-600 cursor-pointer absolute right-3 top-11 text-gray-600' />}
+                        <RiDeleteBin6Line onClick={() => setDelModal(item._id)} size={20} className='hover:text-red-600 cursor-pointer absolute right-3 top-11 text-gray-600' />}
+                   
+                   
+                   {delModal && <div onClick={() => setDelModal(false)} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-3 z-50">
+              <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full">
+                <h2 className="text-lg font-semibold mb-3 text-orange-600">Cancel Order</h2>
+                <p className="mb-4">Address will be deleted, are you sure ?</p>
+                <div className='flex justify-end gap-2'>
+
+                  <button
+                    onClick={() => deleteAddress(delModal)}
+                    className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-500"
+                  >
+                    Okay
+                  </button>
+                  <button
+                    onClick={() => setDelModal(false)}
+                    className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>}
+                   
                     </div>
                   ))
                   }

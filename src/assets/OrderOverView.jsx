@@ -338,7 +338,7 @@ const OrderOverView = () => {
             {cancelModal && <div onClick={() => setCancelModal(false)} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-3 z-50">
               <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full">
                 <h2 className="text-lg font-semibold mb-3 text-orange-600">Cancel Order</h2>
-                <p className="mb-4">Your order will be cancelled, are you sure ?</p>
+                <p className="mb-4">Your Order will be cancelled, are you sure ?</p>
                 <div className='flex justify-end gap-2'>
 
                   <button
