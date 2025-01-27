@@ -16,6 +16,7 @@ const OrderOverView = () => {
   const [singleOrder, setSingleOrder] = useState(null);
   const [totalAmount, setTotalAmount] = useState("")
   const [cancelSpin, setCancelSpin] = useState(false)
+  const [cancelModal, setCancelModal] = useState(false)
 
   // Finding single order based on order ID
   useEffect(() => {
@@ -39,10 +40,7 @@ const OrderOverView = () => {
 
   // cancel order function 
   const cancelOrderFunc = async (updataStatus) => {
-    const isOkay = confirm("Order will be cancelled, are you sure ?")
-    console.log(isOkay);
-
-    if (!isOkay) return
+    setCancelModal(false)
     if (singleOrder.orderStatus === "shipped" || singleOrder.orderStatus === "outofdelivery") {
       toast.warning(`Orders cannot be canceled once ${singleOrder.orderStatus.replace("outofdelivery", "out of delivery")}. For any queries, please contact us`, {
         className: "custom-toast"
@@ -327,7 +325,7 @@ const OrderOverView = () => {
               {singleOrder?.orderStatus === "delivered" || singleOrder?.orderStatus === "cancelled" ? false :
 
                 <div className='text-center border-l border-black w-full py-1'>
-                  <button onClick={() => cancelOrderFunc({ orderStatus: "cancelled" })} className='text-black hover:text-blue-600'>Cancel</button>
+                  <button onClick={() => setCancelModal(true)} className='text-black hover:text-blue-600'>Cancel</button>
                 </div>
               }
               <div className='border-l border-black border-r w-full text-center py-1'>
@@ -335,6 +333,29 @@ const OrderOverView = () => {
 
               </div>
             </div>
+
+            {/* cancel confirmation modal */}
+            {cancelModal && <div onClick={() => setCancelModal(false)} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-3 z-50">
+              <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full">
+                <h2 className="text-lg font-semibold mb-3 text-orange-600">Cancel Order</h2>
+                <p className="mb-4">Your order will be cancelled, are you sure ?</p>
+                <div className='flex justify-end gap-2'>
+
+                  <button
+                    onClick={() => cancelOrderFunc({ orderStatus: "cancelled" })}
+                    className="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-500"
+                  >
+                    Okay
+                  </button>
+                  <button
+                    onClick={() => setCancelModal(false)}
+                    className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>}
 
           </div>
 

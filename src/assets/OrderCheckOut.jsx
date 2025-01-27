@@ -159,7 +159,7 @@ const OrderCheckOut = () => {
   const placeOrder = async () => {
     if (defaultAddress.length <= 0) {
       toast.warning("Please add address next place the order", { className: "custom-toast" })
-    } else if (totalAmount < 120) {
+    } else if (totalAmount < 150) {
       setModal(true)
 
     }
@@ -282,20 +282,20 @@ const OrderCheckOut = () => {
                         </span>
                       </p>
                       <p className="font-semibold text-sm  ">
-                      {item.products[0].itemWeight &&
-                        <span className="font-semibold text-sm text-gray-600 ">
-                          {item.products[0].itemWeight}{item.products[0].itemSubCategory === "Milk" ? "ml ," : "g ,"}
-                        </span>
-                      } Qty :
+                        {item.products[0].itemWeight &&
+                          <span className="font-semibold text-sm text-gray-600 ">
+                            {item.products[0].itemWeight}{item.products[0].itemSubCategory === "Milk" ? "ml ," : "g ,"}
+                          </span>
+                        } Qty :
                         <span className="font-medium text-sm   text-gray-700 pl-1">
-                          {item.itemQty} 
+                          {item.itemQty}
                         </span>
                       </p>
                       <p className="font-semibold capitalize text-sm text-blue-600">
-                        {item.products[0].orderType === "buyonce" ? null : item.products[0].orderType }
+                        {item.products[0].orderType === "buyonce" ? null : item.products[0].orderType}
                       </p>
 
-                      
+
                     </div>
                   </div>
                 ))}
@@ -378,10 +378,10 @@ const OrderCheckOut = () => {
       </div>
 
       {/* modal section  */}
-      {modal && <div onClick={()=> setModal(false)}  className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-3">
+      {modal && <div onClick={() => setModal(false)} className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 p-3">
         <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full">
           <h2 className="text-lg font-semibold mb-3 text-orange-600">Complete Your Order</h2>
-          <p className="mb-4">Orders below ₹120 are not allowed. Please add more products, increase the quantity of existing items, or place the order directly from your cart if you already have products.</p>
+          <p className="mb-4">Orders below <span className='text-[1rem] font-bold'>Rs.150</span> are not allowed. Please add more products, increase the quantity of existing items, or place the order directly from your cart if you already have products.</p>
           <div className='text-end'>
             {cartItems.length > 0 ?
               <Link to="/cart"

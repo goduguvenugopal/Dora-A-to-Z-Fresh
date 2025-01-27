@@ -65,6 +65,11 @@ const Search = () => {
                 </h3>
 
               </div>
+              {item.itemStock === "0" && 
+                <div className='absolute top-2 h-7 flex items-center justify-center  text-sm left-2 rounded px-2 bg-black text-white'>
+                  <span>Sold out</span>
+                </div>
+                }
             </Link>
           ))}
         </div>
