@@ -314,7 +314,7 @@ const ProductOverView = () => {
           {/* image section  */}
           <div className='relative flex flex-col gap-3 w-full sm:w-[48%]'>
             <LazyLoadImage
-            onClick={() => setZoomImg(itemImg)}
+              onClick={() => setZoomImg(itemImg)}
               alt="ecommerce"
               className=" w-full h-auto rounded-lg "
               src={itemImg}
@@ -363,7 +363,7 @@ const ProductOverView = () => {
                     <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(itemCost * itemQty || 0).toFixed(2)}
                     </span>
                     {
-                      product.itemCategory === "curd" || product.itemCategory === "milk" ?
+                      product.itemCategory === "curd" || product.itemCategory === "milk" || itemWeight === "500" || itemWeight === "1000" ?
                         null :
                         <span className={` text-md line-through text-red-700 font-medium ${product.offerCost ? "block" : "hidden"}`}>Rs. {parseFloat(product.offerCost * itemQty || 0).toFixed(2)}
                         </span>
@@ -378,7 +378,7 @@ const ProductOverView = () => {
 
               {product.itemStock === "0" ?
                 <div className='bg-red-500 rounded px-2 p-1 text-white font-medium w-fit'>
-                  Out Of Stock
+                  Sold out
                 </div> :
                 <div className='bg-green-500 rounded px-2 p-1 text-white font-medium w-fit'>
                   In Stock
@@ -426,7 +426,7 @@ const ProductOverView = () => {
                 </div>
                 <div className="flex gap-3 justify-start my-5 w-full">
                   <button className="w-full bg-gray-400 font-semibold text-white border-0 py-3 px-6 focus:outline-none pointer-events-none rounded-full">
-                    Out Of Stock
+                    Sold out
                   </button>
                 </div>
               </>
@@ -487,7 +487,17 @@ const ProductOverView = () => {
                         <option value="subscription">Subscription</option>
                       </select>
                     </div>
-                    {orderType === "buyonce" && <h5 className='font-semibold my-4 flex items-center gap-2'><FaTruck className='text-blue-500' /> Delivery charges apply at checkout</h5>}
+                    {orderType === "buyonce" && discount.deliveryCharges === 0 ?
+                      <h5 className='font-semibold my-4 flex items-center gap-2 text-green-600'>
+                        <FaTruck className='text-blue-500' /> Delivery charges free</h5>
+                      : <>
+                        {orderType === "buyonce" && <h5 className='font-semibold my-4 flex items-center gap-2'><FaTruck className='text-blue-500' /> Delivery charges apply at checkout</h5>}
+                      </>
+                    }
+
+                    {orderType === "buyonce" &&
+                      <h5 className='font-semibold my-4 flex items-center gap-2'><FaTruck className='text-black' />Delivery in 45 minutes.</h5>
+                    }
 
                     {orderType === "subscription" && <>
                       <div className="flex gap-1 mb-3 items-center">
@@ -539,8 +549,16 @@ const ProductOverView = () => {
 
 
                   </> :
-                  <h5 className='font-semibold my-4 flex items-center gap-2'><FaTruck className='text-blue-500' /> Delivery charges apply at checkout</h5>
+                  <>
+                    {
+                      discount?.deliveryCharges === 0 ?
+                        <h5 className='font-semibold my-4 flex items-center gap-2 text-green-600'>
+                          <FaTruck className='text-blue-500' /> Delivery charges free</h5>
+                        : <h5 className='font-semibold my-4 flex items-center gap-2'><FaTruck className='text-blue-500' /> Delivery charges apply at checkout</h5>
+                    }
+                    <h5 className='font-semibold my-4 flex items-center gap-2'><FaTruck className='text-black' />Delivery in 45 minutes.</h5>
 
+                  </>
                 }
 
 
@@ -667,11 +685,11 @@ const ProductOverView = () => {
                     <span className='text-md text-gray-900'>Rs. {parseFloat(item?.itemCost || 0).toFixed(2)}</span>
 
                   </div>
-                  {item.itemStock === "0" && 
-                <div className='absolute top-2 h-7 flex items-center justify-center  text-sm left-2 rounded px-2 bg-black text-white'>
-                  <span>Sold out</span>
-                </div>
-                }
+                  {item.itemStock === "0" &&
+                    <div className='absolute top-2 h-7 flex items-center justify-center  text-sm left-2 rounded px-2 bg-black text-white'>
+                      <span>Sold out</span>
+                    </div>
+                  }
                 </Link>
               ))}
             </div>

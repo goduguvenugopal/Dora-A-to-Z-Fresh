@@ -281,7 +281,7 @@ const OrderCheckOut = () => {
                           ₹{item.totalAmount}
                         </span>
                       </p>
-                      <p className="font-semibold text-sm  ">
+                      <p className="font-semibold text-sm ">
                         {item.products[0].itemWeight &&
                           <span className="font-semibold text-sm text-gray-600 ">
                             {item.products[0].itemWeight}{item.products[0].itemSubCategory === "Milk" ? "ml ," : "g ,"}

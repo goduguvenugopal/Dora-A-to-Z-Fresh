@@ -66,7 +66,7 @@ const OrderOverView = () => {
     }
   }
 
-
+ 
   // Handle loading state
   if (!singleOrder) {
     return <Loading />
@@ -295,9 +295,9 @@ const OrderOverView = () => {
                         <div className="w-5 h-5 flex items-center justify-center rounded-full border-2 border-gray-500 text-white">
 
                         </div>
-                        <div className=" rounded-md ">
+                        <div className=" rounded-md w-full ">
                           <div className="font-bold  text-[0.9rem] lg:text-lg">Order Delivery</div>
-                          <p className="text-sm">Your Order will be delivered in 1 day after order confirmed</p>
+                          <p className="text-sm">{singleOrder?.orderedProdcuts?.some((item)=>item.orderType === "subscription") ? "Subscription orders are delivered daily at 6 AM to 8 AM and 6 PM to 8 AM after order confirmed" : "Your Order will be delivered in 45 minutes after order confirmed"} </p>
                         </div>
                       </div>
 
