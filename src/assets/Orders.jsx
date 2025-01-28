@@ -31,16 +31,25 @@ const Orders = () => {
     fetchOrders();
   }, [user]);
 
+  console.log(filterOrders);
 
 
   // filter orders function based on order status 
   const inputSelectHandleFunc = (e) => {
     const selectInput = e.target.value
-    const results = filterOrders.filter((item) => item.orderStatus === selectInput)
-    setOrders(results)
     if (selectInput === "all") {
       setOrders(filterOrders)
-
+    }
+    else if (selectInput === "subscription") {
+      const results = filterOrders.filter((order) =>
+        order.orderedProdcuts.some((product) => product.orderType === "subscription")
+      );
+      setOrders(results);
+    }
+    
+    else {
+      const results = filterOrders.filter((item) => item.orderStatus === selectInput)
+      setOrders(results)
     }
   }
 
@@ -75,6 +84,7 @@ const Orders = () => {
             Filters
           </option>
           <option value="all">All</option>
+          <option value="subscription">Subscriptions</option>
           <option value="pending">Pending</option>
           <option value="confirmed">Confirmed</option>
           <option value="shipped">Shipped</option>
