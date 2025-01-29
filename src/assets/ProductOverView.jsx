@@ -27,7 +27,7 @@ const ProductOverView = () => {
   const [areaName, setAreaName] = useState()
   const [zoomImg, setZoomImg] = useState("")
   const [orderType, setOrderType] = useState("buyonce")
-  const [days, setDays] = useState(7)
+  const [days, setDays] = useState(30)
   const [dis, setDis] = useState(null)
   const navigate = useNavigate()
   const [cartSpin, setCartSpin] = useState(false)
@@ -58,7 +58,7 @@ const ProductOverView = () => {
 
   // when order type changes set to default value to all
   useEffect(() => {
-    setDays(7)
+    setDays(30)
     setItemQty(1)
     setItemWeight("250")
   }, [orderType])
@@ -505,7 +505,7 @@ const ProductOverView = () => {
                         <span className='text-lg font-semibold text-black'>{days} days</span>
                       </div>
                       <div className='flex gap-3 flex-wrap mb-5'>
-                        <div className='text-center'>
+                        {/* <div className='text-center'>
                           <div onClick={() => setDays(7)} className='border-2 flex items-center justify-center border-green-700 h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
                             7 days
                           </div>
@@ -530,7 +530,7 @@ const ProductOverView = () => {
                           {discount.twentyDays &&
                             <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.twentyDays} off</h5>
                           }
-                        </div>
+                        </div> */}
 
                         <div className='text-center'>
                           <div onClick={() => setDays(30)} className='border-2 flex items-center justify-center border-green-700  h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
