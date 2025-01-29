@@ -31,7 +31,7 @@ const Orders = () => {
     fetchOrders();
   }, [user]);
 
-  console.log(filterOrders);
+ 
 
 
   // filter orders function based on order status 

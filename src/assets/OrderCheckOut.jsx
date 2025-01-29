@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { FaCircleCheck, FaDownload, FaUpload, FaWhatsapp } from 'react-icons/fa6'
+import { FaCircleCheck, FaDownload, FaRegCopy, FaUpload, FaWhatsapp } from 'react-icons/fa6'
 import { dataContext } from "../App"
 import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom'
@@ -188,6 +188,17 @@ const OrderCheckOut = () => {
     }
   }
 
+  // number copy function 
+  const copyNumber = async (number) => {
+    try {
+      await navigator.clipboard.writeText(number);   
+      toast.success("Number Copied to clipboard", { className: "custom-toast" });
+    } catch (error) {
+      console.error(error);
+      toast.error("Number not Copied", { className: "custom-toast" });  
+    }
+  }
+  
 
   // if not token available or orderProducts length empty page navigate to home 
   useEffect(() => {
@@ -240,22 +251,22 @@ const OrderCheckOut = () => {
               alt="qr_code"
               className="border-2 my-2 h-52 w-52 rounded "
             />
-            {/* <span className='font-bold mb-1'>OR</span> */}
-            <img src="/allpayments.png" className='w-[60%] mb-1 ' alt="all_upi_logo" />
+            
+            <img src="/allpayments.png" className='w-[60%] mb-2 ' alt="all_upi_logo" />
             <h6 className='text-blue-600 font-bold'>PAY TO THIS NUMBER</h6>
-            <span className='font-bold my-1'>9603669236</span>
+            <span onClick={()=>copyNumber(9603669236)} className='font-bold my-2 cursor-pointer flex items-center gap-2 hover:text-blue-600'>9603669236 <FaRegCopy/></span>
             <h4 className='text-center'>Banking Name : <span className='font-bold '>BANUPRAKASH NAGARAM</span></h4>
 
             <a href="/qrcode.png" className=' animate-bounce text-md font-semibold px-3 h-[2.5rem] mt-6 flex items-center gap-2 rounded-full text-white bg-orange-600' download="/qrcode.png"><FaDownload />Download QR Code</a>
           </div>
 
           {/* order product details section  */}
-          <div className="p-3 w-full lg:w-[34%]  shadow-md shadow-gray-300 rounded-lg">
+          <div className="p-3 pb-5 pt-0 w-full lg:w-[34%] lg:h-[90vh] lg:overflow-y-auto shadow-md shadow-gray-300 rounded-lg">
             <details>
-              <summary className="font-bold mb-4 cursor-pointer text-orange-600">
+              <summary className="font-bold py-3 lg:bg-white lg:sticky lg:top-0 cursor-pointer text-orange-600">
                 ORDER SUMMARY
               </summary>
-              <div className=" rounded w-full flex flex-col gap-2">
+              <div className=" rounded w-full flex flex-col gap-2 mt-2">
                 {orderProducts?.map((item) => (
                   <div
                     key={item._id}
