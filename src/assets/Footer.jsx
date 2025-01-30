@@ -68,7 +68,7 @@ const {number} = useContext(dataContext)
                   <a className="text-white-600 hover:text-white-800 flex items-center gap-2" href='https://www.youtube.com/@DoraA-ZFresh'><FaYoutube className='bg-white text-red-600   w-8 h-8 p-1 rounded-full ' /> YouTube</a>
                 </li>
                 <li className='flex mt-3'>
-                  <a className="text-white-600 hover:text-white-800 flex items-center gap-2" href='https://www.instagram.com/bunny_rao_bprs/profilecard/?igsh=MWg4amw1bDloYnd4eQ=='><FaInstagram className='bg-white text-red-600 w-8 h-8 p-1 rounded-full ' /> Instagram</a>
+                  <a className="text-white-600 hover:text-white-800 flex items-center gap-2" href='https://www.instagram.com/dora_a_to_z_fresh/profilecard/?igsh=MWg4amw1bDloYnd4eQ=='><FaInstagram className='bg-white text-red-600 w-8 h-8 p-1 rounded-full ' /> Instagram</a>
                 </li>
                 <li className='flex mt-3'>
                   <a className="text-white-600 hover:text-white-800 flex items-center gap-2" href=' '><FaFacebook className='bg-white text-blue-600   w-8 h-8 p-1 rounded-full ' /> Facebook</a>

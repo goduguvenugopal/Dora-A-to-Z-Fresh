@@ -8,7 +8,6 @@ import { scrollToTop } from './RouteHandler'
 
 
 const AllProducts = () => {
-  scrollToTop()
   const { category } = useParams()
   const { products } = useContext(dataContext)
   const [categoryItems, setCategoryItems] = useState([])
@@ -40,7 +39,7 @@ const AllProducts = () => {
   return (
     <>
       <div className='p-3 mt-3 mb-7 pt-24'>
-        <h5 className='text-center text-2xl font-semibold capitalize'>{category.replace("vegetables" ,"vegetable")} Products</h5>
+        <h5 className='text-center text-2xl font-semibold capitalize'>{category.replace("vegetables", "vegetable")} Products</h5>
         <hr className='my-2 border border-orange-500' />
 
 
@@ -93,10 +92,10 @@ const AllProducts = () => {
                   <span className='text-md text-gray-900'>Rs. {parseFloat(item?.itemCost || 0).toFixed(2)}</span>
 
                 </div>
-                {item.itemStock === "0" && 
-                <div className='absolute top-2 h-7 flex items-center justify-center  text-sm left-2 rounded px-2 bg-black text-white'>
-                  <span>Sold out</span>
-                </div>
+                {item.itemStock === "0" &&
+                  <div className='absolute top-2 h-7 flex items-center justify-center  text-sm left-2 rounded px-2 bg-black text-white'>
+                    <span>Sold out</span>
+                  </div>
                 }
               </Link>
             ))}
@@ -107,7 +106,7 @@ const AllProducts = () => {
           }
         </div>
       </div>
-    
+
     </>
   )
 }
