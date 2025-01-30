@@ -13,7 +13,7 @@ const {number} = useContext(dataContext)
   const shareApp = async () => {
     try {
       await navigator.share(({
-        text: "Shop fresh and pure products directly from trusted farmers with Dora A to Z Fresh! Experience quality you can trust. :",
+        text: "Dora A to Z Fresh - Your one-stop shop for fresh milk, groceries, and all your needs, delivered to your doorstep with quality assurance. Shop now! :",
         url: "https://doraatozfresh.vercel.app"
       }))
     } catch (error) {
