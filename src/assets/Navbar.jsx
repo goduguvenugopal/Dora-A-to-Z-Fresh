@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BsFillBoxSeamFill } from 'react-icons/bs';
 import { CgProfile } from 'react-icons/cg';
-import { FaBars, FaDownload, FaHome, FaSearch } from 'react-icons/fa';
+import { FaBars, FaDownload, FaHome, FaSearch, FaShareSquare } from 'react-icons/fa';
 import { FaCartShopping } from 'react-icons/fa6';
 import { MdClose, MdLogin, MdLogout, MdPhone } from 'react-icons/md';
 import { Link } from 'react-router-dom';
@@ -54,6 +54,19 @@ const Navbar = () => {
   }, [prevScrollPos])
 
 
+  // share app function 
+
+  const shareApp = async () => {
+    try {
+      await navigator.share(({
+        text: "Dora A to Z Fresh - Your one-stop shop for fresh milk, groceries, and all your needs, delivered to your doorstep with quality assurance. Shop now! :",
+        url: "https://doraatozfresh.vercel.app"
+      }))
+    } catch (error) {
+      console.error(error);
+
+    }
+  }
 
 
   return (
@@ -122,7 +135,12 @@ const Navbar = () => {
             <Link onClick={() => setOffcanvas(false)} to="/login" className='text-[1.2rem] flex items-center  w-fit   gap-[0.7rem] border-b  border-gray-700 hover:border-white'><MdLogin size={23} /> Login</Link>
           }
 
-          <a href='/Dora A to Z Fresh.apk' download="Dora A to Z Fresh.apk" className='text-[1.2rem] absolute left-5 bottom-5 h-10 bg-blue-600 flex justify-center items-center gap-2 rounded-full w-fit hover:bg-blue-800 px-5'><FaDownload />  Download App</a>
+          <div className=' absolute left-5 bottom-5 flex flex-wrap gap-3'>
+            <button onClick={shareApp} className='bg-blue-600 text-white flex items-center justify-center gap-2 font-semibold h-10 rounded-full w-[11rem]'>
+              <FaShareSquare className=' text-white' />Share App
+            </button>
+            <a href='/Dora A to Z Fresh.apk' download="Dora A to Z Fresh.apk" className='text-[1.2rem] text-black h-10 hover:bg-gray-200 bg-gray-100 flex justify-center items-center gap-2 rounded-full w-fit  px-5'><FaDownload />  Download App</a>
+          </div>
 
           <MdClose size={25} className='absolute right-5 cursor-pointer' onClick={() => setOffcanvas(false)} />
         </div>

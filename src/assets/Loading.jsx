@@ -6,8 +6,8 @@ export const Loading = () => {
     return (
 
         <div className="flex justify-center items-center h-screen">
-          <Lottie animationData={loader} className='w-[4rem]'/>
-            {/* <div className="animate-spin rounded-full h-10 w-10 border-4 border-t-white  border-t-4 border-r-4 border-blue-500 border-solid"></div> */}
+          {/* <Lottie animationData={loader} className='w-[4rem]'/> */}
+            <div className="animate-spin rounded-full h-10 w-10 border-4 border-t-white  border-t-4 border-r-4 border-blue-500 border-solid"></div>
         </div>
 
 

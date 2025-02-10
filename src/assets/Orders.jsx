@@ -171,7 +171,11 @@ const Orders = () => {
           </div>
         ))
       ) : (
-        <div className="text-lg text-center font-medium flex items-center justify-center h-[70vh]">No orders found</div>
+        <div className="text-lg flex flex-col gap-2 text-center font-medium  items-center justify-center h-[70vh]">
+          No orders found
+          <Link to="/" className='text-white px-3 py-[0.1rem] rounded-full text-[0.8rem]  font-medium bg-blue-700 hover:bg-blue-500'>Continue Shopping</Link>
+          
+          </div>
       )}
     </div>
   );
