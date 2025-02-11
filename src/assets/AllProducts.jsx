@@ -8,15 +8,36 @@ import { scrollToTop } from './RouteHandler'
 
 
 const AllProducts = () => {
+  scrollToTop()
   const { category } = useParams()
   const { products } = useContext(dataContext)
   const [categoryItems, setCategoryItems] = useState([])
+  const [categoryItems1, setCategoryItems1] = useState([])
+  const [pageNum, setPageNum] = useState(1)
 
+
+  let itemsLength = []
+
+
+  // rendering products according to the category 
   useEffect(() => {
     const results = products.filter((item) => item.itemCategory?.toLowerCase().includes(category.toLowerCase()))
-    setCategoryItems(results.reverse())
+    setCategoryItems1(results)
+    setCategoryItems(results.reverse().slice(0, 10))
+
   }, [category, products])
 
+  // looping items for pagination to set dynamically pagination length 
+  for (let index = 1; index < Math.ceil(categoryItems1.length / 10) + 1; index++) {
+    itemsLength.push(index)
+  }
+
+
+  // pagination function
+  const changePageFunction = (pageNumber) => {
+    setPageNum(pageNumber)
+    setCategoryItems(categoryItems1.slice((pageNumber * 10) - 10, pageNumber * 10))
+  }
 
   // filter function 
   const filterFunc = (e) => {
@@ -38,7 +59,7 @@ const AllProducts = () => {
 
   return (
     <>
-      <div className='p-3 mt-3 mb-7 pt-24'>
+      <div className='p-3 mt-3 mb-5 pt-24'>
         <h5 className='text-center text-2xl font-semibold capitalize'>{category.replace("vegetables", "vegetable")} Products</h5>
         <hr className='my-2 border border-orange-500' />
 
@@ -68,7 +89,7 @@ const AllProducts = () => {
           </div>
         }
 
-        <div className="mt-6 w-full grid grid-cols-2 gap-y-6 gap-x-5 md:gap-y-7 lg:gap-y-6  md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+        <div className="mt-6 w-full pb-5 grid grid-cols-2 gap-y-6 gap-x-5 md:gap-y-7 lg:gap-y-6  md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
 
           {categoryItems.length ? <>
             {categoryItems.map((item) => (
@@ -99,13 +120,28 @@ const AllProducts = () => {
                 }
               </Link>
             ))}
+
+
+
           </> :
             <div className="text-lg font-medium flex justify-center items-center h-[70vh] w-[95vw]">
               No Products
             </div>
           }
         </div>
+
+        <hr className='my-4 border border-orange-500' />
+
+        {/* pagination section  */}
+        <div className='flex select-none justify-center px-10 w-full'>
+          <div className='overflow-auto flex gap-2  px-5 py-3'>
+            {itemsLength.map((num, index) => (
+              <div key={index} onClick={()=>changePageFunction(num)} className={`border-[0.09rem] hover:bg-blue-600 hover:text-white  hover:border-blue-600 p-3 flex items-center justify-center rounded-full h-9 w-9 font-medium border-gray-500 cursor-pointer ${pageNum === num ? "bg-blue-600 border-blue-600 text-white" : ""}`}>{num}</div>
+            ))}
+          </div>
+        </div>
       </div>
+
 
     </>
   )
