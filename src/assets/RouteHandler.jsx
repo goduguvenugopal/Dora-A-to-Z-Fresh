@@ -27,7 +27,6 @@ export const RouteHandler = () => {
 };
 
 
-
 // scroll to top custom Component 
 export const scrollToTop = () => {
   const location = useLocation()

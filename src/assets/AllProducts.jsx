@@ -4,6 +4,7 @@ import { dataContext } from '../App'
 import Footer from './Footer'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { scrollToTop } from './RouteHandler'
+import { FaGreaterThan, FaLessThan } from 'react-icons/fa'
 
 
 
@@ -13,7 +14,7 @@ const AllProducts = () => {
   const { products } = useContext(dataContext)
   const [categoryItems, setCategoryItems] = useState([])
   const [categoryItems1, setCategoryItems1] = useState([])
-  const [pageNum, setPageNum] = useState(1)
+  const [pageNum, setPageNum] = useState(0)
 
 
   let itemsLength = []
@@ -24,7 +25,7 @@ const AllProducts = () => {
     const results = products.filter((item) => item.itemCategory?.toLowerCase().includes(category.toLowerCase()))
     setCategoryItems1(results)
     setCategoryItems(results.reverse().slice(0, 10))
-
+    setPageNum(1)
   }, [category, products])
 
   // looping items for pagination to set dynamically pagination length 
@@ -32,12 +33,27 @@ const AllProducts = () => {
     itemsLength.push(index)
   }
 
+  //  page increment function 
+  const pageIncrement = () => {
+    setPageNum((prev) => prev + 1)
+  }
+  //  page decrement function 
+  const pageDecrement = () => {
+    setPageNum((prev) => prev - 1)
+  }
+
+  useEffect(() => {
+    setCategoryItems(categoryItems1.slice((pageNum * 10) - 10, pageNum * 10))
+  }, [pageNum])
 
   // pagination function
   const changePageFunction = (pageNumber) => {
     setPageNum(pageNumber)
-    setCategoryItems(categoryItems1.slice((pageNumber * 10) - 10, pageNumber * 10))
   }
+
+
+  console.log(pageNum);
+
 
   // filter function 
   const filterFunc = (e) => {
@@ -133,12 +149,19 @@ const AllProducts = () => {
         <hr className='my-4 border border-orange-500' />
 
         {/* pagination section  */}
-        <div className='flex select-none justify-center px-10 w-full'>
-          <div className='overflow-auto flex gap-2  px-5 py-3'>
+        <div className='flex select-none justify-center items-center  w-full'>
+          <span onClick={pageDecrement} className={` text-white  hover:bg-orange-600 p-3 flex items-center justify-center rounded-full h-9 w-9 font-medium   cursor-pointer ${pageNum === 1 ? "pointer-events-none bg-gray-400" : " bg-orange-500"}`}>
+            <FaLessThan />
+          </span>
+          <div className='overflow-auto scrollbar-hide-card flex gap-2  px-3'>
             {itemsLength.map((num, index) => (
-              <div key={index} onClick={()=>changePageFunction(num)} className={`border-[0.09rem] hover:bg-blue-600 hover:text-white  hover:border-blue-600 p-3 flex items-center justify-center rounded-full h-9 w-9 font-medium border-gray-500 cursor-pointer ${pageNum === num ? "bg-blue-600 border-blue-600 text-white" : ""}`}>{num}</div>
+              <span key={index} onClick={() => changePageFunction(num)} className={`border-[0.09rem] hover:bg-blue-600 hover:text-white  hover:border-blue-600 p-3 flex items-center justify-center rounded-full h-9 w-9 font-medium  cursor-pointer ${pageNum === num ? "bg-blue-600 border-blue-600 text-white" : "border-gray-500"}`}>{num}</span>
             ))}
           </div>
+          <span onClick={pageIncrement} className={`  text-white    hover:bg-orange-600 p-3 flex items-center justify-center rounded-full h-9 w-9 font-medium   cursor-pointer ${pageNum === itemsLength.length ? "pointer-events-none bg-gray-400" : " bg-orange-500"}`}>
+            <FaGreaterThan />
+          </span>
+
         </div>
       </div>
 
