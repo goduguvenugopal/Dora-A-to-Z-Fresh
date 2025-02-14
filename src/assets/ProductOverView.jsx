@@ -56,6 +56,15 @@ const ProductOverView = () => {
   })
 
 
+// changing title dynamically 
+useEffect(() => {
+  if (product?.itemName) {
+    document.title = `${product?.itemName?.split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}`
+  }else{
+    document.title = 'Welcome to Dora A to Z Fresh';
+  }
+}, [product])
+
   // when order type changes set to default value to all
   useEffect(() => {
     setDays(30)

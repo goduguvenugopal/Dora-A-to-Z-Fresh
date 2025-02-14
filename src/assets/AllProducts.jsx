@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { Link, useLocation, useParams } from 'react-router-dom'
 import { dataContext } from '../App'
 import Footer from './Footer'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
@@ -15,6 +15,17 @@ const AllProducts = () => {
   const [categoryItems, setCategoryItems] = useState([])
   const [categoryItems1, setCategoryItems1] = useState([])
   const [pageNum, setPageNum] = useState(0)
+ const title = useRef(document.title)
+  
+
+  // changing title dynamically 
+  useEffect(() => {
+    if (category) {
+      document.title = `${category.replace("vegetables", "vegetable").split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join("")} Products`
+    }else{
+      document.title = 'Welcome to Dora A to Z Fresh';
+    }
+  }, [category])
 
 
   let itemsLength = []
@@ -50,9 +61,6 @@ const AllProducts = () => {
   const changePageFunction = (pageNumber) => {
     setPageNum(pageNumber)
   }
-
-
-  console.log(pageNum);
 
 
   // filter function 

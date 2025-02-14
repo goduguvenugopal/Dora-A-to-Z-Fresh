@@ -18,6 +18,18 @@ const OrderOverView = () => {
   const [cancelSpin, setCancelSpin] = useState(false)
   const [cancelModal, setCancelModal] = useState(false)
 
+
+  // changing title dynamically 
+  useEffect(() => {
+    if (singleOrder) {
+      document.title = "Track & Manage Orders"
+    } else {
+      document.title = 'Welcome to Dora A to Z Fresh';
+    }
+  }, [singleOrder])
+
+
+
   // Finding single order based on order ID
   useEffect(() => {
     if (orders) {
@@ -66,7 +78,7 @@ const OrderOverView = () => {
     }
   }
 
- 
+
   // Handle loading state
   if (!singleOrder) {
     return <Loading />
@@ -297,7 +309,7 @@ const OrderOverView = () => {
                         </div>
                         <div className=" rounded-md w-full ">
                           <div className="font-bold  text-[0.9rem] lg:text-lg">Order Delivery</div>
-                          <p className="text-sm">{singleOrder?.orderedProdcuts?.some((item)=>item.orderType === "subscription") ? "Subscription orders are delivered daily at 6 AM to 8 AM and 6 PM to 8 AM after order confirmed" : "Your Order will be delivered in 45 minutes after order confirmed"} </p>
+                          <p className="text-sm">{singleOrder?.orderedProdcuts?.some((item) => item.orderType === "subscription") ? "Subscription orders are delivered daily at 6 AM to 8 AM and 6 PM to 8 AM after order confirmed" : "Your Order will be delivered in 45 minutes after order confirmed"} </p>
                         </div>
                       </div>
 

@@ -23,7 +23,6 @@ import OrderOverView from "./assets/OrderOverView"
 export const dataContext = createContext();
 
 function App() {
-  RouteHandler()
   const [token, setToken] = useState("")
   const api = import.meta.env.VITE_API;
   const number = import.meta.env.VITE_NUMBER;
@@ -37,6 +36,7 @@ function App() {
   const [discount, setDiscount] = useState({})
   const [orderProducts, setOrderProducts] = useState([])
   const [orders , setOrders] = useState([])
+  RouteHandler(cartItems)
 
   useEffect(() => {
     // retrieving token from localStorage
