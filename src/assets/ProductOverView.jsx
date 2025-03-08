@@ -360,6 +360,8 @@ useEffect(() => {
                 {orderType === "subscription" ? <>
                   <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(((days * itemCost) - dis) * itemQty || 0).toFixed(2)}
                   </span>
+
+                  
                   {
                     dis ?
                       <span className='text-md line-through text-red-700 font-medium'>Rs. {parseFloat((days * itemCost) * itemQty || 0).toFixed(2)}
@@ -371,7 +373,7 @@ useEffect(() => {
                     <span className='text-2xl text-gray-700 font-medium'>Rs. {parseFloat(itemCost * itemQty || 0).toFixed(2)}
                     </span>
                     {
-                      product.itemCategory === "curd" || product.itemCategory === "milk" || itemWeight === "500" || itemWeight === "1000" ?
+                       itemWeight === "500" || itemWeight === "1000" ?
                         null :
                         <span className={` text-md line-through text-red-700 font-medium ${product.offerCost ? "block" : "hidden"}`}>Rs. {parseFloat(product.offerCost * itemQty || 0).toFixed(2)}
                         </span>
