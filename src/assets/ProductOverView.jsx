@@ -188,7 +188,7 @@ useEffect(() => {
       totalAmount: orderType === "subscription" ? parseFloat((days * itemCost) - dis || 0).toFixed(2) : parseFloat(itemCost || 0).toFixed(2),
       products: [initialData]
     }))
-  }, [product, itemId, products, itemCost, itemWeight, days, orderType, itemQty])
+  }, [product, itemId, products, itemCost, itemWeight, days, orderType, itemQty,dis])
 
 
 
@@ -269,7 +269,7 @@ useEffect(() => {
     } else if (days === 20) {
       if (itemWeight === "500" || itemWeight === "1000") {
         if (itemWeight === "500") {
-          const halfDiscount = discount.twentyDays / 2
+          const halfDiscount = discount.twentyDays
 
           setDis(halfDiscount)
         } else {
@@ -279,8 +279,7 @@ useEffect(() => {
     } else if (days === 30) {
       if (itemWeight === "500" || itemWeight === "1000") {
         if (itemWeight === "500") {
-          const halfDiscount = discount.thirtyDays / 2
-
+          const halfDiscount = discount.twentyDays
           setDis(halfDiscount)
         } else {
           setDis(discount.thirtyDays)

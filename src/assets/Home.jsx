@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import Carousel from "../assets/Carousel"
 import Footer from './Footer'
 import { dataContext } from '../App'
@@ -6,12 +6,38 @@ import { Link } from 'react-router-dom'
 import { FaDownload, FaShareSquare } from 'react-icons/fa'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import Faq from './Faq'
-
+import { MdClose } from "react-icons/md";
 
 
 const Home = () => {
     const { categories } = useContext(dataContext)
+    const { carousel } = useContext(dataContext)
+    const [images, setImages] = useState([]);
+    const [lastImg, setLastImg] = useState(images?.length)
+    const [toggle, setToggle] = useState(null)
 
+
+    useEffect(() => {
+        setImages(carousel.carouselImage?.reverse())
+    }, [carousel])
+
+
+    useEffect(() => {
+        const toggleValue = sessionStorage.getItem("offerpopup")
+        const parsedValue = JSON.parse(toggleValue)
+        if (parsedValue === false) {
+            setToggle(false)
+        } else {
+            sessionStorage.setItem("offerpopup", JSON.stringify(true))
+            setToggle(true)
+
+        }
+    }, [])
+
+    const removePopUp = () => {
+        sessionStorage.setItem("offerpopup", JSON.stringify(false))
+        setToggle(false)
+    }
 
     // share app function 
     const shareApp = async () => {
@@ -27,6 +53,23 @@ const Home = () => {
     }
     return (
         <>
+            {/* offer pop card  */}
+            {toggle
+                &&
+                <div className="bg-black fixed  flex p-3  justify-center items-center lg:items-start top-0 left-0 h-full w-full bg-opacity-50 z-10" >
+                    <div className="bg-white  p-1 text-center scrollbar-hide-card h-[60%] md:h-[70%] lg:h-full lg:w-[50%] overflow-auto rounded pb-5">
+
+                        <div className="w-full h-fit bg-white rounded ">
+                            <span onClick={removePopUp} className="absolute bg-white rounded w-8 h-8 flex justify-center items-center font-medium top-4 right-4 cursor-pointer"><MdClose size={25} /></span>
+                            <img src={images[lastImg]} alt="offer-poster" className="w-full h-fit rounded" />
+                        </div>
+                        <p className="mt-3 mx-2">{carousel.offerTitle}</p>
+                        <button onClick={removePopUp} className="w-[40%] py-2 mt-3 font-medium  bg-blue-500 text-white rounded-3xl">Shop now</button>
+                    </div>
+                </div>
+            }
+
+            {/* categories section  */}
             <Carousel />
             <div className='p-3 mt-5'>
                 <h5 className='text-center text-2xl font-semibold'>Product Categories</h5>
