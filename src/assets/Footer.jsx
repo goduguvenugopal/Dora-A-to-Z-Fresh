@@ -124,7 +124,7 @@ const {number} = useContext(dataContext)
       </div>
       <div className="bg-white">
         <div className=" py-4 px-5 ">
-          <a href="https://goduguvenugopal.vercel.app/" target="_self">
+          <a href="https://wwww.goduguvenugopal.in/" target="_self">
           <p className=" text-black text-center ">
             © 2025 Built with ❤️ by <span className='text-blue-500 font-medium'>Venugopal.</span> All rights reserved.
           </p>
