@@ -11,8 +11,8 @@ const Carousel = () => {
 
 
   useEffect(() => {
-    setImages(carousel.carouselImage)
-    setOfferTitle(carousel.offerTitle)
+    setImages(carousel?.carouselImage)
+    setOfferTitle(carousel?.offerTitle)
   }, [carousel])
 
 
