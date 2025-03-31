@@ -215,7 +215,7 @@ const Cart = () => {
               ))}
 
             </div>
-            {/* place order out card  */}
+            {/* place order side card  */}
             <div className='pt-10 lg:pt-0 lg:fixed  lg:top-0 lg:right-0 bg-white '>
               <div className="lg:w-[24rem] lg:h-[100vh] lg:mx-auto bg-white lg:shadow-md  lg:p-6 lg:border lg:pt-24">
                 <h2 className="text-gray-700 font-bold text-lg mb-4">PRICE DETAILS</h2>

@@ -5,6 +5,7 @@ import Footer from './Footer'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { scrollToTop } from './RouteHandler'
 import { FaGreaterThan, FaLessThan } from 'react-icons/fa'
+import InstallApp from './InstallApp'
 
 
 
@@ -173,7 +174,7 @@ const AllProducts = () => {
         </div>
       </div>
 
-
+<InstallApp/>
     </>
   )
 }

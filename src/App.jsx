@@ -18,6 +18,7 @@ import Orders from "./assets/Orders";
 import Login from "./assets/Login";
 import OrderCheckOut from "./assets/OrderCheckOut";
 import OrderOverView from "./assets/OrderOverView"
+ 
 
 
 export const dataContext = createContext();
@@ -35,8 +36,13 @@ function App() {
   const [cartItems, setCartItems] = useState([])
   const [discount, setDiscount] = useState({})
   const [orderProducts, setOrderProducts] = useState([])
-  const [orders , setOrders] = useState([])
+  const [orders, setOrders] = useState([])
   RouteHandler(cartItems)
+
+
+
+ 
+
 
   useEffect(() => {
     // retrieving token from localStorage
@@ -169,6 +175,7 @@ function App() {
     }}>
 
       <Navbar />
+   
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products_by_category/:category" element={<AllProducts />} />

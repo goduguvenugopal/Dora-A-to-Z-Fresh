@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { dataContext } from '../App'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import { scrollToTop } from './RouteHandler'
+import InstallApp from './InstallApp'
 
 const Search = () => {
   scrollToTop()
@@ -31,6 +32,7 @@ const Search = () => {
   }, [])
 
   return (
+    <>
     <div className='mt-20 px-3 pb-10'>
       <div className='flex justify-center pt-9 mb-7'>
         <div className='relative w-full sm:w-auto'>
@@ -80,6 +82,9 @@ const Search = () => {
         </div>
       }
     </div>
+    <InstallApp/>
+    </>
+
   )
 }
 

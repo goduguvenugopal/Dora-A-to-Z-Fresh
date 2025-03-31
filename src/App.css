@@ -13,3 +13,5 @@ body::-webkit-scrollbar{
 .custom-toast {
   @apply bg-gray-800 text-white text-sm p-4 rounded-lg w-fit my-8 m-2;
 }
+
+
