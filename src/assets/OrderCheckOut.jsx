@@ -257,7 +257,9 @@ const OrderCheckOut = () => {
             <span onClick={()=>copyNumber(9603669236)} className='font-bold my-2 cursor-pointer flex items-center gap-2 hover:text-blue-600'>9603669236 <FaRegCopy/></span>
             <h4 className='text-center'>Banking Name : <span className='font-bold '>BANUPRAKASH NAGARAM</span></h4>
 
-            <a href="/qrcode.png" className=' animate-bounce text-md font-semibold px-3 h-[2.5rem] mt-6 flex items-center gap-2 rounded-full text-white bg-orange-600' download="/qrcode.png"><FaDownload />Download QR Code</a>
+            {/* <a href="/qrcode.png" className=' animate-bounce text-md font-semibold px-3 h-[2.5rem] mt-6 flex items-center gap-2 rounded-full text-white bg-orange-600' download="/qrcode.png"><FaDownload />Download QR Code</a> */}
+            <a href={`upi://pay?pa=venugopal9059@ybl&pn=Dora A-Z Fresh&am=${totalAmount}&cu=INR`} target='_blank' rel='noopener' className='hover:bg-blue-600 animate-bounce text-md font-semibold px-4 h-[2.5rem] mt-6 flex items-center gap-2 rounded-full text-white bg-blue-700' > PAY USING UPI</a>
+
           </div>
 
           {/* order product details section  */}
@@ -286,7 +288,7 @@ const OrderCheckOut = () => {
                           {item?.products[0]?.itemName.substring(0, 30)}..
                         </span>
                       </p>
-                      <p className="font-semibold text-sm  ">
+                      <p className="font-semibold text-sm">
                         Price :
                         <span className="font-medium text-black pl-1 text-sm  ">
                           ₹{item.totalAmount}
@@ -305,8 +307,6 @@ const OrderCheckOut = () => {
                       <p className="font-semibold capitalize text-sm text-blue-600">
                         {item.products[0].orderType === "buyonce" ? null : item.products[0].orderType}
                       </p>
-
-
                     </div>
                   </div>
                 ))}
@@ -332,7 +332,7 @@ const OrderCheckOut = () => {
                 </div>
               </div>
 
-              <h3 className="font-bold mt-3 text-xl  ">
+              <h3 className="font-bold mt-3 text-xl">
                 TOTAL COST :
                 <span className="text-black pl-1">Rs. {totalAmount}</span>
               </h3>
