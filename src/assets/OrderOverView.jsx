@@ -201,6 +201,7 @@ const OrderOverView = () => {
                       <h5 className='text-sm'>
                         <span className='font-bold text-red-500'>Note:</span> Orders will be processed after full payment. Send the payment receipt to WhatsApp at <a href={`https://wa.me/91${number}`} className='text-green-700 font-bold'>{number}</a> on the same day.
                       </h5>
+                      <a href={`upi://pay?pa=venugopal9059@ybl&pn=Dora A-Z Fresh&am=${singleOrder?.totalAmount}&cu=INR`} target='_blank' rel='noopener' className='hover:bg-blue-600 animate-bounce text-md font-semibold px-4 h-[2.5rem] mt-6 flex items-center justify-center gap-2 rounded-full text-white bg-blue-700' > PAY USING UPI</a>
 
                     </div>
                   </div>
