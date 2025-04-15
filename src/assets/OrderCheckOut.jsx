@@ -191,14 +191,14 @@ const OrderCheckOut = () => {
   // number copy function 
   const copyNumber = async (number) => {
     try {
-      await navigator.clipboard.writeText(number);   
+      await navigator.clipboard.writeText(number);
       toast.success("Number Copied to clipboard", { className: "custom-toast" });
     } catch (error) {
       console.error(error);
-      toast.error("Number not Copied", { className: "custom-toast" });  
+      toast.error("Number not Copied", { className: "custom-toast" });
     }
   }
-  
+
 
   // if not token available or orderProducts length empty page navigate to home 
   useEffect(() => {
@@ -240,27 +240,56 @@ const OrderCheckOut = () => {
 
 
           {/* qr code payment section  */}
-          <div className="p-3 flex flex-col w-full lg:w-[34%]  items-center  shadow-md shadow-gray-300 rounded-lg">
+          {totalAmount > 150 ?
+            <div className="p-3 flex flex-col w-full lg:w-[34%]  items-center  shadow-md shadow-gray-300 rounded-lg">
 
-            <h2 className="font-bold  text-orange-600">
-              PAYMENT DETAILS
-            </h2>
-            <h4 className='font-medium'>SCAN QR CODE</h4>
-            <img
-              src="/qrcode.png"
-              alt="qr_code"
-              className="border-2 my-2 h-52 w-52 rounded "
-            />
-            
-            <img src="/allpayments.png" className='w-[60%] mb-2 ' alt="all_upi_logo" />
-            <h6 className='text-blue-600 font-bold'>PAY TO THIS NUMBER</h6>
-            <span onClick={()=>copyNumber(9603669236)} className='font-bold my-2 cursor-pointer flex items-center gap-2 hover:text-blue-600'>9603669236 <FaRegCopy/></span>
-            <h4 className='text-center'>Banking Name : <span className='font-bold '>BANUPRAKASH NAGARAM</span></h4>
+              <h2 className="font-bold  text-orange-600">
+                PAYMENT DETAILS
+              </h2>
+              <h4 className='font-medium'>SCAN QR CODE</h4>
+              <img
+                src="/qrcode.png"
+                alt="qr_code"
+                className="border-2 my-2 h-52 w-52 rounded "
+              />
 
-            {/* <a href="/qrcode.png" className=' animate-bounce text-md font-semibold px-3 h-[2.5rem] mt-6 flex items-center gap-2 rounded-full text-white bg-orange-600' download="/qrcode.png"><FaDownload />Download QR Code</a> */}
-            <a href={`upi://pay?pa=venugopal9059@ybl&pn=Dora A-Z Fresh&am=${totalAmount}&cu=INR`} target='_blank' rel='noopener' className='hover:bg-blue-600 animate-bounce text-md font-semibold px-4 h-[2.5rem] mt-6 flex items-center gap-2 rounded-full text-white bg-blue-700' > PAY USING UPI</a>
+              <img src="/allpayments.png" className='w-[60%] mb-2 ' alt="all_upi_logo" />
+              <h6 className='text-blue-600 font-bold'>PAY TO THIS NUMBER</h6>
+              <span onClick={() => copyNumber(9603669236)} className='font-bold my-2 cursor-pointer flex items-center gap-2 hover:text-blue-600'>9603669236 <FaRegCopy /></span>
+              <h4 className='text-center'>Banking Name : <span className='font-bold '>BANUPRAKASH NAGARAM</span></h4>
 
-          </div>
+              {/* <a href="/qrcode.png" className=' animate-bounce text-md font-semibold px-3 h-[2.5rem] mt-6 flex items-center gap-2 rounded-full text-white bg-orange-600' download="/qrcode.png"><FaDownload />Download QR Code</a> */}
+              <a href={`upi://pay?pa=venugopal9059@ybl&pn=Dora A-Z Fresh&am=${totalAmount}&cu=INR`} target='_blank' rel='noopener' className='hover:bg-blue-600 animate-bounce text-md font-semibold px-4 h-[2.5rem] mt-6 flex items-center gap-2 rounded-full text-white bg-blue-700' > PAY USING UPI</a>
+
+            </div>
+            :
+            <div className="p-3 flex flex-col w-full lg:w-[34%]  items-center  shadow-md shadow-gray-300 rounded-lg">
+              <div onClick={(e) => e.stopPropagation()} className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full">
+                <h2 className="text-lg font-semibold mb-3 text-orange-600">Complete Your Order</h2>
+                <p className="mb-4">Orders below <span className='text-[1rem] font-bold'>Rs.150</span> are not allowed. Please add more products, increase the quantity of existing items, or place the order directly from your cart if you already have products.</p>
+                <div className='text-end'>
+                  {cartItems.length > 0 ?
+                    <Link to="/cart"
+                      onClick={() => setModal(false)}
+                      className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    >
+                      Go to cart
+                    </Link>
+                    :
+                    <Link to="/"
+                      onClick={() => setModal(false)}
+                      className="bg-indigo-700 text-white px-4 py-2 rounded hover:bg-blue-700"
+                    >
+                      Add More Products
+                    </Link>
+                  }
+                </div>
+              </div>
+            </div>
+
+          }
+
+
 
           {/* order product details section  */}
           <div className="p-3 pb-5 pt-0 w-full lg:w-[34%] lg:h-[90vh] lg:overflow-y-auto shadow-md shadow-gray-300 rounded-lg">
