@@ -201,7 +201,7 @@ const OrderOverView = () => {
                       <h5 className='text-sm'>
                         <span className='font-bold text-red-500'>Note:</span> Orders will be processed after full payment. Send the payment receipt to WhatsApp at <a href={`https://wa.me/91${number}`} className='text-green-700 font-bold'>{number}</a> on the same day.
                       </h5>
-                      <a href={`upi://pay?pa=960366@ybl&pn=Dora A-Z Fresh&am=${singleOrder?.totalAmount}&cu=INR`} target='_blank' rel='noopener' className='hover:bg-blue-600 animate-bounce text-md font-semibold px-4 h-[2.5rem] mt-6 flex items-center justify-center gap-2 rounded-full text-white bg-blue-700' > PAY USING UPI</a>
+                      <a href={`upi://pay?pa=960366@ybl&pn=Dora A-Z Fresh&am=${singleOrder?.totalAmount}&cu=INR`} target='_blank' rel='noopener' className='hover:bg-blue-600  text-md font-semibold px-4 h-[2.5rem] mt-3 flex items-center justify-center gap-2 rounded-full text-white bg-blue-700' > PAY ₹{singleOrder?.totalAmount}</a>
 
                     </div>
                   </div>
@@ -337,11 +337,11 @@ const OrderOverView = () => {
             <div className='mt-5 border-y border-black flex justify-around'>
               {singleOrder?.orderStatus === "delivered" || singleOrder?.orderStatus === "cancelled" ? false :
 
-                <div className='text-center border-l border-black w-full py-1'>
+                <div className='text-center border-l active:bg-blue-300 border-black w-full py-1'>
                   <button onClick={() => setCancelModal(true)} className='text-black hover:text-blue-600'>Cancel</button>
                 </div>
               }
-              <div className='border-l border-black border-r w-full text-center py-1'>
+              <div className='border-l active:bg-blue-300 border-black border-r w-full text-center py-1'>
                 <Link to="/contact" className='hover:text-blue-600'>Contact Us</Link>
 
               </div>

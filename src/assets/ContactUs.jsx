@@ -71,7 +71,7 @@ const ContactUs = () => {
 
             <div className="space-y-4">
 
-              <a href="mailto:dora.a.to.z.fresh@gmail.com" className="flex items-center gap-3">
+              <a href="mailto:dora.a.to.z.fresh@gmail.com" className="flex items-center active:bg-blue-300 gap-3">
                 <MdMail className="h-6 w-6 text-blue-500" />
                 <div>
                   <p className="text-lg font-medium">Email Us</p>
@@ -80,21 +80,21 @@ const ContactUs = () => {
               </a>
 
 
-              <a href={`tel:+91${number}`} className="flex items-center gap-3">
+              <a href={`tel:+91${number}`} className="flex items-center active:bg-blue-300 gap-3">
                 <FaPhoneAlt className="h-6 w-6 text-blue-500" />
                 <div>
                   <p className="text-lg font-medium">Phone Number</p>
                   <p className="text-sm text-gray-600">{number}</p>
                 </div>
               </a>
-              <a href={`https://wa.me/91${number}`} className="flex items-center gap-3">
+              <a href={`https://wa.me/91${number}`} className="flex items-center active:bg-blue-300 gap-3">
                 <FaWhatsapp className="h-6 w-6 font-bold text-green-500" />
                 <div>
                   <p className="text-lg font-medium">WhatsApp Number</p>
                   <p className="text-sm text-gray-600">{number}</p>
                 </div>
               </a>
-              <a href="https://maps.app.goo.gl/YmA4dbsdDkvRfr6t5" className="flex items-center gap-3">
+              <a href="https://maps.app.goo.gl/YmA4dbsdDkvRfr6t5" className="flex active:bg-blue-300 items-center gap-3">
                 <FaLocationDot className="h-6 w-6 text-blue-500" />
                 <div className="w-full">
                   <p className="text-lg font-medium">Address</p>

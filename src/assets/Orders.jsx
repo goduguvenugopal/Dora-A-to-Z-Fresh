@@ -102,7 +102,7 @@ const Orders = () => {
             className="flex flex-col items-start gap-2 border-b border-gray-400 pb-4 mb-4"
           >
             {/* Product Image */}
-            <Link to={`/orders/order_over_view/${product._id}`} className="flex gap-3">
+            <Link to={`/orders/order_over_view/${product._id}`} className="flex active:bg-blue-300 gap-3 w-full">
 
               <div className="w-[6.8rem] h-fit lg:w-[9.5rem] ">
                 <img
