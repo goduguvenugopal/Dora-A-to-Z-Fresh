@@ -259,7 +259,8 @@ const OrderCheckOut = () => {
               <h4 className='text-center'>Banking Name : <span className='font-bold '>BANUPRAKASH NAGARAM</span></h4>
 
               {/* <a href="/qrcode.png" className=' animate-bounce text-md font-semibold px-3 h-[2.5rem] mt-6 flex items-center gap-2 rounded-full text-white bg-orange-600' download="/qrcode.png"><FaDownload />Download QR Code</a> */}
-              <a href={`upi://pay?pa=venugopal9059@ybl&pn=Dora A-Z Fresh&am=${totalAmount}&cu=INR`} target='_blank' rel='noopener' className='hover:bg-blue-600 animate-bounce text-md font-semibold px-4 h-[2.5rem] mt-6 flex items-center gap-2 rounded-full text-white bg-blue-700' > PAY USING UPI</a>
+              <a href={`upi://pay?pa=960366@ybl&pn=Dora A-Z Fresh&am=${totalAmount}&cu=INR`} target='_blank' rel='noopener' className='hover:bg-blue-600  text-md font-semibold px-4 h-[2.5rem] mt-4 flex items-center gap-2 rounded-full text-white bg-blue-700' > PAY ₹{totalAmount}</a>
+              <h5 className='mt-2'><span className='font-bold text-red-500'>Note : </span>After making the payment, please place your order and send the payment receipt via WhatsApp on the same day.</h5>
 
             </div>
             :
