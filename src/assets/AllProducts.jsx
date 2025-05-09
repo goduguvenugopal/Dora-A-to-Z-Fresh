@@ -8,7 +8,6 @@ import { FaGreaterThan, FaLessThan } from 'react-icons/fa'
 import InstallApp from './InstallApp'
 
 
-
 const AllProducts = () => {
   scrollToTop()
   const { category } = useParams()
