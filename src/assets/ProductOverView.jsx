@@ -191,8 +191,6 @@ useEffect(() => {
   }, [product, itemId, products, itemCost, itemWeight, days, orderType, itemQty,dis])
 
 
-
-
   // add to cart function 
   const addToCartFunc = async () => {
     if (itemQty < parseInt(product.minOrderQty) && orderType === "buyonce" && itemWeight === "250") {
