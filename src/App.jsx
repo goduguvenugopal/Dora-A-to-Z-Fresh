@@ -10,77 +10,91 @@ import { RouteHandler } from "./assets/RouteHandler";
 import Search from "./assets/Search";
 import axios from "axios";
 import Profile from "./assets/Profile";
-import { Loading } from "./assets/Loading"
-import AllProducts from "./assets/AllProducts"
-import ProductOverView from "./assets/ProductOverView"
-import 'react-lazy-load-image-component/src/effects/blur.css';
+import { Loading } from "./assets/Loading";
+import AllProducts from "./assets/AllProducts";
+import ProductOverView from "./assets/ProductOverView";
+import "react-lazy-load-image-component/src/effects/blur.css";
 import Orders from "./assets/Orders";
 import Login from "./assets/Login";
 import OrderCheckOut from "./assets/OrderCheckOut";
-import OrderOverView from "./assets/OrderOverView"
- 
-
+import OrderOverView from "./assets/OrderOverView";
 
 export const dataContext = createContext();
 
 function App() {
-  const [token, setToken] = useState("")
+  const [token, setToken] = useState("");
   const api = import.meta.env.VITE_API;
   const number = import.meta.env.VITE_NUMBER;
+  const analytics_api = import.meta.env.VITE_ANALYTICS_API;
   const [carousel, setCarousel] = useState({});
-  const [products, setProducts] = useState([])
-  const [spinner, setSpinner] = useState(false)
-  const [categories, setCategories] = useState([])
-  const [user, setUser] = useState({})
-  const [defaultAddress, setDefaultAddress] = useState([])
-  const [cartItems, setCartItems] = useState([])
-  const [discount, setDiscount] = useState({})
-  const [orderProducts, setOrderProducts] = useState([])
-  const [orders, setOrders] = useState([])
-  RouteHandler(cartItems)
+  const [products, setProducts] = useState([]);
+  const [spinner, setSpinner] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [user, setUser] = useState({});
+  const [defaultAddress, setDefaultAddress] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [discount, setDiscount] = useState({});
+  const [orderProducts, setOrderProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
+  RouteHandler(cartItems);
 
+  //  Daily Unique Visitors Tracker
+  useEffect(() => {
+    const sendVisitorId = async (visitorId) => {
+      try {
+        await axios.post(`${analytics_api}/analytics/api/visit`, { visitorId });
+      } catch (error) {
+        console.error("Error sending visitor ID:", error);
+      }
+    };
 
+    const visitorId = localStorage.getItem("visitorId");
 
- 
-
+    if (!visitorId) {
+      const randomVisitorId = crypto.randomUUID();
+      localStorage.setItem("visitorId", JSON.stringify(randomVisitorId));
+      sendVisitorId(randomVisitorId);
+    } else {
+      const parsedId = JSON.parse(visitorId);
+      sendVisitorId(parsedId);
+    }
+  }, []);
 
   useEffect(() => {
     // retrieving token from localStorage
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
     if (token) {
-      setToken(JSON.parse(token))
+      setToken(JSON.parse(token));
     }
     // retrieving address from localStorage
-    const address = localStorage.getItem("address")
+    const address = localStorage.getItem("address");
     if (address) {
-      setDefaultAddress(JSON.parse(address))
+      setDefaultAddress(JSON.parse(address));
     }
 
-    // retrieving user details 
-    const userDetails = localStorage.getItem("user")
+    // retrieving user details
+    const userDetails = localStorage.getItem("user");
     if (user) {
-      setUser(JSON.parse(userDetails))
+      setUser(JSON.parse(userDetails));
     }
-  }, [])
+  }, []);
 
-  // fetching all products 
+  // fetching all products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setSpinner(true)
-        const res = await axios.get(`${api}/product/get-all-products`)
+        setSpinner(true);
+        const res = await axios.get(`${api}/product/get-all-products`);
         if (res) {
-          setProducts(res.data.retrievdProducts.reverse())
+          setProducts(res.data.retrievdProducts.reverse());
         }
       } catch (error) {
         console.error(error);
-
       }
-    }
-    fetchProducts()
+    };
+    fetchProducts();
 
-
-    // fetching carousel 
+    // fetching carousel
     const getCarousel = async () => {
       try {
         const res = await axios.get(`${api}/carousel/get-carousel`);
@@ -94,42 +108,34 @@ function App() {
 
     getCarousel();
 
-
     // fetching all categories
     const fetchAllCategories = async () => {
       try {
-
-        const res = await axios.get(`${api}/category/get-category-products`)
+        const res = await axios.get(`${api}/category/get-category-products`);
         if (res) {
-          setCategories(res.data.retrievedProducts)
+          setCategories(res.data.retrievedProducts);
         }
       } catch (error) {
         console.error(error);
-
       }
-    }
-    fetchAllCategories()
+    };
+    fetchAllCategories();
 
-
-
-    // fetching discount function 
+    // fetching discount function
     const fetchDiscount = async () => {
       try {
-        const res = await axios.get(`${api}/offer/get-offer`)
+        const res = await axios.get(`${api}/offer/get-offer`);
         if (res) {
-          setDiscount(res.data.offers[0])
-          setSpinner(false)
-
+          setDiscount(res.data.offers[0]);
+          setSpinner(false);
         }
       } catch (error) {
         console.error(error);
-
       }
-    }
+    };
 
-    fetchDiscount()
-
-  }, [])
+    fetchDiscount();
+  }, []);
 
   useEffect(() => {
     // fetching cart products
@@ -137,56 +143,76 @@ function App() {
       try {
         const res = await axios.get(`${api}/cart/get-user-cart-products`, {
           headers: {
-            token: token
-          }
-        })
+            token: token,
+          },
+        });
         if (res) {
-          setCartItems(res.data.retrievdProducts.reverse())
+          setCartItems(res.data.retrievdProducts.reverse());
         }
       } catch (error) {
         console.error(error);
       }
-    }
+    };
 
     if (token) {
-      fetchCartItems()
+      fetchCartItems();
     }
-  }, [token])
-
+  }, [token]);
 
   if (spinner) {
-    return (<Loading />)
+    return <Loading />;
   }
 
   return (
-    // useContext provider wrapped to child components for state management 
-    <dataContext.Provider value={{
-      api, number,
-      carousel, setCarousel,
-      products, setProducts,
-      categories, setCategories,
-      token, setToken,
-      user, setUser,
-      defaultAddress, setDefaultAddress,
-      cartItems, setCartItems,
-      discount, setDiscount,
-      orderProducts, setOrderProducts,
-      orders, setOrders
-    }}>
-
+    // useContext provider wrapped to child components for state management
+    <dataContext.Provider
+      value={{
+        api,
+        number,
+        carousel,
+        setCarousel,
+        products,
+        setProducts,
+        categories,
+        setCategories,
+        token,
+        setToken,
+        user,
+        setUser,
+        defaultAddress,
+        setDefaultAddress,
+        cartItems,
+        setCartItems,
+        discount,
+        setDiscount,
+        orderProducts,
+        setOrderProducts,
+        orders,
+        setOrders,
+      }}
+    >
       <Navbar />
-   
+
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/products_by_category/:category" element={<AllProducts />} />
-        <Route path="/product_over_view/:itemId" element={<ProductOverView />} />
+        <Route
+          path="/products_by_category/:category"
+          element={<AllProducts />}
+        />
+        <Route
+          path="/product_over_view/:itemId"
+          element={<ProductOverView />}
+        />
         <Route path="/cart" element={<Cart />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/search" element={<Search />} />
         <Route path="/order_check_out" element={<OrderCheckOut />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/orders" element={<Orders />} />
-        <Route path="/orders/order_over_view/:orderId" element={<OrderOverView />} />
+        <Route
+          path="/orders/order_over_view/:orderId"
+          element={<OrderOverView />}
+        />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
