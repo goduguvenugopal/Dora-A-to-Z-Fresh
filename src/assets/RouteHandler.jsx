@@ -48,6 +48,7 @@ export const RouteHandler = (cartItems) => {
 };
 
 
+
 // scroll to top custom Component 
 export const scrollToTop = () => {
   const location = useLocation()
