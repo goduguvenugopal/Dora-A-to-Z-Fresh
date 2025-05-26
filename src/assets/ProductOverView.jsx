@@ -598,7 +598,7 @@ const ProductOverView = () => {
                         <div
                           onClick={() => weightSelectFunc(item)}
                           key={index}
-                          className={`border-2 border-green-700 py-1  px-4 rounded-full cursor-pointer font-semibold ${item == itemWeight ? "bg-blue-600 text-white border-2 border-blue-600" : ""}`}
+                          className={`border-2  py-1  px-4 rounded-full cursor-pointer font-semibold ${item == itemWeight ? "bg-blue-600 text-white border-blue-600" : "border-green-700"}`}
                         >
                           {item}
                           {product.itemSubCategory === "Milk" ? "ml" : "g"}
