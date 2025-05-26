@@ -338,9 +338,11 @@ const ProductOverView = () => {
       setOrderProducts([cart]);
       navigate("/order_check_out");
     } else {
-      toast.warning("Please add address before placing order", {
-        className: "custom-toast",
-      });
+      // toast.warning("Please add address before placing order", {
+      //   className: "custom-toast",
+      // });
+      navigate("/profile");
+
     }
   };
  
@@ -575,6 +577,7 @@ const ProductOverView = () => {
               </>
             ) : (
               <>
+              {/* from here the section will be render if stock is availble   */}
                 {/* item weight quantity selection section  */}
                 {product.itemWeight.length > 0 ? (
                   <>
@@ -595,7 +598,7 @@ const ProductOverView = () => {
                         <div
                           onClick={() => weightSelectFunc(item)}
                           key={index}
-                          className="border-2 border-green-700 py-1 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold"
+                          className={`border-2 border-green-700 py-1 hover:border-blue-600  px-4 rounded-full cursor-pointer font-semibold ${item == itemWeight ? "bg-blue-600 text-white" : ""}`}
                         >
                           {item}
                           {product.itemSubCategory === "Milk" ? "ml" : "g"}
@@ -882,7 +885,8 @@ const ProductOverView = () => {
                 </div>
 
                 {/* add address section  */}
-                <div className="mb-3 py-3 capitalize flex items-center gap-2 justify-between w-full ">
+                {defaultAddress.length > 0 ? 
+                 <div className="mb-3 py-3 capitalize flex items-center gap-2 justify-between w-full ">
                   <div className="w-[60%]  ">
                     <h5 className="text-sm font-medium text-black">
                       Delivery to :{" "}
@@ -894,7 +898,8 @@ const ProductOverView = () => {
                         {defaultAddress[0]?.street.substring(0, 35)}...
                       </span>
                     </h5>
-                  </div>
+                  </div> 
+
                   <div className="w-[30%]  ">
                     {defaultAddress.length > 0 ? (
                       <Link
@@ -912,7 +917,8 @@ const ProductOverView = () => {
                       </Link>
                     )}
                   </div>
-                </div>
+                </div>: ""}
+
               </>
             )}
           </div>
