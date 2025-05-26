@@ -285,7 +285,7 @@ const OrderCheckOut = () => {
           </details>
 
           {/* qr code payment section  */}
-          {(totalAmount) =>
+          {(totalAmount) >=
             150 ? (
               <div className="p-3 flex flex-col w-full lg:w-[34%]  items-center  shadow-md shadow-gray-300 rounded-lg">
                 <h2 className="font-bold  text-orange-600">PAYMENT DETAILS</h2>
