@@ -79,8 +79,41 @@ function App() {
     }
   }, []);
 
-  // fetching all products
   useEffect(() => {
+    // fetching user details
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`${api}/user/get-single-user`, {
+          headers: {
+            token: token,
+          },
+        });
+        if (response) {
+          setUser(response.data.singleUser);
+          localStorage.setItem(
+            "user",
+            JSON.stringify(response.data.singleUser)
+          );
+        }
+      } catch (error) {
+        if (error?.response?.status === 404) {
+          localStorage.removeItem("token");
+          localStorage.removeItem("address");
+          localStorage.removeItem("user")
+          setToken("");
+          setDefaultAddress([]);
+          setUser({})
+        }
+      }
+    };
+
+    if (token) {
+      fetchUser();
+    }
+  }, [token]);
+
+  useEffect(() => {
+    // fetching all products
     const fetchProducts = async () => {
       try {
         setSpinner(true);
