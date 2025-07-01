@@ -183,7 +183,7 @@ const Login = () => {
                                             <div className="mt-2">
                                                 <input
 
-                                                    maxLength="9"
+                                                    maxLength="25"
                                                     value={fullName}
                                                     onChange={(e) => setFullName(e.target.value)}
                                                     type="text"

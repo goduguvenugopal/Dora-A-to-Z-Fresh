@@ -14,9 +14,7 @@ const Search = () => {
   const searchRef = useRef()
   const changeHandling = (e) => {
     setText(e.target.value)
-
   }
-
 
   // search function 
   useEffect(() => {
@@ -33,6 +31,7 @@ const Search = () => {
 
   return (
     <>
+
     <div className='mt-20 px-3 pb-10'>
       <div className='flex justify-center pt-9 mb-7'>
         <div className='relative w-full sm:w-auto'>
