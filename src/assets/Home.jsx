@@ -162,7 +162,7 @@ const Home = () => {
         </div>
       </div>
 
-      <Promotions />
+      {/* <Promotions /> */}
 
       <Faq />
       <Footer />

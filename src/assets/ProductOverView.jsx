@@ -507,6 +507,8 @@ const ProductOverView = () => {
               )}
             </div>
 
+            <h5 className="text-green-600 font-bold">{product.offerMessage}</h5>
+
             <hr className="border border-gray-200 mb-2 mt-5" />
 
             {/* rendering elements based on stock availability  */}
@@ -750,11 +752,11 @@ const ProductOverView = () => {
                             >
                               30 days
                             </div>
-                            {discount.thirtyDays && (
+                            {/* {discount.thirtyDays && (
                               <h5 className="text-blue-600 font-medium mt-1">
                                 Rs. {discount.thirtyDays} off
                               </h5>
-                            )}
+                            )} */}
                           </div>
                         </div>
                         <h5 className="font-semibold mb-2 flex items-center gap-2 text-green-600">
