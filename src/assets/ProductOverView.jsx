@@ -12,6 +12,8 @@ import { locations } from "./hardCodeData";
 import axios from "axios";
 import { BiExitFullscreen, BiFullscreen } from "react-icons/bi";
 import { Helmet } from "react-helmet";
+import ProductReviews from "../assets/ProdutReviews";
+import { RiDiscountPercentFill } from "react-icons/ri";
 
 const ProductOverView = () => {
   scrollToTop();
@@ -342,10 +344,8 @@ const ProductOverView = () => {
       //   className: "custom-toast",
       // });
       navigate("/profile");
-
     }
   };
- 
 
   // Check if the product is still being retrieved or is empty
   if (!product || Object.keys(product).length === 0) {
@@ -507,9 +507,20 @@ const ProductOverView = () => {
               )}
             </div>
 
-            <h5 className="text-green-600 font-bold">{product.offerMessage}</h5>
+            {/* discount section  */}
+            {product.offerMessage && (
+              <section className="py-3 flex items-center gap-2 flex-wrap">
+                <button className="bg-gradient-to-r flex justify-between gap-2 items-center from-pink-500 via-red-500 to-yellow-500 text-white px-5 py-2 rounded-full font-semibold shadow-lg animate-bounce hover:scale-105 transition-transform duration-300">
+                  <RiDiscountPercentFill size={21}/> Discount
+                </button>
 
-            <hr className="border border-gray-200 mb-2 mt-5" />
+                <p className="text-green-600 font-bold">
+                  {product.offerMessage}
+                </p>
+              </section>
+            )}
+
+            <hr className="border border-gray-200 mb-2 mt-2" />
 
             {/* rendering elements based on stock availability  */}
             {product.itemStock === "0" ? (
@@ -579,7 +590,7 @@ const ProductOverView = () => {
               </>
             ) : (
               <>
-              {/* from here the section will be render if stock is availble   */}
+                {/* from here the section will be render if stock is availble   */}
                 {/* item weight quantity selection section  */}
                 {product.itemWeight.length > 0 ? (
                   <>
@@ -600,7 +611,11 @@ const ProductOverView = () => {
                         <div
                           onClick={() => weightSelectFunc(item)}
                           key={index}
-                          className={`border-2  py-1  px-4 rounded-full cursor-pointer font-semibold ${item == itemWeight ? "bg-blue-600 text-white border-blue-600" : "border-green-700"}`}
+                          className={`border-2  py-1  px-4 rounded-full cursor-pointer font-semibold ${
+                            item == itemWeight
+                              ? "bg-blue-600 text-white border-blue-600"
+                              : "border-green-700"
+                          }`}
                         >
                           {item}
                           {product.itemSubCategory === "Milk" ? "ml" : "g"}
@@ -887,40 +902,42 @@ const ProductOverView = () => {
                 </div>
 
                 {/* add address section  */}
-                {defaultAddress.length > 0 ? 
-                 <div className="mb-3 py-3 capitalize flex items-center gap-2 justify-between w-full ">
-                  <div className="w-[60%]  ">
-                    <h5 className="text-sm font-medium text-black">
-                      Delivery to :{" "}
-                      <span className="text-gray-600">
-                        {defaultAddress[0]?.name},{" "}
-                        {defaultAddress[0]?.postalCode},{" "}
-                        {defaultAddress[0]?.village},{" "}
-                        {defaultAddress[0]?.district},{" "}
-                        {defaultAddress[0]?.street.substring(0, 35)}...
-                      </span>
-                    </h5>
-                  </div> 
+                {defaultAddress.length > 0 ? (
+                  <div className="mb-3 py-3 capitalize flex items-center gap-2 justify-between w-full ">
+                    <div className="w-[60%]  ">
+                      <h5 className="text-sm font-medium text-black">
+                        Delivery to :{" "}
+                        <span className="text-gray-600">
+                          {defaultAddress[0]?.name},{" "}
+                          {defaultAddress[0]?.postalCode},{" "}
+                          {defaultAddress[0]?.village},{" "}
+                          {defaultAddress[0]?.district},{" "}
+                          {defaultAddress[0]?.street.substring(0, 35)}...
+                        </span>
+                      </h5>
+                    </div>
 
-                  <div className="w-[30%]  ">
-                    {defaultAddress.length > 0 ? (
-                      <Link
-                        to="/profile"
-                        className="font-semibold text-sm block p-1 bg-blue-600 hover:bg-blue-500 rounded-full   border-none w-[7rem] text-center text-white"
-                      >
-                        Change
-                      </Link>
-                    ) : (
-                      <Link
-                        to="/profile"
-                        className="font-semibold text-sm block  p-1 bg-blue-600 hover:bg-blue-500 rounded-full   border-none w-full text-center text-white"
-                      >
-                        Add Address
-                      </Link>
-                    )}
+                    <div className="w-[30%]  ">
+                      {defaultAddress.length > 0 ? (
+                        <Link
+                          to="/profile"
+                          className="font-semibold text-sm block p-1 bg-blue-600 hover:bg-blue-500 rounded-full   border-none w-[7rem] text-center text-white"
+                        >
+                          Change
+                        </Link>
+                      ) : (
+                        <Link
+                          to="/profile"
+                          className="font-semibold text-sm block  p-1 bg-blue-600 hover:bg-blue-500 rounded-full   border-none w-full text-center text-white"
+                        >
+                          Add Address
+                        </Link>
+                      )}
+                    </div>
                   </div>
-                </div>: ""}
-
+                ) : (
+                  ""
+                )}
               </>
             )}
           </div>
@@ -934,6 +951,10 @@ const ProductOverView = () => {
             <p className="font-serif">{product.itemDescription}</p>
           </div>
         )}
+
+        {/* review component  */}
+
+        <ProductReviews />
 
         {/* related products section  */}
         {relatedProducts.length > 1 && (

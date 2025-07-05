@@ -24,6 +24,7 @@ export const dataContext = createContext();
 function App() {
   const [token, setToken] = useState("");
   const api = import.meta.env.VITE_API;
+  const reviews_api = import.meta.env.VITE_REVIEWS_API
   const number = import.meta.env.VITE_NUMBER;
   const analytics_api = import.meta.env.VITE_ANALYTICS_API;
   const [carousel, setCarousel] = useState({});
@@ -201,6 +202,7 @@ function App() {
     <dataContext.Provider
       value={{
         api,
+        reviews_api,
         number,
         carousel,
         setCarousel,
