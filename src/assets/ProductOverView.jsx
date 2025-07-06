@@ -12,7 +12,7 @@ import { locations } from "./hardCodeData";
 import axios from "axios";
 import { BiExitFullscreen, BiFullscreen } from "react-icons/bi";
 import { Helmet } from "react-helmet";
-import ProductReviews from "../assets/ProdutReviews";
+import ProductReviewsForm from "./ProdutReviewsForm";
 import { RiDiscountPercentFill } from "react-icons/ri";
 
 const ProductOverView = () => {
@@ -954,7 +954,6 @@ const ProductOverView = () => {
 
         {/* review component  */}
 
-        <ProductReviews />
 
         {/* related products section  */}
         {relatedProducts.length > 1 && (
@@ -999,6 +998,8 @@ const ProductOverView = () => {
           </div>
         )}
       </section>
+        <ProductReviewsForm itemId={itemId} />
+
       <Footer />
     </>
   );

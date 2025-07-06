@@ -42,7 +42,7 @@ const Faq = () => {
                             className="w-full text-left p-4 bg-gray-100 focus:outline-none flex justify-between items-center"
                         >
                             <span className="text-lg font-medium">
-                                What if my book arrives damaged?
+                                What if my product arrives damaged?
                             </span>
                             <span>{activeIndex === 1 ? "-" : "+"}</span>
                         </button>
@@ -50,7 +50,7 @@ const Faq = () => {
                             className={`p-4 text-gray-700 ${activeIndex === 1 ? "" : "hidden"
                                 }`}
                         >
-                            If your book arrives in less-than-perfect condition, please
+                            If your product arrives in less-than-perfect condition, please
                             <Link className='text-blue-600' to="/contact"> contact us</Link> customer support team within 1 day of receiving your
                             order. We will be happy to assist you with a replacement or
                             refund.

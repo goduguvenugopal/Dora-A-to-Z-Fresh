@@ -67,7 +67,7 @@ const Home = () => {
                 className="w-full h-fit rounded"
               />
             </div>
-            <p className="mt-3 mx-2 capitalize font-serif">
+            <p className="mt-5 mx-2 capitalize font-serif text-green-600 font-semibold">
               {carousel?.offerTitle}
             </p>
             <button
