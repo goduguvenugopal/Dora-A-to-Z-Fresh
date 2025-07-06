@@ -15,7 +15,7 @@ import { dataContext } from "../App";
 import { Slide, toast, ToastContainer } from "react-toastify";
 
 const Navbar = () => {
-  const { token, setToken, cartItems } = useContext(dataContext);
+  const { token, setToken, cartItems, user, setUser } = useContext(dataContext);
   const [offcanvas, setOffcanvas] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [prevScrollPos, setPrevScrollPos] = useState(window.scrollY);
@@ -206,6 +206,8 @@ const Navbar = () => {
               onClick={() => {
                 localStorage.removeItem("token");
                 setToken("");
+                localStorage.removeItem("user");
+                setUser({});
                 toast.success("logged out", {
                   className: "custom-toast",
                 });

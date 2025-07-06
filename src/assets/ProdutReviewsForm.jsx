@@ -5,14 +5,17 @@ import { GoUpload } from "react-icons/go";
 import { LuStar } from "react-icons/lu";
 import { dataContext } from "../App";
 import { MdDelete } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
-const ProdutReviewsForm = ({ itemId }) => {
+const ProdutReviewsForm = ({ itemId}) => {
+ 
   const [rating, setRating] = useState(0);
   const [image, setImage] = useState(null);
   const [reviewText, setReviewText] = useState("");
   const [reviewToggle, setReviewToggle] = useState(false);
   const { user } = useContext(dataContext);
   const [productReviewImg, setProductReviewImg] = useState(null);
+  const navigate = useNavigate();
 
   const handleRating = (value) => {
     setRating(value);
@@ -26,16 +29,14 @@ const ProdutReviewsForm = ({ itemId }) => {
     setImage(imageUrl);
   };
 
-  // review form data converting to object 
+  // review form data converting to object
   const formData = new FormData();
   formData.append("productId", itemId);
-  formData.append("userId", user._id);
-  formData.append("userName", user.fullName);
-  formData.append("rating", rating.toString());
+  formData.append("userId", user?._id);
+  formData.append("userName", user?.fullName);
+  formData.append("rating", rating?.toString());
   formData.append("reviewText", reviewText);
   formData.append("productReviewImg", productReviewImg);
-
- 
 
   return (
     <>
@@ -55,7 +56,13 @@ const ProdutReviewsForm = ({ itemId }) => {
             </button>
           ) : (
             <button
-              onClick={() => setReviewToggle(true)}
+              onClick={() => {
+                if (user) {
+                  setReviewToggle(true);
+                } else {
+                  navigate("/login");
+                }
+              }}
               className="flex  justify-center w-40 lg:w-52  bg-yellow-500 px-3 py-1.5 text-[1rem] font-semibold text-white shadow-xs hover:bg-yellow-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Write a Review
