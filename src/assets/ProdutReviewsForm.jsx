@@ -51,7 +51,9 @@ const ProdutReviewsForm = ({ itemId }) => {
       setLoader(true);
       const res = await axios.post(`${reviews_api}/api/add/reviews`, formData);
       if (res) {
-        toast.success("Thank you for sharing your valuable review!");
+        toast.success("Thank you for sharing your valuable review!", {
+          className: "custom-toast",
+        });
         setReviewToggle(false);
         setReviewText("");
         setRating(0);
@@ -60,7 +62,9 @@ const ProdutReviewsForm = ({ itemId }) => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Please try again");
+      toast.error("Please try again", {
+          className: "custom-toast",
+        });
     } finally {
       setLoader(false);
     }
@@ -71,6 +75,7 @@ const ProdutReviewsForm = ({ itemId }) => {
       <ToastContainer
         position="bottom-center"
         transition={Slide}
+        draggable
         theme="dark"
       />
       <div className="p-3 mt-8 mb-12 lg:px-9 text-center">

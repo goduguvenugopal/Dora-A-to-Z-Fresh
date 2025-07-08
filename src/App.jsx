@@ -18,7 +18,7 @@ import Orders from "./assets/Orders";
 import Login from "./assets/Login";
 import OrderCheckOut from "./assets/OrderCheckOut";
 import OrderOverView from "./assets/OrderOverView";
-import 'react-toastify/dist/ReactToastify.css';
+ 
 
 
 export const dataContext = createContext();
