@@ -154,7 +154,6 @@ const ProdutReviewsForm = ({ itemId }) => {
                     ))}
                   </div>
                 </div>
-
                 {/* review writing section  */}
                 <div>
                   <label
