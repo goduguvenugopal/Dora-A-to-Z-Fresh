@@ -18,15 +18,14 @@ import Orders from "./assets/Orders";
 import Login from "./assets/Login";
 import OrderCheckOut from "./assets/OrderCheckOut";
 import OrderOverView from "./assets/OrderOverView";
- 
-
+import ProdutReviewsForm from "./assets/ProdutReviewsForm";
 
 export const dataContext = createContext();
 
 function App() {
   const [token, setToken] = useState("");
   const api = import.meta.env.VITE_API;
-  const reviews_api = import.meta.env.VITE_REVIEWS_API
+  const reviews_api = import.meta.env.VITE_REVIEWS_API;
   const number = import.meta.env.VITE_NUMBER;
   const analytics_api = import.meta.env.VITE_ANALYTICS_API;
   const [carousel, setCarousel] = useState({});
@@ -40,26 +39,37 @@ function App() {
   const [orderProducts, setOrderProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   RouteHandler(cartItems);
+  const todayDate = new Date().toLocaleDateString("en-GB");
 
   //  Daily Unique Visitors Tracker
   useEffect(() => {
     const sendVisitorId = async (visitorId) => {
       try {
-        await axios.post(`${analytics_api}/analytics/api/visit`, { visitorId });
+        const res = await axios.post(`${analytics_api}/analytics/api/visit`, {
+          visitorId,
+        });
+        if (res) {
+          localStorage.setItem("todayDate", JSON.stringify(todayDate));
+        }
       } catch (error) {
         console.error("Error sending visitor ID:", error);
       }
     };
 
     const visitorId = localStorage.getItem("visitorId");
+    const storedDate = localStorage.getItem("todayDate");
 
-    if (!visitorId) {
+    if (!visitorId && !storedDate) {
       const randomVisitorId = crypto.randomUUID();
+      localStorage.setItem("todayDate", JSON.stringify(todayDate));
       localStorage.setItem("visitorId", JSON.stringify(randomVisitorId));
       sendVisitorId(randomVisitorId);
     } else {
-      const parsedId = JSON.parse(visitorId);
-      sendVisitorId(parsedId);
+      const parsedDate = JSON.parse(storedDate);
+      if (parsedDate !== todayDate) {
+        const parsedId = JSON.parse(visitorId);
+        sendVisitorId(parsedId);
+      }
     }
   }, []);
 
@@ -102,10 +112,10 @@ function App() {
         if (error?.response?.status === 404) {
           localStorage.removeItem("token");
           localStorage.removeItem("address");
-          localStorage.removeItem("user")
+          localStorage.removeItem("user");
           setToken("");
           setDefaultAddress([]);
-          setUser({})
+          setUser({});
         }
       }
     };
@@ -242,6 +252,7 @@ function App() {
         />
         <Route path="/cart" element={<Cart />} />
         <Route path="/contact" element={<ContactUs />} />
+        <Route path="/reviewform" element={<ProdutReviewsForm/>} />
         <Route path="/search" element={<Search />} />
         <Route path="/order_check_out" element={<OrderCheckOut />} />
         <Route path="/profile" element={<Profile />} />

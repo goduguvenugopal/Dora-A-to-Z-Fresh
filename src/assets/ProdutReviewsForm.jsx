@@ -8,6 +8,7 @@ import { MdDelete } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { Slide, toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+import Reviews from "./Reviews";
 
 const ProdutReviewsForm = ({ itemId }) => {
   const [rating, setRating] = useState(0);
@@ -59,12 +60,13 @@ const ProdutReviewsForm = ({ itemId }) => {
         setRating(0);
         setImage(null);
         setProductReviewImg(null);
+        
       }
     } catch (error) {
       console.error(error);
       toast.error("Please try again", {
-          className: "custom-toast",
-        });
+        className: "custom-toast",
+      });
     } finally {
       setLoader(false);
     }
@@ -78,7 +80,7 @@ const ProdutReviewsForm = ({ itemId }) => {
         draggable
         theme="dark"
       />
-      <div className="p-3 mt-8 mb-12 lg:px-9 text-center">
+      <div className="p-3 mt-8  lg:px-9 text-center">
         <h5 className="text-2xl font-medium text-black text-center">
           Customer Reviews
         </h5>
@@ -254,9 +256,12 @@ const ProdutReviewsForm = ({ itemId }) => {
                 </div>
               </form>
             </div>
+            <hr className="mt-5 border-yellow-400 border" />
           </motion.div>
         )}
       </div>
+
+      <Reviews itemId={itemId} />
     </>
   );
 };
