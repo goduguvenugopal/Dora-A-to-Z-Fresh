@@ -5,6 +5,9 @@ import { dataContext } from "../App";
 import { div } from "framer-motion/client";
 import { CustomLoading } from "./Loading";
 import { GoPerson } from "react-icons/go";
+import { FaStar } from "react-icons/fa";
+import { LuStar } from "react-icons/lu";
+
 
 const Reviews = ({ itemId }) => {
   const [reviews, setReviews] = useState([]);
@@ -17,7 +20,6 @@ const Reviews = ({ itemId }) => {
       setSpinner(true);
       const res = await axios.get(`${reviews_api}/api/get/reviews/${itemId}`);
       if (res) {
-        console.log(res.data);
         setReviews(res.data);
       }
     } catch (error) {
@@ -43,9 +45,22 @@ const Reviews = ({ itemId }) => {
                 className="border-b-[0.09rem] border-yellow-400 mb-3 py-3"
                 key={item._id}
               >
-                <div className="flex items-center justify-between ">
+                <div className="flex items-center gap-2">
+                  {[
+                    ...Array(5)].map((_, index) => (
+                      <span key={index}  className="text-yellow-400 ">
+                        {index < item.rating ? (
+                          <FaStar size={20} />
+                        ) : (
+                          <LuStar size={20} />
+                        )}
+                      </span>
+                    ))
+                  }
+                </div>
+                <div className="flex mt-3 items-center justify-between ">
                   <div className="flex items-center gap-3 text-yellow-500 ">
-                    <span className="">
+                    <span className="bg-gray-200">
                       <GoPerson size={22} />
                     </span>
                     <h5 className="text-[1rem] capitalize font-bold">
@@ -66,7 +81,6 @@ const Reviews = ({ itemId }) => {
                     alt=""
                   />
                 )}
-               
               </div>
             ))}
           </div>
