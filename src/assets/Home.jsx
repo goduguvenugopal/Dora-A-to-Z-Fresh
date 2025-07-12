@@ -9,6 +9,7 @@ import Faq from "./Faq";
 import { MdClose } from "react-icons/md";
 import InstallApp from "./InstallApp";
 import Promotions from "./Promotions";
+import RecentlyViewedProducts from "./recentlyViewedProducts";
 
 const Home = () => {
   const { categories } = useContext(dataContext);
@@ -133,6 +134,9 @@ const Home = () => {
           )}
         </div>
       </div>
+
+{/* recently viewed products component  */}
+<RecentlyViewedProducts/>
 
       {/* download share app section  */}
       <InstallApp />

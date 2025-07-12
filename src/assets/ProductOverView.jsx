@@ -14,6 +14,7 @@ import { BiExitFullscreen, BiFullscreen } from "react-icons/bi";
 import { Helmet } from "react-helmet";
 import ProductReviewsForm from "./ProdutReviewsForm";
 import { RiDiscountPercentFill } from "react-icons/ri";
+import RecentlyViewedProducts from "./recentlyViewedProducts";
 
 const ProductOverView = () => {
   scrollToTop();
@@ -24,6 +25,8 @@ const ProductOverView = () => {
     cartItems,
     orderProducts,
     number,
+    viewedProducts,
+    setViewedProducts,
     setOrderProducts,
     setCartItems,
     defaultAddress,
@@ -69,18 +72,6 @@ const ProductOverView = () => {
     products: [],
   });
 
-  // // changing title dynamically
-  // useEffect(() => {
-  //   if (product?.itemName) {
-  //     document.title = `${product?.itemName
-  //       ?.split(" ")
-  //       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-  //       .join(" ")}`;
-  //   } else {
-  //     document.title = "Welcome to Dora A to Z Fresh";
-  //   }
-  // }, [product]);
-
   // when order type changes set to default value to all
   useEffect(() => {
     setDays(30);
@@ -110,6 +101,17 @@ const ProductOverView = () => {
   useEffect(() => {
     const results = products.find((item) => item._id === itemId);
     setProduct(results);
+
+    // recently viewed Products adding
+    const isProduct = viewedProducts?.some((item) => item?._id === itemId);
+
+    if (isProduct === false && results) {
+      if(viewedProducts.length < 7){
+        const seenProducts = [...viewedProducts, results];
+        sessionStorage.setItem("viewedProducts", JSON.stringify(seenProducts));
+        setViewedProducts(seenProducts);
+      } 
+    }
   }, [products, itemId]);
 
   // item weight,cost and qty initial value function
@@ -511,7 +513,7 @@ const ProductOverView = () => {
             {product.offerMessage && (
               <section className="py-3 flex items-center gap-2 flex-wrap">
                 <button className="bg-gradient-to-r flex justify-between gap-2 items-center from-pink-500 via-red-500 to-yellow-500 text-white px-5 py-2 rounded-full font-semibold shadow-lg animate-bounce hover:scale-105 transition-transform duration-300">
-                  <RiDiscountPercentFill size={21}/> Discount
+                  <RiDiscountPercentFill size={21} /> Discount
                 </button>
 
                 <p className="text-green-600 font-bold">
@@ -733,33 +735,6 @@ const ProductOverView = () => {
                           </span>
                         </div>
                         <div className="flex gap-3 flex-wrap mb-5">
-                          {/* <div className='text-center'>
-                          <div onClick={() => setDays(7)} className='border-2 flex items-center justify-center border-green-700 h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
-                            7 days
-                          </div>
-                          {discount.sevenDays &&
-                            <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.sevenDays} off</h5>
-                          }
-                        </div>
-
-                        <div className='text-center'>
-                          <div onClick={() => setDays(10)} className='border-2 flex items-center justify-center border-green-700  h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
-                            10 days
-                          </div>
-                          {discount.tenDays &&
-                            <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.tenDays} off</h5>
-                          }
-                        </div>
-
-                        <div className='text-center'>
-                          <div onClick={() => setDays(20)} className='border-2 flex items-center justify-center border-green-700  h-9 hover:border-blue-600 px-4 rounded-full cursor-pointer font-semibold'>
-                            20 days
-                          </div>
-                          {discount.twentyDays &&
-                            <h5 className='text-blue-600 font-medium mt-1'>Rs. {discount.twentyDays} off</h5>
-                          }
-                        </div> */}
-
                           <div className="text-center">
                             <div
                               onClick={() => setDays(30)}
@@ -767,11 +742,6 @@ const ProductOverView = () => {
                             >
                               30 days
                             </div>
-                            {/* {discount.thirtyDays && (
-                              <h5 className="text-blue-600 font-medium mt-1">
-                                Rs. {discount.thirtyDays} off
-                              </h5>
-                            )} */}
                           </div>
                         </div>
                         <h5 className="font-semibold mb-2 flex items-center gap-2 text-green-600">
@@ -954,7 +924,6 @@ const ProductOverView = () => {
 
         {/* review component  */}
 
-
         {/* related products section  */}
         {relatedProducts.length > 1 && (
           <div className="mt-10 lg:px-9">
@@ -998,7 +967,10 @@ const ProductOverView = () => {
           </div>
         )}
       </section>
-        <ProductReviewsForm itemId={itemId} />
+      {/* recently viewed products component  */}
+      <RecentlyViewedProducts />
+      {/* product review form component  */}
+      <ProductReviewsForm itemId={itemId} />
 
       <Footer />
     </>

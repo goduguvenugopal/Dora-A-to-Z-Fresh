@@ -38,6 +38,7 @@ function App() {
   const [discount, setDiscount] = useState({});
   const [orderProducts, setOrderProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [viewedProducts, setViewedProducts] = useState([]);
   RouteHandler(cartItems);
   const todayDate = new Date().toLocaleDateString("en-GB");
 
@@ -89,6 +90,12 @@ function App() {
     const userDetails = localStorage.getItem("user");
     if (user) {
       setUser(JSON.parse(userDetails));
+    }
+
+    // retrieving reviewed products from session storage
+    const isViewdedProducts = sessionStorage.getItem("viewedProducts");
+    if (isViewdedProducts) {
+      setViewedProducts(JSON.parse(isViewdedProducts));
     }
   }, []);
 
@@ -236,6 +243,8 @@ function App() {
         setOrderProducts,
         orders,
         setOrders,
+        viewedProducts,
+        setViewedProducts,
       }}
     >
       <Navbar />
@@ -252,7 +261,7 @@ function App() {
         />
         <Route path="/cart" element={<Cart />} />
         <Route path="/contact" element={<ContactUs />} />
-        <Route path="/reviewform" element={<ProdutReviewsForm/>} />
+        <Route path="/reviewform" element={<ProdutReviewsForm />} />
         <Route path="/search" element={<Search />} />
         <Route path="/order_check_out" element={<OrderCheckOut />} />
         <Route path="/profile" element={<Profile />} />
