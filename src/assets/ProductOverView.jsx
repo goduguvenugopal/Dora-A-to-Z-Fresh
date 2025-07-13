@@ -14,7 +14,7 @@ import { BiExitFullscreen, BiFullscreen } from "react-icons/bi";
 import { Helmet } from "react-helmet";
 import ProductReviewsForm from "./ProdutReviewsForm";
 import { RiDiscountPercentFill } from "react-icons/ri";
-import RecentlyViewedProducts from "./recentlyViewedProducts";
+import RecentlyViewedProducts from "./RecentlyViewedProducts";
 
 const ProductOverView = () => {
   scrollToTop();
@@ -101,16 +101,12 @@ const ProductOverView = () => {
   useEffect(() => {
     const results = products.find((item) => item._id === itemId);
     setProduct(results);
-
-    // recently viewed Products adding
-    const isProduct = viewedProducts?.some((item) => item?._id === itemId);
-
-    if (isProduct === false && results) {
-      if(viewedProducts.length < 7){
-        const seenProducts = [...viewedProducts, results];
-        sessionStorage.setItem("viewedProducts", JSON.stringify(seenProducts));
-        setViewedProducts(seenProducts);
-      } 
+    if (results) {
+      let updated = viewedProducts.filter((item) => item._id !== itemId);
+      updated.unshift(results);
+      updated = updated.slice(0, 8);
+      localStorage.setItem("viewedProducts", JSON.stringify(updated));
+      setViewedProducts(updated);
     }
   }, [products, itemId]);
 

@@ -44,7 +44,7 @@ const RecentlyViewedProducts = () => {
                   </div>
                 )}
               </Link>
-            )).reverse()}
+            ))}
           </div>
         </div>
       )}

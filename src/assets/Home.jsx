@@ -9,7 +9,7 @@ import Faq from "./Faq";
 import { MdClose } from "react-icons/md";
 import InstallApp from "./InstallApp";
 import Promotions from "./Promotions";
-import RecentlyViewedProducts from "./recentlyViewedProducts";
+import RecentlyViewedProducts from "./RecentlyViewedProducts";
 
 const Home = () => {
   const { categories } = useContext(dataContext);
