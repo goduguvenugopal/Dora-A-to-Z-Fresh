@@ -30,7 +30,7 @@ function App() {
   const analytics_api = import.meta.env.VITE_ANALYTICS_API;
   const [carousel, setCarousel] = useState({});
   const [products, setProducts] = useState([]);
-  const [spinner, setSpinner] = useState(false);
+  const [spinner, setSpinner] = useState(true);
   const [categories, setCategories] = useState([]);
   const [user, setUser] = useState({});
   const [defaultAddress, setDefaultAddress] = useState([]);
@@ -136,7 +136,7 @@ function App() {
     // fetching all products
     const fetchProducts = async () => {
       try {
-        setSpinner(true);
+        
         const res = await axios.get(`${api}/product/get-all-products`);
         if (res) {
           setProducts(res.data.retrievdProducts.reverse());
