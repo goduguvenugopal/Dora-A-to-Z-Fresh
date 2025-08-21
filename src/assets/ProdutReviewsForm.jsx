@@ -15,7 +15,7 @@ const ProdutReviewsForm = ({ itemId }) => {
   const [image, setImage] = useState(null);
   const [reviewText, setReviewText] = useState("");
   const [reviewToggle, setReviewToggle] = useState(false);
-  const { user, reviews_api , token} = useContext(dataContext);
+  const { user, reviews_api } = useContext(dataContext);
   const [productReviewImg, setProductReviewImg] = useState(null);
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
@@ -50,11 +50,7 @@ const ProdutReviewsForm = ({ itemId }) => {
         return toast.warning("Please give rating");
       }
       setLoader(true);
-      const res = await axios.post(`${reviews_api}/api/add/reviews`, formData , {
-        headers : {
-          token : token
-        }
-      });
+      const res = await axios.post(`${reviews_api}/api/add/reviews`, formData );
        
       if (res) {
         toast.success("Thank you for sharing your valuable review!", {
