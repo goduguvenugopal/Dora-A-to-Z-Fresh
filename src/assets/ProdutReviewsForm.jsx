@@ -60,7 +60,6 @@ const ProdutReviewsForm = ({ itemId }) => {
         setRating(0);
         setImage(null);
         setProductReviewImg(null);
-        
       }
     } catch (error) {
       console.error(error);
@@ -202,6 +201,7 @@ const ProdutReviewsForm = ({ itemId }) => {
                     onChange={fileHandling}
                     className="hidden"
                     name="productReviewImg"
+                    accept="image/jpeg, image/png, image/jpg, image/webp"
                     id="productReviewImg"
                   />
                   {image && (
