@@ -19,9 +19,6 @@ export const RouteHandler = (cartItems) => {
       case '/login':
         document.title = 'Secure Email Login & Continue Shopping';
         break;
-      case '/contact':
-        document.title = 'Contact Us for Any Delivery Queries';
-        break;
       case '/cart':
         document.title = `My Cart (${cartItems.length} items)`;
         break;

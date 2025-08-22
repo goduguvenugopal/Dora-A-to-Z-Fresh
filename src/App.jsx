@@ -1,4 +1,10 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, {
+  useState,
+  createContext,
+  useEffect,
+  lazy,
+  Suspense,
+} from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./assets/Navbar";
@@ -9,16 +15,17 @@ import ContactUs from "./assets/ContactUs";
 import { RouteHandler } from "./assets/RouteHandler";
 import Search from "./assets/Search";
 import axios from "axios";
-import Profile from "./assets/Profile";
 import { Loading } from "./assets/Loading";
 import AllProducts from "./assets/AllProducts";
 import ProductOverView from "./assets/ProductOverView";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import Orders from "./assets/Orders";
-import Login from "./assets/Login";
-import OrderCheckOut from "./assets/OrderCheckOut";
-import OrderOverView from "./assets/OrderOverView";
-import ProdutReviewsForm from "./assets/ProdutReviewsForm";
+// lazy load imports
+const Orders = lazy(() => import("./assets/Orders"));
+const Profile = lazy(() => import("./assets/Profile"));
+const Login = lazy(() => import("./assets/Login"));
+const OrderCheckOut = lazy(() => import("./assets/OrderCheckOut"));
+const OrderOverView = lazy(() => import("./assets/OrderOverView"));
+const ProdutReviewsForm = lazy(() => import("./assets/ProdutReviewsForm"));
 
 export const dataContext = createContext();
 
@@ -136,7 +143,6 @@ function App() {
     // fetching all products
     const fetchProducts = async () => {
       try {
-        
         const res = await axios.get(`${api}/product/get-all-products`);
         if (res) {
           setProducts(res.data.retrievdProducts.reverse());
@@ -249,30 +255,32 @@ function App() {
     >
       <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/products_by_category/:category"
-          element={<AllProducts />}
-        />
-        <Route
-          path="/product_over_view/:itemId"
-          element={<ProductOverView />}
-        />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/contact" element={<ContactUs />} />
-        <Route path="/reviewform" element={<ProdutReviewsForm />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/order_check_out" element={<OrderCheckOut />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route
-          path="/orders/order_over_view/:orderId"
-          element={<OrderOverView />}
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/products_by_category/:category"
+            element={<AllProducts />}
+          />
+          <Route
+            path="/product_over_view/:itemId"
+            element={<ProductOverView />}
+          />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/contact" element={<ContactUs />} />
+          <Route path="/reviewform" element={<ProdutReviewsForm />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/order_check_out" element={<OrderCheckOut />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route
+            path="/orders/order_over_view/:orderId"
+            element={<OrderOverView />}
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Suspense>
     </dataContext.Provider>
   );
 }
