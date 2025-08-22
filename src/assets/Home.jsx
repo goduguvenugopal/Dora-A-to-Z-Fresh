@@ -43,7 +43,7 @@ const Home = () => {
     try {
       await navigator.share({
         text: "Dora A to Z Fresh - Your one-stop shop for fresh milk, groceries, and all your needs, delivered to your doorstep with quality assurance. Shop now! :",
-        url: "https://doraatozfresh.vercel.app",
+        url: "https://www.doraatozfresh.in",
       });
     } catch (error) {
       console.error(error);
