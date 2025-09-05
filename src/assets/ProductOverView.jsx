@@ -706,8 +706,7 @@ const ProductOverView = () => {
                       <>
                         {orderType === "buyonce" && (
                           <h5 className="font-semibold my-4 flex items-center gap-2">
-                            <FaTruck className="text-blue-500" /> Delivery
-                            charges apply at checkout
+                            <FaTruck className="text-blue-500" /> Enjoy free delivery on all orders above ₹150.
                           </h5>
                         )}
                       </>

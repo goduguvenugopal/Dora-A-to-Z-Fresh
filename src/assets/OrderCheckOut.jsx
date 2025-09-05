@@ -40,9 +40,9 @@ const OrderCheckOut = () => {
   const [orderForm, setOrderForm] = useState(initialOrderData);
 
   const emailData = {
-  email: `${defaultAddress[0]?.email}, dora.a.to.z.fresh@gmail.com`,
-  subject: "Dora A to Z Fresh | Order Placed Successfully",
-  html: `
+    email: `${defaultAddress[0]?.email}, dora.a.to.z.fresh@gmail.com`,
+    subject: "Dora A to Z Fresh | Order Placed Successfully",
+    html: `
     <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
       <h2 style="color: #2c7a7b;">Dear ${defaultAddress[0]?.name},</h2>
       <p>Thank you for placing your order with <strong>Dora A to Z Fresh</strong>!  
@@ -52,26 +52,44 @@ const OrderCheckOut = () => {
       <ul style="list-style:none; padding:0;">
         <li><strong>City:</strong> ${defaultAddress[0]?.district}</li>
         <li><strong>Phone:</strong> ${defaultAddress[0]?.phone}</li>
-        <li><strong>Address:</strong> ${defaultAddress[0]?.street}, ${defaultAddress[0]?.village}, ${defaultAddress[0]?.postalCode}</li>
+        <li><strong>Address:</strong> ${defaultAddress[0]?.street}, ${
+      defaultAddress[0]?.village
+    }, ${defaultAddress[0]?.postalCode}</li>
         <li><strong>State:</strong> ${defaultAddress[0]?.state}</li>
       </ul>
 
       <h3 style="margin-top:20px; color:#2c5282;">🛍️ Product Details</h3>
       <div style="width:100%; border:1px solid #ddd; border-radius:8px; overflow:hidden;">
-        ${orderProducts.map((item) => `
+        ${orderProducts
+          .map(
+            (item) => `
           <div style="display:flex; gap:15px; border-bottom:1px solid #eee; padding:12px;">
             <img src="${item?.products[0]?.itemImage[0]}" 
                  alt="${item?.products[0]?.itemName.substring(0, 20)}" 
                  style="height:100px; width:100px; object-fit:cover; border-radius:6px;" />
             <div>
-              <p style="margin:4px 0; font-weight:600;">${item?.products[0]?.itemName.substring(0, 20)}..</p>
-              <p style="margin:4px 0;"><strong>Price:</strong> Rs. ${item?.products[0]?.itemPrice}</p>
-              <p style="margin:4px 0;"><strong>Quantity:</strong> ${item.itemQty}</p>
-              <p style="margin:4px 0;"><strong>Order Type:</strong> ${item.products[0].orderType.replace("buyonce", "Buy Once")}</p>
-              <p style="margin:4px 0;"><strong>Weight:</strong> ${item.products[0].itemWeight}${item.products[0].itemSubCategory === "Milk" ? "ml" : "g"}</p>
+              <p style="margin:4px 0; font-weight:600;">${item?.products[0]?.itemName.substring(
+                0,
+                20
+              )}..</p>
+              <p style="margin:4px 0;"><strong>Price:</strong> Rs. ${
+                item?.products[0]?.itemPrice
+              }</p>
+              <p style="margin:4px 0;"><strong>Quantity:</strong> ${
+                item.itemQty
+              }</p>
+              <p style="margin:4px 0;"><strong>Order Type:</strong> ${item.products[0].orderType.replace(
+                "buyonce",
+                "Buy Once"
+              )}</p>
+              <p style="margin:4px 0;"><strong>Weight:</strong> ${
+                item.products[0].itemWeight
+              }${item.products[0].itemSubCategory === "Milk" ? "ml" : "g"}</p>
             </div>
           </div>
-        `).join("")}
+        `
+          )
+          .join("")}
       </div>
 
       <h3 style="margin-top:20px; color:#2c5282;">💳 Payment Details</h3>
@@ -109,8 +127,7 @@ const OrderCheckOut = () => {
       </a>
     </div>
   `,
-};
-
+  };
 
   useEffect(() => {
     // total amount caluculating function
@@ -124,7 +141,7 @@ const OrderCheckOut = () => {
       (item) => item.orderType === "subscription"
     );
     // checking if any order has subscription deliveryCharges will be zero
-    if (isOrderType === false) {
+    if (isOrderType === false && totalAmount < 150) {
       const withDeliveryCharges = discount.deliveryCharges + totalAmount;
       setTotalAmount(withDeliveryCharges.toFixed(2));
       setOriginalAmount(totalAmount);
@@ -154,8 +171,6 @@ const OrderCheckOut = () => {
       toast.warning("Please add address next place the order", {
         className: "custom-toast",
       });
-    } else if (totalAmount < 150) {
-      setModal(true);
     } else {
       try {
         setOrderSpin(true);
@@ -260,59 +275,58 @@ const OrderCheckOut = () => {
           </details>
 
           {/* qr code payment section  */}
-          {(totalAmount) >=
-            150 ? (
-              <div className="p-3 flex flex-col w-full lg:w-[34%]  items-center  shadow-md shadow-gray-300 rounded-lg">
-                <h2 className="font-bold  text-orange-600">PAYMENT DETAILS</h2>
-                <h4 className="font-medium">SCAN QR CODE</h4>
-                <img
-                  src="/qrcode.png"
-                  alt="qr_code"
-                  className="border-2 my-2 h-52 w-52 rounded "
-                />
 
-                <img
-                  src="/allpayments.png"
-                  className="w-[60%] mb-2 "
-                  alt="all_upi_logo"
-                />
-                <h6 className="text-blue-600 font-bold">PAY TO THIS NUMBER</h6>
-                <span
-                  onClick={() => copyNumber(9603669236)}
-                  className="font-bold my-2 cursor-pointer flex items-center gap-2 hover:text-blue-600"
-                >
-                  9603669236 <FaRegCopy />
-                </span>
-                <h4 className="text-center">
-                  Banking Name :{" "}
-                  <span className="font-bold ">BANUPRAKASH NAGARAM</span>
-                </h4>
-                <div className="hidden lg:block">
-                  <a
-                    href="/qrcode.png"
-                    className=" animate-bounce text-md font-semibold px-3 h-[2.5rem] mt-6 flex items-center gap-2 rounded-full text-white  bg-orange-600"
-                    download="/qrcode.png"
-                  >
-                    <FaDownload />
-                    Download QR Code
-                  </a>
-                </div>
-                <a
-                  href={`upi://pay?pa=960366@ybl&pn=Dora A-Z Fresh&am=${totalAmount}&cu=INR`}
-                  target="_blank"
-                  rel="noopener"
-                  className="hover:bg-blue-600 lg:hidden text-md font-semibold px-4 h-[2.5rem] my-4 flex justify-center items-center gap-2 rounded-full text-white bg-blue-700 min-w-[12rem]"
-                >
-                  {" "}
-                  PAY ₹{totalAmount}
-                </a>
-                <h5 className=" lg:hidden">
-                  <span className="font-bold text-red-500">Note : </span>After
-                  making the payment, please place your order and send the
-                  payment receipt via below WhatsApp number on the same day.
-                </h5>
-              </div>
-            ) : (
+          <div className="p-3 flex flex-col w-full lg:w-[34%]  items-center  shadow-md shadow-gray-300 rounded-lg">
+            <h2 className="font-bold  text-orange-600">PAYMENT DETAILS</h2>
+            <h4 className="font-medium">SCAN QR CODE</h4>
+            <img
+              src="/qrcode.png"
+              alt="qr_code"
+              className="border-2 my-2 h-52 w-52 rounded "
+            />
+
+            <img
+              src="/allpayments.png"
+              className="w-[60%] mb-2 "
+              alt="all_upi_logo"
+            />
+            <h6 className="text-blue-600 font-bold">PAY TO THIS NUMBER</h6>
+            <span
+              onClick={() => copyNumber(9603669236)}
+              className="font-bold my-2 cursor-pointer flex items-center gap-2 hover:text-blue-600"
+            >
+              9603669236 <FaRegCopy />
+            </span>
+            <h4 className="text-center">
+              Banking Name :{" "}
+              <span className="font-bold ">BANUPRAKASH NAGARAM</span>
+            </h4>
+            <div className="hidden lg:block">
+              <a
+                href="/qrcode.png"
+                className=" animate-bounce text-md font-semibold px-3 h-[2.5rem] mt-6 flex items-center gap-2 rounded-full text-white  bg-orange-600"
+                download="/qrcode.png"
+              >
+                <FaDownload />
+                Download QR Code
+              </a>
+            </div>
+            <a
+              href={`upi://pay?pa=960366@ybl&pn=Dora A-Z Fresh&am=${totalAmount}&cu=INR`}
+              target="_blank"
+              rel="noopener"
+              className="hover:bg-blue-600 lg:hidden text-md font-semibold px-4 h-[2.5rem] my-4 flex justify-center items-center gap-2 rounded-full text-white bg-blue-700 min-w-[12rem]"
+            >
+              {" "}
+              PAY ₹{totalAmount}
+            </a>
+            <h5 className=" lg:hidden">
+              <span className="font-bold text-red-500">Note : </span>After
+              making the payment, please place your order and send the payment
+              receipt via below WhatsApp number on the same day.
+            </h5>
+          </div>
+          {/*           
               <div className="p-3 flex flex-col w-full lg:w-[34%]  items-center  shadow-md shadow-gray-300 rounded-lg">
                 <div
                   onClick={(e) => e.stopPropagation()}
@@ -349,8 +363,7 @@ const OrderCheckOut = () => {
                   </div>
                 </div>
               </div>
-            )
-          }
+           */}
 
           {/* order product details section  */}
           <div className="p-3 pb-5 pt-0 w-full lg:w-[34%] lg:h-[90vh] lg:overflow-y-auto shadow-md shadow-gray-300 rounded-lg">
@@ -434,7 +447,12 @@ const OrderCheckOut = () => {
                   )}
                 </div>
               </div>
-
+              {originalAmount < 150 && (
+                <p className="my-3 text-gray-700 font-semibold">
+                  Order above ₹150 and unlock free delivery benefits—shop smart,
+                  save more
+                </p>
+              )}
               <h3 className="font-bold mt-3 text-xl">
                 TOTAL COST :
                 <span className="text-black pl-1">Rs. {totalAmount}</span>
