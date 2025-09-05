@@ -140,60 +140,30 @@ function App() {
   }, [token]);
 
   useEffect(() => {
-    // fetching all products
-    const fetchProducts = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get(`${api}/product/get-all-products`);
-        if (res) {
-          setProducts(res.data.retrievdProducts.reverse());
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchProducts();
+        const [productsRes, carouselRes, categoriesRes, discountRes] =
+          await Promise.all([
+            axios.get(`${api}/product/get-all-products`),
+            axios.get(`${api}/carousel/get-carousel`),
+            axios.get(`${api}/category/get-category-products`),
+            axios.get(`${api}/offer/get-offer`),
+          ]);
 
-    // fetching carousel
-    const getCarousel = async () => {
-      try {
-        const res = await axios.get(`${api}/carousel/get-carousel`);
-        if (res) {
-          setCarousel(res.data.retrievedCarousel[0]);
-        }
+        // set data from responses
+        if (productsRes)
+          setProducts(productsRes.data.retrievdProducts.reverse());
+        if (carouselRes) setCarousel(carouselRes.data.retrievedCarousel[0]);
+        if (categoriesRes) setCategories(categoriesRes.data.retrievedProducts);
+        if (discountRes) setDiscount(discountRes.data.offers[0]);
       } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getCarousel();
-
-    // fetching all categories
-    const fetchAllCategories = async () => {
-      try {
-        const res = await axios.get(`${api}/category/get-category-products`);
-        if (res) {
-          setCategories(res.data.retrievedProducts);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchAllCategories();
-
-    // fetching discount function
-    const fetchDiscount = async () => {
-      try {
-        const res = await axios.get(`${api}/offer/get-offer`);
-        if (res) {
-          setDiscount(res.data.offers[0]);
-          setSpinner(false);
-        }
-      } catch (error) {
-        console.error(error);
+        console.error("Error fetching data:", error);
+      } finally {
+        setSpinner(false); // stop spinner once all requests finish
       }
     };
 
-    fetchDiscount();
+    fetchData();
   }, []);
 
   useEffect(() => {
