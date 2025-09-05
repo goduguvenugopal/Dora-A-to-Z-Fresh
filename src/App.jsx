@@ -35,6 +35,7 @@ function App() {
   const reviews_api = import.meta.env.VITE_REVIEWS_API;
   const number = import.meta.env.VITE_NUMBER;
   const analytics_api = import.meta.env.VITE_ANALYTICS_API;
+  const render_api = import.meta.env.VITE_RENDER_API
   const [carousel, setCarousel] = useState({});
   const [products, setProducts] = useState([]);
   const [spinner, setSpinner] = useState(true);
@@ -198,6 +199,7 @@ function App() {
       value={{
         api,
         reviews_api,
+        render_api,
         number,
         carousel,
         setCarousel,

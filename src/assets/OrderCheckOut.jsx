@@ -17,6 +17,7 @@ const OrderCheckOut = () => {
   const {
     orderProducts,
     api,
+    render_api,
     number,
     token,
     defaultAddress,
@@ -183,7 +184,7 @@ const OrderCheckOut = () => {
           setOrderOk(true);
           setOrderSpin(false);
           // if order placed successfully email confirmation wll be sent to user and seller
-          await axios.post(`${api}/updates-email/send-updates`, emailData);
+          await axios.post(`${render_api}/updates-email/send-updates`, emailData);
         }
       } catch (error) {
         console.error(error);

@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
     const [loginToggle, setLoginToggle] = useState(false)
-    const { setToken, api, token, loading } = useContext(dataContext)
+    const { setToken, api, token, loading , render_api} = useContext(dataContext)
     const [fullName, setFullName] = useState("")
     const [email, setEmail] = useState("")
     const [otp, setOtp] = useState("")
@@ -24,7 +24,7 @@ const Login = () => {
         event.preventDefault()
         setBtnToggle(true)
         try {
-            const response = await axios.post(`${api}/email/send-otp`, { email, fullName })
+            const response = await axios.post(`${render_api}/email/send-otp`, { email, fullName })
             if (response) {
                 setLoginToggle(true)
                 setBtnToggle(false)
@@ -41,7 +41,7 @@ const Login = () => {
         event.preventDefault()
         setSubmitBtn(true)
         try {
-            const response = await axios.post(`${api}/email/verify-otp`, { email, fullName, otp })
+            const response = await axios.post(`${render_api}/email/verify-otp`, { email, fullName, otp })
             if (response) {
                 setOtp("")
                 // storing token in localStorage

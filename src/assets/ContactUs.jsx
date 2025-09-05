@@ -12,7 +12,7 @@ import Faq from "./Faq";
 
 const ContactUs = () => {
   scrollToTop()
-  const { api ,number} = useContext(dataContext)
+  const { api ,number ,render_api} = useContext(dataContext)
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -36,7 +36,7 @@ const ContactUs = () => {
     } else {
       setSubmitSpin(true);
       try {
-        const res = await axios.post(`${api}/updates-email/send-updates`, formData);
+        const res = await axios.post(`${render_api}/updates-email/send-updates`, formData);
         if (res) {
           toast.success(
             "Thank you for reaching out. Our customer service team will be in touch with you shortly."
