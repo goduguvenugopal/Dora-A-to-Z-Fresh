@@ -35,7 +35,7 @@ function App() {
   const reviews_api = import.meta.env.VITE_REVIEWS_API;
   const number = import.meta.env.VITE_NUMBER;
   const analytics_api = import.meta.env.VITE_ANALYTICS_API;
-  const render_api = import.meta.env.VITE_RENDER_API
+  const render_api = import.meta.env.VITE_RENDER_API;
   const [carousel, setCarousel] = useState({});
   const [products, setProducts] = useState([]);
   const [spinner, setSpinner] = useState(true);
@@ -140,31 +140,25 @@ function App() {
     }
   }, [token]);
 
+  // fetching home data all
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchHomeData = async () => {
       try {
-        const [productsRes, carouselRes, categoriesRes, discountRes] =
-          await Promise.all([
-            axios.get(`${api}/product/get-all-products`),
-            axios.get(`${api}/carousel/get-carousel`),
-            axios.get(`${api}/category/get-category-products`),
-            axios.get(`${api}/offer/get-offer`),
-          ]);
-
-        // set data from responses
-        if (productsRes)
-          setProducts(productsRes.data.retrievdProducts.reverse());
-        if (carouselRes) setCarousel(carouselRes.data.retrievedCarousel[0]);
-        if (categoriesRes) setCategories(categoriesRes.data.retrievedProducts);
-        if (discountRes) setDiscount(discountRes.data.offers[0]);
+        const res = await axios.get(`${api}/api/home-data`);
+        if (res) {
+          setCarousel(res.data.carousel[0]);
+          setCategories(res.data.categories);
+          setProducts(res.data.products.reverse());
+          setDiscount(res.data.discounts[0]);
+        }
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
-        setSpinner(false); // stop spinner once all requests finish
+        setSpinner(false);
       }
     };
 
-    fetchData();
+    fetchHomeData();
   }, []);
 
   useEffect(() => {
