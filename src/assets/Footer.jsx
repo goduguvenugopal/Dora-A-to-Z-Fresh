@@ -92,7 +92,7 @@ const {number} = useContext(dataContext)
                   Customer Care : {number}
                 </a>
                 <a href="mailto:dora.a.to.z.fresh@gmail.com" className="flex items-center gap-3">
-                  Email us
+                  Email us : dora.a.to.z.fresh@gmail.com
                 </a>
               </li>
 
@@ -126,7 +126,7 @@ const {number} = useContext(dataContext)
         <div className=" py-4 px-5 ">
           <a href="https://www.goduguvenugopal.in/" target="_self">
           <p className=" text-black text-center ">
-            © 2025 Built with ❤️ by <span className='text-blue-500 font-medium'>Venugopal.</span> All rights reserved.
+            © 2025 Developed with ❤️ by <span className='text-blue-500 font-medium'>Venugopal.</span> All rights reserved.
           </p>
           </a>
 
