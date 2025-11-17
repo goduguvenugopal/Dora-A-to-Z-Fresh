@@ -41,7 +41,7 @@ const OrderCheckOut = () => {
   const [orderForm, setOrderForm] = useState(initialOrderData);
 
   const emailData = {
-    email: `${defaultAddress[0]?.email}, dora.a.to.z.fresh@gmail.com`,
+    email: `${defaultAddress[0]?.email}`,
     subject: "Dora A to Z Fresh | Order Placed Successfully",
     html: `
     <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
