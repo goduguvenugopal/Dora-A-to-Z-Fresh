@@ -65,17 +65,11 @@ const OrderCheckOut = () => {
           .map(
             (item) => `
           <div style="display:flex; gap:15px; border-bottom:1px solid #eee; padding:12px;">
-            <img src="${item?.products[0]?.itemImage[0]}" 
-                 alt="${item?.products[0]?.itemName.substring(0, 20)}" 
-                 style="height:100px; width:100px; object-fit:cover; border-radius:6px;" />
             <div>
-              <p style="margin:4px 0; font-weight:600;">${item?.products[0]?.itemName.substring(
+              <p style="margin:4px 0; font-weight:600;">${item?.products[0]?.itemName?.substring(
                 0,
                 20
               )}..</p>
-              <p style="margin:4px 0;"><strong>Price:</strong> Rs. ${
-                item?.products[0]?.itemPrice
-              }</p>
               <p style="margin:4px 0;"><strong>Quantity:</strong> ${
                 item.itemQty
               }</p>
@@ -109,11 +103,6 @@ const OrderCheckOut = () => {
         <li><strong>Google Maps:</strong> <a href="https://maps.app.goo.gl/YmA4dbsdDkvRfr6t5">View Location</a></li>
       </ul>
 
-      <h3 style="margin-top:20px; color:#2c5282;">👤 Customer Information</h3>
-      <ul style="list-style:none; padding:0;">
-        <li><strong>Name:</strong> ${defaultAddress[0]?.name}</li>
-        <li><strong>Email:</strong> ${defaultAddress[0]?.email}</li>
-      </ul>
 
       <p style="margin-top:20px;">If you have any questions, feel free to reach out at 
         <a href="mailto:dora.a.to.z.fresh@gmail.com">dora.a.to.z.fresh@gmail.com</a>.
@@ -122,9 +111,9 @@ const OrderCheckOut = () => {
       <p style="margin-top:20px; font-weight:600;">Thank you for shopping with Dora A to Z Fresh!  
       We look forward to serving you again.</p>
 
-      <a href="https://doraatozfresh.vercel.app" 
+      <a href="https://www.doraatozfresh.in/orders" 
          style="display:inline-block; margin-top:20px; background:#2b6cb0; color:#fff; padding:10px 20px; text-decoration:none; border-radius:6px;">
-         Continue Shopping
+         Track Order
       </a>
     </div>
   `,
