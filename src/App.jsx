@@ -144,7 +144,7 @@ function App() {
   useEffect(() => {
     const fetchHomeData = async () => {
       try {
-        const res = await axios.get(`${api}/api/home-data`);
+        const res = await axios.get(`${render_api}/api/home-data`);
         if (res) {
           setCarousel(res.data.carousel[0]);
           setCategories(res.data.categories);
